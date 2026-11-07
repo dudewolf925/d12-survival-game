@@ -501,7 +501,26 @@ el('roll').disabled=true;
 el('die').disabled=true;
 el('accept').classList.add('hidden');
 el('finish').disabled=true;
-setText('status',(finishKind==='winner'?'Winner! ':'Finished by '+(current.redditUser||'Unassigned')+'. ')+'Your Survival Time: '+fmt(elapsed));
+
+setText(
+  'status',
+  'Score saved! ' +
+  (finishKind === 'winner'
+    ? 'Winner! '
+    : 'Finished by ' +
+      (current.redditUser || 'Unassigned') + '. ') +
+  'Survival Time: ' + fmt(elapsed)
+);
+
+try {
+  await board();
+} catch (refreshError) {
+  console.warn(
+    'Score saved, but leaderboard refresh failed:',
+    refreshError
+  );
+}
+
 await board();
 }catch(e){
 setText('saveStatus','Could not save: '+e.message);
