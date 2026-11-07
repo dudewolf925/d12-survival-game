@@ -17,17 +17,11 @@
   --muted: #c9bfd7;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: radial-gradient(
-    ellipse at top,
-    #2b1a43,
-    var(--bg) 70%
-  );
+  background: radial-gradient(ellipse at top,#2b1a43,var(--bg) 70%);
   color: var(--text);
   font: 16px/1.5 system-ui,-apple-system,sans-serif;
 }
@@ -38,9 +32,7 @@ main {
   padding: 20px 14px 50px;
 }
 
-h1,h2,h3 {
-  line-height: 1.2;
-}
+h1,h2,h3 { line-height: 1.2; }
 
 h1 {
   text-align: center;
@@ -48,10 +40,7 @@ h1 {
   margin: 14px 0 4px;
 }
 
-h2 {
-  font-size: 23px;
-  margin: 0 0 12px;
-}
+h2 { font-size: 23px; margin: 0 0 12px; }
 
 .sub {
   text-align: center;
@@ -75,9 +64,7 @@ h2 {
   align-items: center;
 }
 
-.row > * {
-  flex: 1;
-}
+.row > * { flex: 1; }
 
 button {
   border: 1px solid #ad85ec;
@@ -101,18 +88,12 @@ button.danger {
   color: white;
 }
 
-button.danger:hover {
-  background: #cf3045;
-}
-
 button:disabled {
   opacity: .45;
   cursor: not-allowed;
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
 .timer {
   font-variant-numeric: tabular-nums;
@@ -121,13 +102,8 @@ button:disabled {
   font-weight: 800;
 }
 
-.muted,.hint {
-  color: var(--muted);
-}
-
-.center {
-  text-align: center;
-}
+.muted,.hint { color: var(--muted); }
+.center { text-align: center; }
 
 .die {
   font-size: 72px;
@@ -145,9 +121,7 @@ button:disabled {
   background: #09070d;
 }
 
-.mediaBox {
-  margin: 14px 0;
-}
+.mediaBox { margin: 14px 0; }
 
 .label {
   font-weight: 700;
@@ -177,36 +151,11 @@ th,td {
   overflow-wrap: anywhere;
 }
 
-th {
-  color: var(--accent);
-}
-
-.scroll {
-  overflow-x: auto;
-}
-
-.error {
-  color: #ffb9c2;
-  white-space: pre-wrap;
-}
-
-.success {
-  color: #b8f5cb;
-}
-
-.notice {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.badge {
-  display: inline-block;
-  border: 1px solid var(--edge);
-  border-radius: 99px;
-  padding: 3px 10px;
-  font-size: 13px;
-  color: var(--muted);
-}
+th { color: var(--accent); }
+.scroll { overflow-x: auto; }
+.error { color: #ffb9c2; white-space: pre-wrap; }
+.success { color: #b8f5cb; }
+.notice { font-size: 13px; color: var(--muted); }
 </style>
 </head>
 
@@ -220,21 +169,16 @@ Roll the D12. Survive as long as you can.
 </p>
 
 <!-- START SCREEN -->
-
 <section class="panel center" id="home">
 
   <div id="homeMedia"></div>
 
   <p id="intro">
-    Roll to begin. Your Survival Time starts
-    with your first roll.
+    Roll to begin. Your Survival Time starts with your first roll.
   </p>
 
-  <label
-    for="playerName"
-    class="label"
-    style="display:block;text-align:left;margin:12px 0 6px"
-  >
+  <label for="playerName" class="label"
+    style="display:block;text-align:left;margin:12px 0 6px">
     Your username
   </label>
 
@@ -250,43 +194,29 @@ Roll the D12. Survive as long as you can.
     Enter your username before starting.
   </p>
 
-  <button id="start">
+  <button id="start" type="button">
     Let’s do this
   </button>
 
 </section>
 
 <!-- GAME SCREEN -->
-
 <section class="panel hidden" id="game">
 
   <p class="center muted" id="soldierName"></p>
 
-  <div class="timer" id="timer">
-    00:00:00
-  </div>
+  <div class="timer" id="timer">00:00:00</div>
+  <p class="center muted">Survival Time</p>
 
-  <p class="center muted">
-    Survival Time
-  </p>
-
-  <div class="die" id="die">
-    12
-  </div>
+  <div class="die" id="die">12</div>
 
   <div class="row">
+    <button id="roll" type="button">Roll D12</button>
 
-    <button id="roll">
-      Roll D12
-    </button>
-
-    <button
-      id="accept"
-      class="secondary hidden"
-    >
+    <button id="accept" type="button"
+      class="secondary hidden">
       Accept Consequences
     </button>
-
   </div>
 
   <p class="center" id="rollHint"></p>
@@ -294,63 +224,41 @@ Roll the D12. Survive as long as you can.
   <div id="slideArea" class="hidden">
 
     <h2 id="slideTitle"></h2>
-
     <p id="slideDescription"></p>
-
     <div id="slideMedia"></div>
-
     <p class="label" id="hunter"></p>
-
     <p class="hint" id="consequence"></p>
 
-    <button
-      id="finish"
-      class="secondary"
-      style="width:100%"
-    >
+    <button id="finish" type="button"
+      class="secondary" style="width:100%">
       I Came
     </button>
 
   </div>
 
-  <button
-    id="tapOut"
-    class="danger"
-    style="width:100%;margin-top:12px"
-  >
+  <button id="tapOut" type="button"
+    class="danger" style="width:100%;margin-top:12px">
     I’m Tapping out
   </button>
 
-  <p
-    class="center"
-    id="status"
-    aria-live="polite"
-  ></p>
+  <p class="center" id="status" aria-live="polite"></p>
 
-  <button
-    id="retrySave"
-    class="secondary hidden"
-    style="width:100%"
-  >
+  <button id="retrySave" type="button"
+    class="secondary hidden" style="width:100%">
     Retry Saving Score
   </button>
 
 </section>
 
 <!-- SOLDIER LEADERBOARD -->
-
 <section class="panel">
 
   <h2>Soldier Leaderboard</h2>
 
-  <p class="notice" id="boardMode">
-    Loading scores…
-  </p>
+  <p class="notice" id="boardMode">Loading scores…</p>
 
   <div class="scroll">
-
     <table>
-
       <thead>
         <tr>
           <th>Soldier</th>
@@ -359,21 +267,15 @@ Roll the D12. Survive as long as you can.
           <th>Ending Slide</th>
         </tr>
       </thead>
-
       <tbody id="soldierRows">
-        <tr>
-          <td colspan="4">Loading…</td>
-        </tr>
+        <tr><td colspan="4">Loading…</td></tr>
       </tbody>
-
     </table>
-
   </div>
 
 </section>
 
 <!-- HUNTER SCOREBOARD -->
-
 <section class="panel">
 
   <h2>Hunter Scoreboard</h2>
@@ -383,32 +285,22 @@ Roll the D12. Survive as long as you can.
   </p>
 
   <div class="scroll">
-
     <table>
-
       <thead>
         <tr>
           <th>Hunter</th>
           <th>Soldiers Claimed</th>
         </tr>
       </thead>
-
       <tbody id="hunterRows">
-        <tr>
-          <td colspan="2">Loading…</td>
-        </tr>
+        <tr><td colspan="2">Loading…</td></tr>
       </tbody>
-
     </table>
-
   </div>
 
 </section>
 
-<p
-  class="center notice"
-  id="configStatus"
-></p>
+<p class="center notice" id="configStatus"></p>
 
 </main>
 
@@ -416,13 +308,16 @@ Roll the D12. Survive as long as you can.
 'use strict';
 
 // ========================================
-// HELPERS
+// HELPERS AND STATE
 // ========================================
 
 const $ = id => document.getElementById(id);
 
 const setText = (id,value) => {
-  $(id).textContent = String(value ?? '');
+  const element = $(id);
+  if(element) {
+    element.textContent = String(value ?? '');
+  }
 };
 
 const TAP_OUT_MARKER = '__TAPPED_OUT__';
@@ -447,26 +342,25 @@ let endingStarted = false;
 let finishKind = 'ruined';
 
 let playerName = '';
-
 let saving = false;
 let scoreSaved = false;
 let rollLocked = false;
-let lastRoll = null;
 
-const fmt = ms => {
-  const s = Math.max(
-    0,
-    Math.floor(ms / 1000)
-  );
+let configLoaded = false;
+
+// ========================================
+// TIME
+// ========================================
+
+function fmt(ms) {
+  const s = Math.max(0,Math.floor(ms / 1000));
 
   return [
     Math.floor(s / 3600),
     Math.floor(s % 3600 / 60),
     s % 60
-  ]
-    .map(x => String(x).padStart(2,'0'))
-    .join(':');
-};
+  ].map(x => String(x).padStart(2,'0')).join(':');
+}
 
 function updateClock() {
   if(startedAt && !endingStarted) {
@@ -480,13 +374,8 @@ function updateClock() {
 // ========================================
 
 function online() {
-  const url = String(
-    config.supabaseUrl || ''
-  ).trim();
-
-  const key = String(
-    config.supabaseKey || ''
-  ).trim();
+  const url = String(config.supabaseUrl || '').trim();
+  const key = String(config.supabaseKey || '').trim();
 
   return (
     /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url) &&
@@ -495,23 +384,16 @@ function online() {
 }
 
 async function request(path,options={}) {
-  const base = String(
-    config.supabaseUrl || ''
-  ).trim().replace(/\/$/,'');
+  const base = String(config.supabaseUrl || '')
+    .trim().replace(/\/$/,'');
 
-  const key = String(
-    config.supabaseKey || ''
-  ).trim();
+  const key = String(config.supabaseKey || '').trim();
 
-  if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(base)
-  ) {
+  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(base)) {
     throw Error('Invalid Supabase URL');
   }
 
-  if(
-    !/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)
-  ) {
+  if(!/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) {
     throw Error('Invalid Supabase publishable key');
   }
 
@@ -529,128 +411,65 @@ async function request(path,options={}) {
   try {
     response = await fetch(
       base + '/rest/v1/' + path,
-      {
-        ...options,
-        headers
-      }
+      {...options,headers}
     );
   } catch(e) {
-    throw Error(
-      'Browser request: ' +
-      e.name + ': ' + e.message
-    );
+    throw Error('Browser request: '+e.name+': '+e.message);
   }
 
   if(!response.ok) {
-    const detail = await response.text()
-      .catch(() => '');
-
+    const detail = await response.text().catch(()=>'');
     throw Error(
-      'Supabase HTTP ' +
-      response.status +
-      ': ' +
-      detail.slice(0,220)
+      'Supabase HTTP '+response.status+': '+detail.slice(0,220)
     );
   }
 
-  if(response.status === 204) {
-    return null;
-  }
+  if(response.status === 204) return null;
 
   const body = await response.text();
-
   return body ? JSON.parse(body) : null;
 }
 
 // ========================================
-// SLIDE CONFIGURATION
+// SLIDES
 // ========================================
 
 function normalizeSlide(s,index) {
-  if(!s || typeof s !== 'object') {
-    return null;
-  }
+  if(!s || typeof s !== 'object') return null;
 
   const id = Number(
-    s.id ??
-    s.slide ??
-    s.number ??
-    index + 1
+    s.id ?? s.slide ?? s.number ?? index + 1
   );
 
-  if(
-    !Number.isInteger(id) ||
-    id < 1
-  ) {
-    return null;
-  }
+  if(!Number.isInteger(id) || id < 1) return null;
 
   return {
     ...s,
     id,
-    title:
-      s.title ||
-      s.name ||
-      'Slide ' + id,
-
-    description:
-      s.description ||
-      s.text ||
-      s.body ||
-      '',
-
-    redditUser:
-      s.redditUser ||
-      s.reddit_user ||
-      s.hunter ||
-      '',
-
-    media:
-      s.media ||
-      s.mediaUrl ||
-      s.mediaURL ||
-      s.image ||
-      s.video ||
-      s.url ||
-      '',
-
-    consequence:
-      s.consequence ||
-      s.consequences ||
-      '',
-
-    destination:
-      s.destination ??
-      s.nextSlide ??
-      s.next ??
-      s.consequenceSlide ??
-      null
+    title: s.title || s.name || 'Slide '+id,
+    description: s.description || s.text || s.body || '',
+    redditUser: s.redditUser || s.reddit_user || s.hunter || '',
+    media: s.media || s.mediaUrl || s.mediaURL ||
+      s.image || s.video || s.url || '',
+    consequence: s.consequence || s.consequences || '',
+    destination: s.destination ?? s.nextSlide ??
+      s.next ?? s.consequenceSlide ?? null
   };
 }
 
 function parseSlides(raw) {
   let data = raw;
 
-  if(
-    !Array.isArray(data) &&
-    data &&
-    typeof data === 'object'
-  ) {
-    data = Object.entries(data).map(
-      ([id,v]) => ({
-        ...v,
-        id: v?.id ?? id
-      })
-    );
+  if(!Array.isArray(data) && data && typeof data === 'object') {
+    data = Object.entries(data).map(([id,v]) => ({
+      ...v,
+      id: v?.id ?? id
+    }));
   }
 
-  if(!Array.isArray(data)) {
-    return [];
-  }
+  if(!Array.isArray(data)) return [];
 
-  return data
-    .map(normalizeSlide)
-    .filter(Boolean);
+  return data.map(normalizeSlide).filter(Boolean);
 }
 
 // ========================================
@@ -660,38 +479,26 @@ function parseSlides(raw) {
 function mediaNode(value) {
   if(!value) return null;
 
-  const source =
-    typeof value === 'string'
-      ? value
-      : (
-          value.url ||
-          value.src ||
-          value.data ||
-          ''
-        );
+  const source = typeof value === 'string'
+    ? value
+    : (value.url || value.src || value.data || '');
 
   if(!source) return null;
 
   const url = String(source).trim();
 
-  if(
-    !/^(https?:|data:image\/|data:video\/|blob:)/i.test(url)
-  ) {
+  if(!/^(https?:|data:image\/|data:video\/|blob:)/i.test(url)) {
     return null;
   }
 
-  const kind =
-    (typeof value === 'object' && value.type) ||
-    '';
+  const kind = (typeof value === 'object' && value.type) || '';
 
   const video =
     /^video/i.test(kind) ||
     /\.(mp4|webm|mov)(\?|#|$)/i.test(url) ||
     /^data:video\//i.test(url);
 
-  const node = document.createElement(
-    video ? 'video' : 'img'
-  );
+  const node = document.createElement(video ? 'video' : 'img');
 
   node.className = 'media';
   node.src = url;
@@ -709,15 +516,14 @@ function mediaNode(value) {
 
 function showMedia(id,media) {
   const box = $(id);
+  if(!box) return;
 
   box.replaceChildren();
 
   const node = mediaNode(media);
 
   if(node) {
-    const wrapper =
-      document.createElement('div');
-
+    const wrapper = document.createElement('div');
     wrapper.className = 'mediaBox';
     wrapper.append(node);
     box.append(wrapper);
@@ -725,130 +531,99 @@ function showMedia(id,media) {
 }
 
 // ========================================
-// LOAD GAME CONFIG
+// LOAD CONFIG
 // ========================================
 
 async function loadPublished() {
   try {
     const response = await fetch(
-      './game-config.json?ts=' + Date.now(),
+      './game-config.json?ts='+Date.now(),
       {cache:'no-store'}
     );
 
     if(!response.ok) {
-      throw Error(
-        'game-config.json HTTP ' +
-        response.status
-      );
+      throw Error('game-config.json HTTP '+response.status);
     }
 
     const c = await response.json();
+    config = {...DEFAULT,...c};
 
-    config = {
-      ...DEFAULT,
-      ...c
-    };
-
-    setText(
-      'gameTitle',
-      c.title ||
-      c.gameTitle ||
-      DEFAULT.title
-    );
-
-    setText(
-      'subtitle',
-      c.subtitle ||
-      'Roll the D12. Survive as long as you can.'
-    );
-
-    setText(
-      'intro',
-      c.intro ||
-      c.instructions ||
-      'Roll to begin. Your Survival Time starts with your first roll.'
-    );
+    setText('gameTitle',c.title || c.gameTitle || DEFAULT.title);
+    setText('subtitle',c.subtitle ||
+      'Roll the D12. Survive as long as you can.');
+    setText('intro',c.intro || c.instructions ||
+      'Roll to begin. Your Survival Time starts with your first roll.');
 
     showMedia(
       'homeMedia',
-      c.homeImage ||
-      c.homeMedia ||
-      c.homeImageUrl ||
-      c.homeMediaUrl ||
-      ''
+      c.homeImage || c.homeMedia ||
+      c.homeImageUrl || c.homeMediaUrl || ''
     );
 
     const arr = parseSlides(
-      c.slides ||
-      c.gameSlides ||
-      c.cards ||
-      []
+      c.slides || c.gameSlides || c.cards || []
     );
 
-    slides = new Map(
-      arr.map(s => [s.id,s])
-    );
+    slides = new Map(arr.map(s => [s.id,s]));
+    configLoaded = true;
 
     setText(
       'configStatus',
       arr.length
-        ? 'Game configuration loaded · ' +
-          arr.length + ' slides'
+        ? 'Game configuration loaded · '+arr.length+' slides'
         : 'Game configuration loaded, but no slides found.'
     );
 
   } catch(e) {
-    setText(
-      'configStatus',
-      'Could not load game-config.json: ' +
-      e.message
-    );
+    setText('configStatus',
+      'Could not load game-config.json: '+e.message);
   }
 
+  // A leaderboard failure cannot prevent the start button
+  // from working.
   try {
     await board();
   } catch(e) {
-    console.warn('Initial leaderboard:',e);
+    console.warn('Initial leaderboard refresh:',e);
   }
 }
 
 // ========================================
-// START GAME
+// START GAME - FIXED
 // ========================================
 
 function begin() {
-  if(playerName || finished) return;
+  const input = document.getElementById('playerName');
+  const home = document.getElementById('home');
+  const game = document.getElementById('game');
 
-  const name = $('playerName').value.trim();
+  const name = input.value.trim();
 
   if(!name) {
-    setText(
-      'nameHint',
-      'Please enter your username to start.'
-    );
-
-    $('playerName').focus();
+    setText('nameHint','Please enter your username first.');
+    input.focus();
     return;
   }
 
+  if(!configLoaded || slides.size === 0) {
+    setText('nameHint',
+      'Game slides are still loading or unavailable. Check the message below the leaderboards.');
+    return;
+  }
+
+  if(finished || endingStarted) return;
+
   playerName = name;
 
-  $('home').classList.add('hidden');
-  $('game').classList.remove('hidden');
+  home.classList.add('hidden');
+  game.classList.remove('hidden');
 
-  setText(
-    'soldierName',
-    'Soldier: ' + playerName
-  );
-
-  setText(
-    'status',
-    'Roll the D12 to begin.'
-  );
+  setText('soldierName','Soldier: '+playerName);
+  setText('status','Ready! Roll the D12 to begin.');
 }
 
 // ========================================
-// SLIDES AND GAMEPLAY
+// GAMEPLAY
 // ========================================
 
 function getSlide(id) {
@@ -859,93 +634,52 @@ function showSlide(s) {
   if(endingStarted) return;
 
   current = s;
-
   $('slideArea').classList.remove('hidden');
 
-  setText(
-    'slideTitle',
-    s.title || 'Slide ' + s.id
-  );
-
-  setText(
-    'slideDescription',
-    s.description || ''
-  );
-
+  setText('slideTitle',s.title || 'Slide '+s.id);
+  setText('slideDescription',s.description || '');
   showMedia('slideMedia',s.media);
 
-  setText(
-    'hunter',
+  setText('hunter',
     s.redditUser
-      ? 'Featured: ' + s.redditUser
+      ? 'Featured: '+s.redditUser
       : 'Featured: Not assigned'
   );
 
-  setText(
-    'consequence',
-    typeof s.consequence === 'string'
-      ? s.consequence
-      : ''
+  setText('consequence',
+    typeof s.consequence === 'string' ? s.consequence : ''
   );
 
-  const consequenceDestination =
-    s.destination ?? s.id + 12;
+  const destination = s.destination ?? s.id + 12;
+  const hasConsequence = s.id <= 12 && !!getSlide(destination);
 
-  const hasConsequence =
-    s.id <= 12 &&
-    !!getSlide(consequenceDestination);
-
-  $('accept').classList.toggle(
-    'hidden',
-    !hasConsequence
-  );
+  $('accept').classList.toggle('hidden',!hasConsequence);
 
   rollLocked = !!(
-    s.lockReroll ||
-    s.noReroll ||
-    s.rerollLocked ||
-    s.mustAccept ||
-    s.forceConsequence
+    s.lockReroll || s.noReroll || s.rerollLocked ||
+    s.mustAccept || s.forceConsequence
   );
 
   $('roll').disabled = rollLocked;
 
-  setText(
-    'rollHint',
-    rollLocked
-      ? 'Reroll locked for this slide.'
-      : ''
+  setText('rollHint',
+    rollLocked ? 'Reroll locked for this slide.' : ''
   );
 
-  // Slide 16 is an automatic winner.
   if(s.id === 16) {
     finishGame(true,false);
   }
 }
 
 function roll() {
-  if(
-    finished ||
-    endingStarted ||
-    rollLocked
-  ) {
-    return;
-  }
+  if(finished || endingStarted || rollLocked) return;
 
   if(!startedAt) {
     startedAt = Date.now();
-
-    tick = setInterval(
-      updateClock,
-      250
-    );
+    tick = setInterval(updateClock,250);
   }
 
-  const n =
-    Math.floor(Math.random() * 12) + 1;
-
-  lastRoll = n;
-
+  const n = Math.floor(Math.random()*12)+1;
   setText('die',n);
 
   const s = getSlide(n);
@@ -953,12 +687,8 @@ function roll() {
   if(s) {
     showSlide(s);
   } else {
-    setText(
-      'rollHint',
-      'Slide ' + n +
-      ' is not configured. Add it in Admin Studio.'
-    );
-
+    setText('rollHint',
+      'Slide '+n+' is not configured. Add it in Admin Studio.');
     $('slideArea').classList.add('hidden');
   }
 
@@ -966,28 +696,14 @@ function roll() {
 }
 
 function accept() {
-  if(
-    !current ||
-    finished ||
-    endingStarted
-  ) {
-    return;
-  }
+  if(!current || finished || endingStarted) return;
 
-  const destination =
-    current.destination ??
-    current.id + 12;
-
+  const destination = current.destination ?? current.id + 12;
   const target = getSlide(destination);
 
   if(!target) {
-    setText(
-      'rollHint',
-      'Consequence slide ' +
-      destination +
-      ' is not configured.'
-    );
-
+    setText('rollHint',
+      'Consequence slide '+destination+' is not configured.');
     return;
   }
 
@@ -995,40 +711,19 @@ function accept() {
 }
 
 // ========================================
-// END GAME - AUTOMATIC SAVE
+// FINISH GAME - AUTO SAVE
 // ========================================
 
-function finishGame(
-  won = false,
-  tappedOut = false
-) {
-  if(
-    finished ||
-    endingStarted ||
-    saving ||
-    scoreSaved
-  ) {
-    return;
-  }
-
-  if(!current && !tappedOut) {
-    return;
-  }
+function finishGame(won=false,tappedOut=false) {
+  if(finished || endingStarted || saving || scoreSaved) return;
+  if(!current && !tappedOut) return;
 
   finishKind = tappedOut
     ? 'tapped_out'
-    : (
-        won || current.id === 16
-          ? 'winner'
-          : 'ruined'
-      );
+    : (won || current.id === 16 ? 'winner' : 'ruined');
 
-  // Freeze Survival Time immediately
-  // when the player ends the run.
   updateClock();
-
   endingStarted = true;
-
   clearInterval(tick);
 
   $('roll').disabled = true;
@@ -1036,24 +731,19 @@ function finishGame(
   $('tapOut').disabled = true;
   $('accept').classList.add('hidden');
 
-  setText(
-    'status',
-    'Saving your Survival Time…'
-  );
+  setText('status','Saving your Survival Time…');
 
   saveScore();
 }
 
 // ========================================
-// LOCAL SCORE FALLBACK
+// LOCAL SCORES
 // ========================================
 
 function localScores() {
   try {
     return JSON.parse(
-      localStorage.getItem(
-        'd12_scores_v5'
-      ) || '[]'
+      localStorage.getItem('d12_scores_v5') || '[]'
     );
   } catch(e) {
     return [];
@@ -1061,29 +751,18 @@ function localScores() {
 }
 
 // ========================================
-// LEADERBOARD HELPERS
+// LEADERBOARDS
 // ========================================
 
 function safeCell(tr,value) {
   const td = document.createElement('td');
-
-  td.textContent = String(
-    value ?? ''
-  );
-
+  td.textContent = String(value ?? '');
   tr.append(td);
 }
 
 function isTappedOut(r) {
-  return (
-    r.featured_reddit_user ===
-    TAP_OUT_MARKER
-  );
+  return r.featured_reddit_user === TAP_OUT_MARKER;
 }
-
-// ========================================
-// RENDER LEADERBOARDS
-// ========================================
 
 function renderBoards(rows) {
   const soldier = $('soldierRows');
@@ -1093,20 +772,17 @@ function renderBoards(rows) {
   hunter.replaceChildren();
 
   const sorted = [...rows]
-    .sort(
-      (a,b) =>
-        Number(a.duration_ms || 0) -
-        Number(b.duration_ms || 0)
+    .sort((a,b) =>
+      Number(a.duration_ms || 0) -
+      Number(b.duration_ms || 0)
     )
     .slice(0,100);
 
   if(!sorted.length) {
     const tr = document.createElement('tr');
     const td = document.createElement('td');
-
     td.colSpan = 4;
     td.textContent = 'No scores yet.';
-
     tr.append(td);
     soldier.append(tr);
   }
@@ -1114,47 +790,21 @@ function renderBoards(rows) {
   for(const r of sorted) {
     const tr = document.createElement('tr');
 
-    safeCell(
-      tr,
-      r.name || 'Anonymous'
-    );
+    safeCell(tr,r.name || 'Anonymous');
+    safeCell(tr,fmt(r.duration_ms || 0));
 
-    safeCell(
-      tr,
-      fmt(r.duration_ms || 0)
-    );
+    const resultLabel = isTappedOut(r)
+      ? 'Tapped Out'
+      : r.result === 'winner'
+        ? 'Winner'
+        : 'Finished by '+(r.featured_reddit_user || 'Unassigned');
 
-    let resultLabel;
-
-    if(isTappedOut(r)) {
-      resultLabel = 'Tapped Out';
-    } else if(r.result === 'winner') {
-      resultLabel = 'Winner';
-    } else {
-      resultLabel =
-        'Finished by ' +
-        (
-          r.featured_reddit_user ||
-          'Unassigned'
-        );
-    }
-
-    safeCell(
-      tr,
-      resultLabel
-    );
-
-    safeCell(
-      tr,
-      isTappedOut(r)
-        ? '—'
-        : (r.ending_slide ?? '—')
-    );
+    safeCell(tr,resultLabel);
+    safeCell(tr,isTappedOut(r) ? '—' : (r.ending_slide ?? '—'));
 
     soldier.append(tr);
   }
 
-  // Count only actual hunter claims.
   const counts = new Map();
 
   for(const r of rows) {
@@ -1162,50 +812,32 @@ function renderBoards(rows) {
       r.result === 'winner' ||
       isTappedOut(r) ||
       !r.featured_reddit_user
-    ) {
-      continue;
-    }
+    ) continue;
 
-    const name = String(
-      r.featured_reddit_user
-    ).trim();
-
-    counts.set(
-      name,
-      (counts.get(name) || 0) + 1
-    );
+    const name = String(r.featured_reddit_user).trim();
+    counts.set(name,(counts.get(name) || 0)+1);
   }
 
   const ranked = [...counts].sort(
-    (a,b) =>
-      b[1] - a[1] ||
-      a[0].localeCompare(b[0])
+    (a,b) => b[1]-a[1] || a[0].localeCompare(b[0])
   );
 
   if(!ranked.length) {
     const tr = document.createElement('tr');
     const td = document.createElement('td');
-
     td.colSpan = 2;
     td.textContent = 'No hunter claims yet.';
-
     tr.append(td);
     hunter.append(tr);
   }
 
   for(const [name,count] of ranked) {
     const tr = document.createElement('tr');
-
     safeCell(tr,name);
     safeCell(tr,count);
-
     hunter.append(tr);
   }
 }
-
-// ========================================
-// REFRESH LEADERBOARDS
-// ========================================
 
 async function board() {
   try {
@@ -1213,186 +845,95 @@ async function board() {
 
     if(online()) {
       rows = await request(
-        'd12_scores?' +
-        'select=name,duration_ms,result,ending_slide,featured_reddit_user,created_at' +
-        '&order=created_at.desc' +
-        '&limit=1000'
+        'd12_scores?select=name,duration_ms,result,ending_slide,featured_reddit_user,created_at&order=created_at.desc&limit=1000'
       );
 
-      setText(
-        'boardMode',
-        'Public leaderboard · online · showing up to 1,000 recent scores'
-      );
-
+      setText('boardMode',
+        'Public leaderboard · online · showing up to 1,000 recent scores');
     } else {
       rows = localScores();
-
-      setText(
-        'boardMode',
-        'Local preview only · check Supabase settings in game-config.json'
-      );
+      setText('boardMode',
+        'Local preview only · check Supabase settings in game-config.json');
     }
 
-    renderBoards(
-      Array.isArray(rows) ? rows : []
-    );
+    renderBoards(Array.isArray(rows) ? rows : []);
 
   } catch(e) {
-    setText(
-      'boardMode',
-      'Leaderboard refresh unavailable: ' +
-      e.message
-    );
-
+    setText('boardMode',
+      'Leaderboard refresh unavailable: '+e.message);
     throw e;
   }
 }
 
 // ========================================
-// SAVE SCORE AUTOMATICALLY
+// SAVE SCORE
 // ========================================
 
 async function saveScore() {
-  if(
-    saving ||
-    scoreSaved ||
-    !endingStarted
-  ) {
-    return;
-  }
+  if(saving || scoreSaved || !endingStarted) return;
 
   saving = true;
-
   $('retrySave').classList.add('hidden');
 
-  const tappedOut =
-    finishKind === 'tapped_out';
+  const tappedOut = finishKind === 'tapped_out';
 
-  // Supabase requires a valid ending_slide.
-  // For tap-outs before the first roll,
-  // use slide 1 instead of invalid slide 0.
-  //
-  // The special hunter marker identifies
-  // a Tapped Out score on the leaderboard.
   const endingSlide = tappedOut
     ? (current ? current.id : 1)
     : current.id;
 
   const record = {
     name: playerName,
-
-    duration_ms: Math.max(
-      100,
-      Math.round(elapsed)
-    ),
-
-    result: tappedOut
-      ? 'ruined'
-      : finishKind,
-
+    duration_ms: Math.max(100,Math.round(elapsed)),
+    result: tappedOut ? 'ruined' : finishKind,
     ending_slide: endingSlide,
-
     featured_reddit_user: tappedOut
       ? TAP_OUT_MARKER
-      : (
-          finishKind === 'winner'
-            ? null
-            : (current.redditUser || null)
-        )
+      : finishKind === 'winner'
+        ? null
+        : (current.redditUser || null)
   };
 
-  // Save the score first.
-  // Leaderboard refreshing is handled
-  // separately after a confirmed save.
   try {
     if(online()) {
-      await request(
-        'd12_scores',
-        {
-          method: 'POST',
-          headers: {
-            Prefer: 'return=minimal'
-          },
-          body: JSON.stringify(record)
-        }
-      );
-
+      await request('d12_scores',{
+        method:'POST',
+        headers:{Prefer:'return=minimal'},
+        body:JSON.stringify(record)
+      });
     } else {
       const rows = localScores();
-
       rows.push(record);
-
-      localStorage.setItem(
-        'd12_scores_v5',
-        JSON.stringify(rows)
-      );
+      localStorage.setItem('d12_scores_v5',JSON.stringify(rows));
     }
-
   } catch(e) {
     saving = false;
 
-    setText(
-      'status',
-      'Score could not be saved: ' +
-      e.message
-    );
-
-    // Retry the same frozen score.
-    // Do not restart the timer or game.
-    $('retrySave').classList.remove(
-      'hidden'
-    );
-
+    setText('status','Score could not be saved: '+e.message);
+    $('retrySave').classList.remove('hidden');
     return;
   }
 
-  // Confirmed saved.
   scoreSaved = true;
   finished = true;
   saving = false;
-
   $('retrySave').classList.add('hidden');
 
   const outcome = tappedOut
     ? 'Tapped Out'
-    : (
-        finishKind === 'winner'
-          ? 'Winner!'
-          : (
-              'Finished by ' +
-              (
-                current.redditUser ||
-                'Unassigned'
-              )
-            )
-      );
+    : finishKind === 'winner'
+      ? 'Winner!'
+      : 'Finished by '+(current.redditUser || 'Unassigned');
 
-  setText(
-    'status',
-    outcome +
-    ' · Survival Time: ' +
-    fmt(elapsed) +
-    ' · Score saved!'
-  );
+  setText('status',
+    outcome+' · Survival Time: '+fmt(elapsed)+' · Score saved!');
 
-  // A leaderboard error must never
-  // change a successful save into
-  // a "Could not save" message.
   try {
     await board();
   } catch(e) {
-    console.warn(
-      'Score saved, but leaderboard refresh failed:',
-      e
-    );
-
-    setText(
-      'status',
-      outcome +
-      ' · Survival Time: ' +
-      fmt(elapsed) +
-      ' · Score saved! Leaderboard refresh unavailable.'
-    );
+    console.warn('Score saved, leaderboard refresh failed:',e);
+    setText('status',
+      outcome+' · Survival Time: '+fmt(elapsed)+
+      ' · Score saved! Leaderboard refresh unavailable.');
   }
 }
 
@@ -1400,49 +941,23 @@ async function saveScore() {
 // BUTTON EVENTS
 // ========================================
 
-$('start').addEventListener(
-  'click',
-  begin
-);
+$('start').addEventListener('click',begin);
+$('roll').addEventListener('click',roll);
+$('accept').addEventListener('click',accept);
 
-$('roll').addEventListener(
-  'click',
-  roll
-);
+$('finish').addEventListener('click',
+  () => finishGame(false,false));
 
-$('accept').addEventListener(
-  'click',
-  accept
-);
+$('tapOut').addEventListener('click',
+  () => finishGame(false,true));
 
-$('finish').addEventListener(
-  'click',
-  () => finishGame(false,false)
-);
+$('retrySave').addEventListener('click',saveScore);
 
-$('tapOut').addEventListener(
-  'click',
-  () => finishGame(false,true)
-);
+$('playerName').addEventListener('keydown',e => {
+  if(e.key === 'Enter') begin();
+});
 
-$('retrySave').addEventListener(
-  'click',
-  saveScore
-);
-
-$('playerName').addEventListener(
-  'keydown',
-  e => {
-    if(e.key === 'Enter') {
-      begin();
-    }
-  }
-);
-
-// ========================================
-// INITIALIZE
-// ========================================
-
+// Start loading configuration immediately.
 loadPublished();
 
 </script>
