@@ -202,7 +202,7 @@ th {
 }
 
 /* ========================================
-   NEW HUNT SUCCESS POPUP
+   HUNT SUCCESS POPUP
    ======================================== */
 
 .huntOverlay {
@@ -294,6 +294,56 @@ th {
 
 body.huntOpen {
   overflow: hidden;
+}
+
+/* ========================================
+   NEW GOLD AND PURPLE WINNER POPUP
+   ======================================== */
+
+.winnerPopup {
+  border: 2px solid #ffd76b;
+  background: linear-gradient(
+    160deg,
+    #302047,
+    #21172f 65%,
+    #38204c
+  );
+  box-shadow: 0 0 45px #ffd76b44;
+  text-align: center;
+}
+
+.winnerTrophy {
+  font-size: 92px;
+  line-height: 1.2;
+  margin: 8px 0;
+  filter: drop-shadow(0 0 18px #ffd76b88);
+}
+
+.winnerPopup h2 {
+  color: #ffd76b;
+  font-size: 30px;
+  letter-spacing: 1px;
+}
+
+.winnerTime {
+  font-size: 38px;
+  font-weight: 900;
+  color: #ffd76b;
+  font-variant-numeric: tabular-nums;
+  margin-top: 15px;
+}
+
+.winnerShare {
+  background: linear-gradient(
+    120deg,
+    #a56c14,
+    #6b3ca5
+  );
+  border: 1px solid #ffd76b;
+}
+
+.winnerPopup label {
+  text-align: left;
 }
 </style>
 </head>
@@ -473,7 +523,7 @@ Roll the D12. Survive as long as you can.
 </main>
 
 <!-- ========================================
-     NEW HUNT SUCCESS POPUP
+     HUNT SUCCESS POPUP
      ======================================== -->
 
 <div
@@ -533,6 +583,74 @@ Roll the D12. Survive as long as you can.
 
     <button
       id="closeHunt"
+      type="button"
+      class="secondary"
+    >
+      Close and View My Score
+    </button>
+
+  </div>
+
+</div>
+
+<!-- ========================================
+     NEW WINNER CELEBRATION POPUP
+     ======================================== -->
+
+<div
+  id="winnerOverlay"
+  class="huntOverlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="winnerHeading"
+>
+
+  <div class="huntPopup winnerPopup">
+
+    <div class="winnerTrophy">🏆</div>
+
+    <h2 id="winnerHeading">
+      NNN SURVIVOR!
+    </h2>
+
+    <p class="center">
+      You survived the D12 Challenge!
+    </p>
+
+    <div class="winnerTime" id="winnerTime">
+      00:00:00
+    </div>
+
+    <p class="center muted">
+      Final Survival Time
+    </p>
+
+    <label for="winnerPost">
+      ✍️ Customize your victory post
+    </label>
+
+    <textarea
+      id="winnerPost"
+      maxlength="10000"
+      placeholder="Tell the community how you survived..."
+    ></textarea>
+
+    <button
+      id="shareVictory"
+      type="button"
+      class="winnerShare"
+    >
+      🏆 Share Victory to Reddit
+    </button>
+
+    <p class="huntSmall">
+      Opens r/NoNutNovemberChalleng with your
+      victory message prefilled. You can edit
+      it before submitting.
+    </p>
+
+    <button
+      id="closeWinner"
       type="button"
       class="secondary"
     >
@@ -1223,7 +1341,7 @@ function accept() {
 }
 
 // ========================================
-// NEW HUNT SUCCESS POPUP
+// HUNT SUCCESS POPUP
 // ========================================
 
 function showHuntSuccess() {
@@ -1235,8 +1353,6 @@ function showHuntSuccess() {
 
   const time = readableTime(elapsed);
 
-  // Refresh the GIF source so the animation
-  // starts when the popup opens.
   $('huntGif').src =
     HUNT_GIF + '?play=' + Date.now();
 
@@ -1269,8 +1385,7 @@ function closeHuntSuccess() {
   document.body.classList.remove('huntOpen');
 
   $('retrySave').focus();
-  // Retry button may be hidden when the score
-  // saved successfully, so move focus to game.
+
   if ($('retrySave').classList.contains('hidden')) {
     $('game').setAttribute('tabindex', '-1');
     $('game').focus();
@@ -1296,8 +1411,56 @@ function shareHuntToReddit() {
     '&title=' + encodeURIComponent(title) +
     '&text=' + encodeURIComponent(post);
 
-  // Opens Reddit's submission page.
-  // The player must submit the post themselves.
+  window.location.href = url;
+}
+
+// ========================================
+// NEW WINNER CELEBRATION
+// ========================================
+
+function showWinnerCelebration() {
+  setText('winnerTime', fmt(elapsed));
+
+  $('winnerPost').value =
+    '🏆 I survived the NNN Challenge!\n\n' +
+    'I lasted ' + readableTime(elapsed) +
+    ' in the D12 Survival Game and made it ' +
+    'all the way to victory! 🎲\n\n' +
+    "Here's how I survived:\n\n";
+
+  $('winnerOverlay').classList.remove('hidden');
+  document.body.classList.add('huntOpen');
+
+  $('closeWinner').focus();
+}
+
+function closeWinnerCelebration() {
+  $('winnerOverlay').classList.add('hidden');
+  document.body.classList.remove('huntOpen');
+
+  $('game').setAttribute('tabindex', '-1');
+  $('game').focus();
+}
+
+function shareVictoryToReddit() {
+  const post = $('winnerPost').value.trim();
+
+  if (!post) {
+    alert('Please enter a message to share.');
+    $('winnerPost').focus();
+    return;
+  }
+
+  const title =
+    '🏆 I Survived the D12 NNN Challenge!';
+
+  const url =
+    'https://www.reddit.com/r/' +
+    REDDIT_COMMUNITY +
+    '/submit?type=TEXT' +
+    '&title=' + encodeURIComponent(title) +
+    '&text=' + encodeURIComponent(post);
+
   window.location.href = url;
 }
 
@@ -1347,12 +1510,12 @@ function finishGame(
     'Saving your Survival Time…'
   );
 
-  // Only show the hunt popup when the
-  // player actually presses "I Came".
-  // Winners and players tapping out
-  // keep their original ending behavior.
+  // Show the appropriate popup immediately.
+  // Score saving continues independently.
   if (finishKind === 'ruined') {
     showHuntSuccess();
+  } else if (finishKind === 'winner') {
+    showWinnerCelebration();
   }
 
   saveScore();
@@ -1678,7 +1841,7 @@ $('retrySave').addEventListener(
   saveScore
 );
 
-// New popup buttons.
+// Hunt popup buttons.
 $('shareReddit').addEventListener(
   'click',
   shareHuntToReddit
@@ -1687,6 +1850,17 @@ $('shareReddit').addEventListener(
 $('closeHunt').addEventListener(
   'click',
   closeHuntSuccess
+);
+
+// New winner popup buttons.
+$('shareVictory').addEventListener(
+  'click',
+  shareVictoryToReddit
+);
+
+$('closeWinner').addEventListener(
+  'click',
+  closeWinnerCelebration
 );
 
 $('playerName').addEventListener(
