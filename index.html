@@ -592,6 +592,7 @@ async function loadPublished() {
 // START GAME - FIXED
 // ========================================
 
+
 function begin() {
   const input = document.getElementById('playerName');
   const home = document.getElementById('home');
@@ -599,11 +600,36 @@ function begin() {
 
   const name = input.value.trim();
 
-  if(!name) {
-    setText('nameHint','Please enter your username first.');
+  if (!name) {
+    setText(
+      'nameHint',
+      'Please enter your username first.'
+    );
     input.focus();
     return;
   }
+
+  if (!configLoaded || slides.size === 0) {
+    setText(
+      'nameHint',
+      'Game slides are still loading or unavailable. Please try again.'
+    );
+    return;
+  }
+
+  if (playerName || finished || endingStarted) return;
+
+  playerName = name;
+
+  home.classList.add('hidden');
+  game.classList.remove('hidden');
+
+  setText('soldierName', 'Soldier: ' + playerName);
+
+  // Start the timer and immediately roll the D12.
+  roll();
+}
+
 
   if(!configLoaded || slides.size === 0) {
     setText('nameHint',
