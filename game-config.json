@@ -1,9 +1,9 @@
 {
-  "title": "A NNN challenge ",
-  "introTitle": "Do you have what it takes to survive the hunt?",
-  "introText": "Roll the die if you’re willing to risk it all.",
+  "title": "A NNN Challenge",
+  "introTitle": "Your fate awaits",
+  "introText": "Roll the twelve-sided die to begin.",
   "homeImageUrl": "",
-  "supabaseUrl": "https://nustqxwldlgsdncebwxt.supabase.co",
+  "supabaseUrl": "https://nustqxwldlgsdncebwxt.supabase.co/",
   "supabaseKey": "sb_publishable_eHWFWDOvdBpcn1B_9mYryg_KjiCvEdr",
   "slides": [
     {
@@ -12,7 +12,7 @@
       "description": "Placeholder for slide 1",
       "type": "placeholder",
       "url": "",
-      "redditUser": "u/Hunter1",
+      "redditUser": "",
       "consequence": false,
       "destination": 1,
       "rerollLockSeconds": 0
@@ -111,7 +111,7 @@
       "description": "Placeholder for slide 10",
       "type": "placeholder",
       "url": "",
-      "redditUser": "u/Hunter10",
+      "redditUser": "",
       "consequence": false,
       "destination": 1,
       "rerollLockSeconds": 0
@@ -133,7 +133,7 @@
       "description": "Placeholder for slide 12",
       "type": "placeholder",
       "url": "",
-      "redditUser": "u/hunter12",
+      "redditUser": "",
       "consequence": false,
       "destination": 1,
       "rerollLockSeconds": 0
