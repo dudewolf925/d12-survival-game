@@ -52,14 +52,10 @@ button{
   font:inherit;
   cursor:pointer
 }
-button.primary{
+button.primary,button.active{
   background:#c7aaff;
   color:#21112d;
   font-weight:bold
-}
-button.active{
-  background:#c7aaff;
-  color:#21112d
 }
 button.danger{
   background:#a51e32;
@@ -103,6 +99,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <p>
 Edit your game on your iPhone and publish changes
 directly to GitHub using your secure Supabase connection.
+Saved drafts are preserved when checking GitHub.
 </p>
 
 <section>
@@ -136,8 +133,8 @@ Choose home photo
 <div class="preview" id="homePreview"></div>
 
 <small>
-For a public game, hosted image URLs are recommended.
-Small photos can be embedded in the configuration.
+Hosted image URLs are recommended. Embedded media can
+make your configuration too large to publish.
 </small>
 </section>
 
@@ -219,10 +216,7 @@ Never enter a secret or service_role key.
 
 <label>
 Supabase project URL
-<input
-  id="supabaseUrl"
-  placeholder="https://project.supabase.co"
->
+<input id="supabaseUrl" placeholder="https://project.supabase.co">
 </label>
 
 <label>
@@ -269,14 +263,14 @@ It is not saved in your game configuration.
 <h2>🚀 Publish to GitHub</h2>
 
 <p>
-Load the current GitHub configuration before editing.
-When ready, publish your changes directly to
-<strong>game-config.json</strong>.
+Your saved draft loads automatically.
+Publishing saves your draft first, then checks GitHub's
+version without replacing your edits.
 </p>
 
 <div class="actions">
 <button id="loadGitHub" type="button">
-Load from GitHub
+Load from GitHub (replace editor)
 </button>
 </div>
 
@@ -290,12 +284,7 @@ Publishing password
 >
 </label>
 
-<button
-  id="publishGitHub"
-  class="primary"
-  type="button"
-  disabled
->
+<button id="publishGitHub" class="primary" type="button">
 🚀 Publish to GitHub
 </button>
 
@@ -303,8 +292,9 @@ Publishing password
 
 <small>
 Your GitHub token stays securely in Supabase.
-Your publishing password is never saved in
-game-config.json.
+Your publishing password is never saved in game-config.json.
+If GitHub changed since your draft's known version,
+publishing stops rather than overwriting those changes.
 </small>
 </section>
 
@@ -313,8 +303,8 @@ game-config.json.
 
 <p>
 Save Draft stores edits on this iPhone.
-Copy Configuration gives you JSON to paste into
-GitHub manually if needed.
+Publish to GitHub saves automatically.
+Copy Configuration provides a manual backup.
 </p>
 
 <div class="actions">
@@ -356,20 +346,31 @@ const DEFAULT = {
 const el = id => document.getElementById(id);
 const clone = x => JSON.parse(JSON.stringify(x));
 
-let cfg = clone(DEFAULT);
-let selected = 1;
-let githubExpectedSha = null;
+const DRAFT_KEY = "d12_config_v5";
+const SHA_KEY = "d12_github_sha_v1";
 
 const GITHUB_CONFIG_API =
   "https://api.github.com/repos/dudewolf925/d12-survival-game/contents/game-config.json?ref=main";
 
-try {
-  const saved = JSON.parse(
-    localStorage.getItem("d12_config_v5")
-  );
+let cfg = clone(DEFAULT);
+let selected = 1;
+let githubExpectedSha = null;
+let hasSavedDraft = false;
 
-  if(saved && Array.isArray(saved.slides)) {
-    cfg = saved;
+// Load the saved iPhone draft automatically.
+try {
+  const stored = localStorage.getItem(DRAFT_KEY);
+
+  if(stored) {
+    const saved = JSON.parse(stored);
+
+    if(saved && Array.isArray(saved.slides)) {
+      cfg = saved;
+      hasSavedDraft = true;
+
+      githubExpectedSha =
+        localStorage.getItem(SHA_KEY) || null;
+    }
   }
 } catch(e) {}
 
@@ -528,9 +529,7 @@ function commit() {
 }
 
 function validate() {
-  if(
-    /service_role|sb_secret_/i.test(cfg.supabaseKey)
-  ) {
+  if(/service_role|sb_secret_/i.test(cfg.supabaseKey)) {
     throw Error(
       "Never publish a Supabase secret/service_role key."
     );
@@ -556,7 +555,9 @@ function validate() {
 
     ids.add(s.id);
 
-    if(!["placeholder","image","video"].includes(s.type)) {
+    if(
+      !["placeholder","image","video"].includes(s.type)
+    ) {
       throw Error(
         "Slide " + s.id + ": invalid media type."
       );
@@ -593,10 +594,7 @@ function validate() {
   }
 
   for(const s of cfg.slides) {
-    if(
-      s.consequence &&
-      !ids.has(s.destination)
-    ) {
+    if(s.consequence && !ids.has(s.destination)) {
       throw Error(
         "Slide " + s.id +
         ": consequence destination missing."
@@ -605,33 +603,28 @@ function validate() {
   }
 }
 
-function save() {
+function saveDraft() {
   commit();
   validate();
 
-  try {
-    localStorage.setItem(
-      "d12_config_v5",
-      JSON.stringify(cfg)
-    );
+  localStorage.setItem(
+    DRAFT_KEY,
+    JSON.stringify(cfg)
+  );
 
-    message(
-      "Draft saved on this device. " +
-      "Use Publish to GitHub to update your game."
-    );
-  } catch(e) {
-    message(
-      "Browser storage is full. " +
-      "Use Copy Configuration to preserve your edits."
-    );
-  }
+  hasSavedDraft = true;
+
+  message(
+    "Draft saved on this iPhone. " +
+    "Publish to GitHub to update your game."
+  );
 }
 
 el("save").onclick = () => {
   try {
-    save();
+    saveDraft();
   } catch(e) {
-    message(e.message);
+    message("Save failed: " + e.message);
   }
 };
 
@@ -678,9 +671,7 @@ el("add").onclick = () => {
     Math.max(...cfg.slides.map(s => s.id)) + 1;
 
   if(id > 99) {
-    return message(
-      "Maximum slide number is 99."
-    );
+    return message("Maximum slide number is 99.");
   }
 
   cfg.slides.push({
@@ -719,22 +710,25 @@ el("remove").onclick = () => {
 };
 
 el("reset").onclick = () => {
-  if(
-    !confirm("Reset all edits on this device?")
-  ) {
+  if(!confirm("Reset all edits on this device?")) {
     return;
   }
 
   cfg = clone(DEFAULT);
   selected = 1;
   githubExpectedSha = null;
+  hasSavedDraft = false;
 
-  el("publishGitHub").disabled = true;
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+    localStorage.removeItem(SHA_KEY);
+  } catch(e) {}
 
   fill();
 
   message(
-    "Defaults restored. Save or copy to keep them."
+    "Defaults restored in the editor. " +
+    "Save Draft to keep them."
   );
 };
 
@@ -783,11 +777,7 @@ el("homeFile").onchange = async () => {
     el("homeImageUrl").value = url;
     cfg.homeImageUrl = url;
 
-    preview(
-      "homePreview",
-      "image",
-      url
-    );
+    preview("homePreview","image",url);
 
     message(
       "Home photo loaded. " +
@@ -801,11 +791,7 @@ el("homeFile").onchange = async () => {
 el("slideFile").onchange = async () => {
   try {
     const file = el("slideFile").files[0];
-
-    const url = await upload(
-      file,
-      "slide"
-    );
+    const url = await upload(file,"slide");
 
     if(!url) return;
 
@@ -815,7 +801,6 @@ el("slideFile").onchange = async () => {
       : "image";
 
     el("url").value = url;
-
     commit();
 
     preview(
@@ -871,8 +856,7 @@ el("resetLeaderboards").onclick = async () => {
   const notice = el("resetNotice");
   const button = el("resetLeaderboards");
 
-  const password =
-    el("resetPassword").value;
+  const password = el("resetPassword").value;
 
   const projectUrl =
     el("supabaseUrl")
@@ -927,14 +911,11 @@ el("resetLeaderboards").onclick = async () => {
   }
 
   button.disabled = true;
-
-  notice.textContent =
-    "Resetting leaderboards…";
+  notice.textContent = "Resetting leaderboards…";
 
   try {
     const response = await fetch(
-      projectUrl +
-      "/functions/v1/reset-leaderboards",
+      projectUrl + "/functions/v1/reset-leaderboards",
       {
         method:"POST",
         headers:{
@@ -949,7 +930,6 @@ el("resetLeaderboards").onclick = async () => {
     );
 
     const raw = await response.text();
-
     let result;
 
     try {
@@ -1013,9 +993,7 @@ async function getGitHubConfig() {
     );
   }
 
-  const encoded =
-    file.content.replace(/\s/g,"");
-
+  const encoded = file.content.replace(/\s/g,"");
   const binary = atob(encoded);
 
   const bytes = Uint8Array.from(
@@ -1023,15 +1001,11 @@ async function getGitHubConfig() {
     character => character.charCodeAt(0)
   );
 
-  const text =
-    new TextDecoder().decode(bytes);
+  const config = JSON.parse(
+    new TextDecoder().decode(bytes)
+  );
 
-  const config = JSON.parse(text);
-
-  if(
-    !config ||
-    !Array.isArray(config.slides)
-  ) {
+  if(!config || !Array.isArray(config.slides)) {
     throw Error(
       "GitHub configuration has no valid slides array."
     );
@@ -1049,8 +1023,8 @@ el("loadGitHub").onclick = async () => {
   if(
     !confirm(
       "Load the current GitHub configuration?\n\n" +
-      "This replaces unsaved edits in the editor. " +
-      "Use Save Draft first if you need to preserve them."
+      "This REPLACES the editor's current draft. " +
+      "Save or copy your draft first if you need it."
     )
   ) {
     return;
@@ -1063,26 +1037,33 @@ el("loadGitHub").onclick = async () => {
   );
 
   try {
-    const latest =
-      await getGitHubConfig();
+    const latest = await getGitHubConfig();
+
+    // Store the GitHub configuration and matching
+    // version together.
+    localStorage.setItem(
+      DRAFT_KEY,
+      JSON.stringify(latest.config)
+    );
+
+    localStorage.setItem(
+      SHA_KEY,
+      latest.sha
+    );
 
     cfg = latest.config;
     selected = 1;
     githubExpectedSha = latest.sha;
+    hasSavedDraft = true;
 
     fill();
 
-    el("publishGitHub").disabled = false;
-
     publishMessage(
-      "GitHub configuration loaded. " +
-      "You can now edit your slides and publish."
+      "GitHub configuration loaded and saved as " +
+      "your draft. Edit and publish whenever you're ready."
     );
+
   } catch(error) {
-    githubExpectedSha = null;
-
-    el("publishGitHub").disabled = true;
-
     publishMessage(
       "Load failed: " + error.message
     );
@@ -1094,28 +1075,16 @@ el("loadGitHub").onclick = async () => {
 el("publishGitHub").onclick = async () => {
   const button = el("publishGitHub");
 
-  // Automatically save draft BEFORE publishing.
+  // Automatically save the draft first.
   try {
-    commit();
-    validate();
+    saveDraft();
 
-    localStorage.setItem(
-      "d12_config_v5",
-      JSON.stringify(cfg)
+    publishMessage(
+      "Draft saved automatically. Checking GitHub..."
     );
-
-    message("Draft automatically saved on this iPhone.");
-    publishMessage("Draft saved. Preparing to publish...");
   } catch(error) {
     publishMessage(
-      "Draft could not be saved: " + error.message
-    );
-    return;
-  }
-
-  if(!githubExpectedSha) {
-    publishMessage(
-      "Draft saved. Load from GitHub before publishing."
+      "Could not save draft: " + error.message
     );
     return;
   }
@@ -1129,13 +1098,18 @@ el("publishGitHub").onclick = async () => {
     return;
   }
 
-  const projectUrl = el("supabaseUrl")
-    .value.trim().replace(/\/$/, "");
+  const projectUrl =
+    el("supabaseUrl")
+    .value.trim()
+    .replace(/\/$/,"");
 
-  const publicKey = el("supabaseKey").value.trim();
+  const publicKey =
+    el("supabaseKey").value.trim();
 
   if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(projectUrl)
+    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(
+      projectUrl
+    )
   ) {
     publishMessage(
       "Draft saved. Enter a valid Supabase project URL."
@@ -1150,78 +1124,174 @@ el("publishGitHub").onclick = async () => {
     return;
   }
 
-  if(!confirm(
-    "Your draft was saved automatically.\n\n" +
-    "Publish these changes to GitHub?"
-  )) {
-    publishMessage(
-      "Draft saved. GitHub publishing cancelled."
-    );
-    return;
-  }
-
   button.disabled = true;
-  publishMessage(
-    "Draft saved. Publishing to GitHub..."
-  );
 
   try {
+    // Check GitHub's current file version.
+    // Do NOT replace the editor's draft.
     const response = await fetch(
-      projectUrl + "/functions/v1/publish-game-config",
+      GITHUB_CONFIG_API,
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": publicKey
+        headers:{
+          "Accept":"application/vnd.github+json"
         },
-        body: JSON.stringify({
-          password,
-          expectedSha: githubExpectedSha,
-          config: cfg
-        })
+        cache:"no-store"
       }
     );
 
-    const raw = await response.text();
-    let result;
-
-    try {
-      result = JSON.parse(raw);
-    } catch(error) {
+    if(!response.ok) {
       throw Error(
-        "Unexpected server response: " +
-        raw.slice(0, 180)
-      );
-    }
-
-    if(!response.ok || !result.ok) {
-      throw Error(
-        result.error ||
-        "Publishing failed (HTTP " +
+        "Could not check GitHub (HTTP " +
         response.status + ")"
       );
     }
 
+    const remote = await response.json();
+
+    if(typeof remote.sha !== "string") {
+      throw Error(
+        "GitHub did not return a file version."
+      );
+    }
+
+    // Stop if GitHub has changed since this
+    // draft's last synchronized version.
+    if(
+      githubExpectedSha &&
+      githubExpectedSha !== remote.sha
+    ) {
+      publishMessage(
+        "Your draft is safe on this iPhone, " +
+        "but GitHub changed since your last " +
+        "synchronized version. Publishing stopped " +
+        "to avoid overwriting newer changes. " +
+        "Do not tap Load from GitHub unless you " +
+        "want to replace your draft."
+      );
+      return;
+    }
+
+    // Older drafts may not have a saved GitHub SHA.
+    if(!githubExpectedSha) {
+      if(
+        !confirm(
+          "Your saved draft has no recorded GitHub " +
+          "version.\n\n" +
+          "Your draft will NOT be replaced.\n\n" +
+          "Publish your entire saved draft over the " +
+          "current GitHub configuration?"
+        )
+      ) {
+        publishMessage(
+          "Draft preserved. Publishing cancelled."
+        );
+        return;
+      }
+    } else if(
+      !confirm(
+        "Draft saved automatically. " +
+        "GitHub has no newer changes.\n\n" +
+        "Publish your current draft now?"
+      )
+    ) {
+      publishMessage(
+        "Draft saved. Publishing cancelled."
+      );
+      return;
+    }
+
+    publishMessage(
+      "Draft saved. Publishing to GitHub..."
+    );
+
+    const publishResponse = await fetch(
+      projectUrl + "/functions/v1/publish-game-config",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "apikey":publicKey
+        },
+        body:JSON.stringify({
+          password,
+          expectedSha:remote.sha,
+          config:cfg
+        })
+      }
+    );
+
+    const raw = await publishResponse.text();
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+    } catch(e) {
+      throw Error(
+        "Unexpected server response: " +
+        raw.slice(0,180)
+      );
+    }
+
+    if(!publishResponse.ok || !result.ok) {
+      throw Error(
+        result.error ||
+        "Publishing failed (HTTP " +
+        publishResponse.status + ")"
+      );
+    }
+
+    // Remember the newly published GitHub version.
     githubExpectedSha = result.sha || null;
+
+    try {
+      if(githubExpectedSha) {
+        localStorage.setItem(
+          SHA_KEY,
+          githubExpectedSha
+        );
+      } else {
+        localStorage.removeItem(SHA_KEY);
+      }
+    } catch(e) {
+      publishMessage(
+        "Published successfully, but Safari " +
+        "could not remember GitHub's new version. " +
+        "Your draft remains saved."
+      );
+      return;
+    }
+
     el("publishPassword").value = "";
 
     publishMessage(
-      "Success! Draft saved automatically and " +
-      "game-config.json published to GitHub."
+      "Success! Your draft was saved and " +
+      "game-config.json published to GitHub. " +
+      "No reload was needed."
     );
 
   } catch(error) {
     publishMessage(
-      "Draft saved, but publishing failed: " +
-      error.message
+      "Your draft is preserved on this iPhone. " +
+      "Publishing failed: " + error.message
     );
   } finally {
-    button.disabled = !githubExpectedSha;
+    button.disabled = false;
   }
 };
 
-
 fill();
+
+if(hasSavedDraft) {
+  publishMessage(
+    "Saved iPhone draft loaded. You can edit " +
+    "and publish without pulling from GitHub."
+  );
+} else {
+  publishMessage(
+    "No saved draft found. Load from GitHub once " +
+    "to begin, or edit the defaults and publish deliberately."
+  );
+}
 </script>
 </body>
 </html>
