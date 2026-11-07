@@ -174,7 +174,8 @@ Roll the D12. Survive as long as you can.
   <div id="homeMedia"></div>
 
   <p id="intro">
-    Roll to begin. Your Survival Time starts with your first roll.
+    Risk it all. Your Survival Time begins
+    the moment you enter the game.
   </p>
 
   <label for="playerName" class="label"
@@ -195,8 +196,8 @@ Roll the D12. Survive as long as you can.
   </p>
 
   <button id="start" type="button">
-  I agree to risk it all
-</button>
+    I agree to risk it all
+  </button>
 
 </section>
 
@@ -313,12 +314,10 @@ Roll the D12. Survive as long as you can.
 
 const $ = id => document.getElementById(id);
 
-const setText = (id,value) => {
+function setText(id,value) {
   const element = $(id);
-  if(element) {
-    element.textContent = String(value ?? '');
-  }
-};
+  if(element) element.textContent = String(value ?? '');
+}
 
 const TAP_OUT_MARKER = '__TAPPED_OUT__';
 
@@ -345,7 +344,6 @@ let playerName = '';
 let saving = false;
 let scoreSaved = false;
 let rollLocked = false;
-
 let configLoaded = false;
 
 // ========================================
@@ -379,7 +377,10 @@ function online() {
 
   return (
     /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url) &&
-    /^sb_publishable_[A-Za-z0-9_-]+$/.test(key)
+    (
+      /^sb_publishable_[A-Za-z0-9_-]+$/.test(key) ||
+      /^eyJ[A-Za-z0-9._-]+$/.test(key)
+    )
   );
 }
 
@@ -393,8 +394,8 @@ async function request(path,options={}) {
     throw Error('Invalid Supabase URL');
   }
 
-  if(!/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) {
-    throw Error('Invalid Supabase publishable key');
+  if(!online()) {
+    throw Error('Invalid Supabase public key');
   }
 
   const headers = {
@@ -403,8 +404,10 @@ async function request(path,options={}) {
     ...(options.headers || {})
   };
 
-  delete headers.Authorization;
-  delete headers.authorization;
+  // Legacy anon JWT keys may need bearer authorization.
+  if(key.startsWith('eyJ')) {
+    headers.Authorization = 'Bearer '+key;
+  }
 
   let response;
 
@@ -549,10 +552,16 @@ async function loadPublished() {
     config = {...DEFAULT,...c};
 
     setText('gameTitle',c.title || c.gameTitle || DEFAULT.title);
-    setText('subtitle',c.subtitle ||
-      'Roll the D12. Survive as long as you can.');
-    setText('intro',c.intro || c.instructions ||
-      'Roll to begin. Your Survival Time starts with your first roll.');
+
+    setText('subtitle',
+      c.subtitle || c.introTitle ||
+      'Roll the D12. Survive as long as you can.'
+    );
+
+    setText('intro',
+      c.intro || c.introText || c.instructions ||
+      'Risk it all. Your Survival Time starts on your first roll.'
+    );
 
     showMedia(
       'homeMedia',
@@ -576,11 +585,11 @@ async function loadPublished() {
 
   } catch(e) {
     setText('configStatus',
-      'Could not load game-config.json: '+e.message);
+      'Could not load game-config.json: '+e.message
+    );
   }
 
-  // A leaderboard failure cannot prevent the start button
-  // from working.
+  // Leaderboard loading never blocks gameplay.
   try {
     await board();
   } catch(e) {
@@ -589,9 +598,8 @@ async function loadPublished() {
 }
 
 // ========================================
-// START GAME - FIXED
+// START GAME
 // ========================================
-
 
 function begin() {
   const input = document.getElementById('playerName');
@@ -600,44 +608,13 @@ function begin() {
 
   const name = input.value.trim();
 
-  if (!name) {
-    setText(
-      'nameHint',
-      'Please enter your username first.'
-    );
+  if(!name) {
+    setText('nameHint','Please enter your username first.');
     input.focus();
     return;
   }
 
-  if (!configLoaded || slides.size === 0) {
-    setText(
-      'nameHint',
-      'Game slides are still loading or unavailable. Please try again.'
-    );
-    return;
-  }
-
-  if (playerName || finished || endingStarted) return;
-
-  playerName = name;
-
-  home.classList.add('hidden');
-  game.classList.remove('hidden');
-
-  setText('soldierName', 'Soldier: ' + playerName);
-
-  // Start the timer and immediately roll the D12.
-  roll();
-}
-
-
-  if(!configLoaded || slides.size === 0) {
-    setText('nameHint',
-      'Game slides are still loading or unavailable. Check the message below the leaderboards.');
-    return;
-  }
-
-  if(finished || endingStarted) return;
+  if(playerName || finished || endingStarted) return;
 
   playerName = name;
 
@@ -645,7 +622,10 @@ function begin() {
   game.classList.remove('hidden');
 
   setText('soldierName','Soldier: '+playerName);
-  setText('status','Ready! Roll the D12 to begin.');
+  setText('status','Rolling the D12…');
+
+  // The first button starts the timer and rolls.
+  roll();
 }
 
 // ========================================
@@ -677,13 +657,19 @@ function showSlide(s) {
   );
 
   const destination = s.destination ?? s.id + 12;
-  const hasConsequence = s.id <= 12 && !!getSlide(destination);
+
+  const hasConsequence =
+    s.id <= 12 &&
+    !!getSlide(destination);
 
   $('accept').classList.toggle('hidden',!hasConsequence);
 
   rollLocked = !!(
-    s.lockReroll || s.noReroll || s.rerollLocked ||
-    s.mustAccept || s.forceConsequence
+    s.lockReroll ||
+    s.noReroll ||
+    s.rerollLocked ||
+    s.mustAccept ||
+    s.forceConsequence
   );
 
   $('roll').disabled = rollLocked;
@@ -713,9 +699,12 @@ function roll() {
   if(s) {
     showSlide(s);
   } else {
-    setText('rollHint',
-      'Slide '+n+' is not configured. Add it in Admin Studio.');
+    current = null;
     $('slideArea').classList.add('hidden');
+
+    setText('rollHint',
+      'Slide '+n+' is not configured. Check game-config.json.'
+    );
   }
 
   updateClock();
@@ -729,7 +718,8 @@ function accept() {
 
   if(!target) {
     setText('rollHint',
-      'Consequence slide '+destination+' is not configured.');
+      'Consequence slide '+destination+' is not configured.'
+    );
     return;
   }
 
@@ -737,7 +727,7 @@ function accept() {
 }
 
 // ========================================
-// FINISH GAME - AUTO SAVE
+// FINISH GAME - AUTOMATIC SAVE
 // ========================================
 
 function finishGame(won=false,tappedOut=false) {
@@ -875,24 +865,27 @@ async function board() {
       );
 
       setText('boardMode',
-        'Public leaderboard · online · showing up to 1,000 recent scores');
+        'Public leaderboard · online · showing up to 1,000 recent scores'
+      );
     } else {
       rows = localScores();
       setText('boardMode',
-        'Local preview only · check Supabase settings in game-config.json');
+        'Local preview only · check Supabase settings in game-config.json'
+      );
     }
 
     renderBoards(Array.isArray(rows) ? rows : []);
 
   } catch(e) {
     setText('boardMode',
-      'Leaderboard refresh unavailable: '+e.message);
+      'Leaderboard refresh unavailable: '+e.message
+    );
     throw e;
   }
 }
 
 // ========================================
-// SAVE SCORE
+// SAVE SCORE AUTOMATICALLY
 // ========================================
 
 async function saveScore() {
@@ -903,6 +896,8 @@ async function saveScore() {
 
   const tappedOut = finishKind === 'tapped_out';
 
+  // The database requires a valid ending slide.
+  // Use the marker to distinguish tap-outs.
   const endingSlide = tappedOut
     ? (current ? current.id : 1)
     : current.id;
@@ -951,15 +946,18 @@ async function saveScore() {
       : 'Finished by '+(current.redditUser || 'Unassigned');
 
   setText('status',
-    outcome+' · Survival Time: '+fmt(elapsed)+' · Score saved!');
+    outcome+' · Survival Time: '+fmt(elapsed)+' · Score saved!'
+  );
 
   try {
     await board();
   } catch(e) {
     console.warn('Score saved, leaderboard refresh failed:',e);
+
     setText('status',
       outcome+' · Survival Time: '+fmt(elapsed)+
-      ' · Score saved! Leaderboard refresh unavailable.');
+      ' · Score saved! Leaderboard refresh unavailable.'
+    );
   }
 }
 
@@ -983,7 +981,10 @@ $('playerName').addEventListener('keydown',e => {
   if(e.key === 'Enter') begin();
 });
 
-// Start loading configuration immediately.
+// ========================================
+// INITIALIZE
+// ========================================
+
 loadPublished();
 
 </script>
