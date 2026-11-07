@@ -383,7 +383,6 @@ const r=await fetch(config.supabaseUrl.replace(/\/$/,'')+'/rest/v1/'+path,{
 ...options,
 headers:{
 apikey:config.supabaseKey,
-Authorization:'Bearer '+config.supabaseKey,
 'Content-Type':'application/json',
 ...options.headers
 }
