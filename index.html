@@ -150,7 +150,8 @@ button:disabled {
   color: var(--accent);
 }
 
-input {
+input,
+textarea {
   width: 100%;
   border: 1px solid #85759a;
   border-radius: 10px;
@@ -158,6 +159,11 @@ input {
   color: white;
   font: inherit;
   padding: 12px;
+}
+
+textarea {
+  min-height: 135px;
+  resize: vertical;
 }
 
 table {
@@ -193,6 +199,101 @@ th {
 .notice {
   font-size: 13px;
   color: var(--muted);
+}
+
+/* ========================================
+   NEW HUNT SUCCESS POPUP
+   ======================================== */
+
+.huntOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(5, 3, 12, .94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+.huntPopup {
+  width: 100%;
+  max-width: 540px;
+  max-height: 95dvh;
+  overflow-y: auto;
+  background: #211a32;
+  border: 2px solid #b38aff;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 0 40px #8c42ff55;
+}
+
+.huntPopup h2 {
+  text-align: center;
+  color: #e5d0ff;
+}
+
+.huntGif {
+  display: block;
+  width: 100%;
+  max-height: 330px;
+  object-fit: contain;
+  border-radius: 12px 12px 0 0;
+  background: #09070d;
+}
+
+.huntBanner {
+  background: linear-gradient(
+    120deg,
+    #682d9f,
+    #a43c6f
+  );
+  border-radius: 0 0 12px 12px;
+  padding: 15px 10px;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.huntTime {
+  text-align: center;
+  color: #f2ddff;
+  font-size: 17px;
+  margin: 14px 0;
+}
+
+.huntPopup label {
+  display: block;
+  color: var(--accent);
+  font-weight: 700;
+  margin: 12px 0 6px;
+}
+
+.huntPopup textarea {
+  margin-bottom: 12px;
+}
+
+.huntPopup button {
+  width: 100%;
+  margin: 5px 0;
+}
+
+.huntShare {
+  background: #ff4500;
+  border-color: #ff7949;
+}
+
+.huntSmall {
+  font-size: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+
+body.huntOpen {
+  overflow: hidden;
 }
 </style>
 </head>
@@ -371,6 +472,77 @@ Roll the D12. Survive as long as you can.
 
 </main>
 
+<!-- ========================================
+     NEW HUNT SUCCESS POPUP
+     ======================================== -->
+
+<div
+  id="huntOverlay"
+  class="huntOverlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="huntHeading"
+>
+
+  <div class="huntPopup">
+
+    <h2 id="huntHeading">
+      🎯 HUNT SUCCESSFUL!
+    </h2>
+
+    <img
+      id="huntGif"
+      class="huntGif"
+      src="https://i.imgur.com/9CEEzCM.gif"
+      alt="Hunt success animation"
+    >
+
+    <div
+      id="huntBanner"
+      class="huntBanner"
+      aria-live="polite"
+    >
+      Successfully hunted!
+    </div>
+
+    <p class="huntTime" id="huntTime"></p>
+
+    <label for="redditPost">
+      ✍️ Customize your Reddit post
+    </label>
+
+    <textarea
+      id="redditPost"
+      maxlength="10000"
+      placeholder="Tell the community what happened..."
+    ></textarea>
+
+    <button
+      id="shareReddit"
+      type="button"
+      class="huntShare"
+    >
+      🟠 Share to Reddit
+    </button>
+
+    <p class="huntSmall">
+      Opens r/NoNutNovemberChalleng with your
+      post prefilled. You can review or edit it
+      before submitting.
+    </p>
+
+    <button
+      id="closeHunt"
+      type="button"
+      class="secondary"
+    >
+      Close and View My Score
+    </button>
+
+  </div>
+
+</div>
+
 <script>
 'use strict';
 
@@ -388,6 +560,12 @@ function setText(id, value) {
 }
 
 const TAP_OUT_MARKER = '__TAPPED_OUT__';
+
+const HUNT_GIF =
+  'https://i.imgur.com/9CEEzCM.gif';
+
+const REDDIT_COMMUNITY =
+  'NoNutNovemberChalleng';
 
 const DEFAULT = {
   title: 'D12 Survival Game',
@@ -429,6 +607,43 @@ function fmt(ms) {
     Math.floor(s % 3600 / 60),
     s % 60
   ].map(x => String(x).padStart(2, '0')).join(':');
+}
+
+function readableTime(ms) {
+  const total = Math.max(
+    0,
+    Math.floor(ms / 1000)
+  );
+
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor(
+    (total % 3600) / 60
+  );
+  const seconds = total % 60;
+
+  const parts = [];
+
+  if (hours) {
+    parts.push(
+      hours + (hours === 1 ? ' hour' : ' hours')
+    );
+  }
+
+  if (minutes) {
+    parts.push(
+      minutes + (
+        minutes === 1 ? ' minute' : ' minutes'
+      )
+    );
+  }
+
+  parts.push(
+    seconds + (
+      seconds === 1 ? ' second' : ' seconds'
+    )
+  );
+
+  return parts.join(', ');
 }
 
 function updateClock() {
@@ -488,7 +703,10 @@ async function request(path, options = {}) {
       {...options, headers}
     );
   } catch (e) {
-    throw Error('Browser request: ' + e.name + ': ' + e.message);
+    throw Error(
+      'Browser request: ' +
+      e.name + ': ' + e.message
+    );
   }
 
   if (!response.ok) {
@@ -535,7 +753,8 @@ function normalizeSlide(s, index) {
     ...s,
     id,
     title: s.title || s.name || 'Slide ' + id,
-    description: s.description || s.text || s.body || '',
+    description:
+      s.description || s.text || s.body || '',
     redditUser:
       s.redditUser ||
       s.reddit_user ||
@@ -568,7 +787,11 @@ function normalizeSlide(s, index) {
 function parseSlides(raw) {
   let data = raw;
 
-  if (!Array.isArray(data) && data && typeof data === 'object') {
+  if (
+    !Array.isArray(data) &&
+    data &&
+    typeof data === 'object'
+  ) {
     data = Object.entries(data).map(([id, v]) => ({
       ...v,
       id: v?.id ?? id
@@ -595,7 +818,10 @@ function mediaNode(value) {
 
   const url = String(source).trim();
 
-  if (!/^(https?:|data:image\/|data:video\/|blob:)/i.test(url)) {
+  if (
+    !/^(https?:|data:image\/|data:video\/|blob:)/i
+      .test(url)
+  ) {
     return null;
   }
 
@@ -711,7 +937,8 @@ async function loadPublished() {
   } catch (e) {
     setText(
       'configStatus',
-      'Could not load game-config.json: ' + e.message
+      'Could not load game-config.json: ' +
+      e.message
     );
   }
 
@@ -745,7 +972,11 @@ function begin() {
     return;
   }
 
-  if (playerName || finished || endingStarted) {
+  if (
+    playerName ||
+    finished ||
+    endingStarted
+  ) {
     return;
   }
 
@@ -761,7 +992,6 @@ function begin() {
 
   setText('status', 'Rolling the D12…');
 
-  // Starts the timer and rolls immediately.
   roll();
 }
 
@@ -851,7 +1081,6 @@ function showSlide(s) {
   const target = validDestination(s);
   const required = isRequiredConsequence(s);
 
-  // Only base slides can offer consequence paths.
   const canAccept = s.id <= 12 && !!target;
 
   $('accept').classList.toggle(
@@ -859,7 +1088,6 @@ function showSlide(s) {
     !canAccept
   );
 
-  // Required consequences override timed reroll settings.
   if (required) {
     rollLocked = true;
     $('roll').disabled = true;
@@ -991,8 +1219,86 @@ function accept() {
     return;
   }
 
-  // Direct navigation; do not roll the die again.
   showSlide(target);
+}
+
+// ========================================
+// NEW HUNT SUCCESS POPUP
+// ========================================
+
+function showHuntSuccess() {
+  if (!current) return;
+
+  const hunter = String(
+    current.redditUser || ''
+  ).trim() || 'an unassigned hunter';
+
+  const time = readableTime(elapsed);
+
+  // Refresh the GIF source so the animation
+  // starts when the popup opens.
+  $('huntGif').src =
+    HUNT_GIF + '?play=' + Date.now();
+
+  setText(
+    'huntBanner',
+    'Successfully hunted by ' + hunter
+  );
+
+  setText(
+    'huntTime',
+    '⏱️ Survival Time: ' + fmt(elapsed)
+  );
+
+  const post =
+    'I lasted ' + time +
+    ' in the NNN Challenge, but ultimately ' +
+    'lost myself to ' + hunter + '. 🎲\n\n' +
+    'My D12 Survival Game experience:\n\n';
+
+  $('redditPost').value = post;
+
+  $('huntOverlay').classList.remove('hidden');
+  document.body.classList.add('huntOpen');
+
+  $('closeHunt').focus();
+}
+
+function closeHuntSuccess() {
+  $('huntOverlay').classList.add('hidden');
+  document.body.classList.remove('huntOpen');
+
+  $('retrySave').focus();
+  // Retry button may be hidden when the score
+  // saved successfully, so move focus to game.
+  if ($('retrySave').classList.contains('hidden')) {
+    $('game').setAttribute('tabindex', '-1');
+    $('game').focus();
+  }
+}
+
+function shareHuntToReddit() {
+  const post = $('redditPost').value.trim();
+
+  if (!post) {
+    alert('Please enter a message to share.');
+    $('redditPost').focus();
+    return;
+  }
+
+  const title =
+    'D12 NNN Challenge - Successfully Hunted';
+
+  const url =
+    'https://www.reddit.com/r/' +
+    REDDIT_COMMUNITY +
+    '/submit?type=TEXT' +
+    '&title=' + encodeURIComponent(title) +
+    '&text=' + encodeURIComponent(post);
+
+  // Opens Reddit's submission page.
+  // The player must submit the post themselves.
+  window.location.href = url;
 }
 
 // ========================================
@@ -1040,6 +1346,14 @@ function finishGame(
     'status',
     'Saving your Survival Time…'
   );
+
+  // Only show the hunt popup when the
+  // player actually presses "I Came".
+  // Winners and players tapping out
+  // keep their original ending behavior.
+  if (finishKind === 'ruined') {
+    showHuntSuccess();
+  }
 
   saveScore();
 }
@@ -1362,6 +1676,17 @@ $('tapOut').addEventListener(
 $('retrySave').addEventListener(
   'click',
   saveScore
+);
+
+// New popup buttons.
+$('shareReddit').addEventListener(
+  'click',
+  shareHuntToReddit
+);
+
+$('closeHunt').addEventListener(
+  'click',
+  closeHuntSuccess
 );
 
 $('playerName').addEventListener(
