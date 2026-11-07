@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>D12 Survival Game</title>
 
 <style>
@@ -17,13 +17,19 @@
   --muted: #c9bfd7;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  background: radial-gradient(ellipse at top,#2b1a43,var(--bg) 70%);
+  background: radial-gradient(
+    ellipse at top,
+    #2b1a43,
+    var(--bg) 70%
+  );
   color: var(--text);
-  font: 16px/1.5 system-ui,-apple-system,sans-serif;
+  font: 16px/1.5 system-ui, -apple-system, sans-serif;
 }
 
 main {
@@ -32,15 +38,20 @@ main {
   padding: 20px 14px 50px;
 }
 
-h1,h2,h3 { line-height: 1.2; }
+h1, h2, h3 {
+  line-height: 1.2;
+}
 
 h1 {
   text-align: center;
-  font-size: clamp(30px,7vw,48px);
+  font-size: clamp(30px, 7vw, 48px);
   margin: 14px 0 4px;
 }
 
-h2 { font-size: 23px; margin: 0 0 12px; }
+h2 {
+  font-size: 23px;
+  margin: 0 0 12px;
+}
 
 .sub {
   text-align: center;
@@ -49,7 +60,7 @@ h2 { font-size: 23px; margin: 0 0 12px; }
 }
 
 .panel {
-  background: rgba(33,26,50,.96);
+  background: rgba(33, 26, 50, .96);
   border: 1px solid var(--edge);
   border-radius: 17px;
   padding: 18px;
@@ -64,7 +75,9 @@ h2 { font-size: 23px; margin: 0 0 12px; }
   align-items: center;
 }
 
-.row > * { flex: 1; }
+.row > * {
+  flex: 1;
+}
 
 button {
   border: 1px solid #ad85ec;
@@ -93,7 +106,9 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
 .timer {
   font-variant-numeric: tabular-nums;
@@ -102,8 +117,13 @@ button:disabled {
   font-weight: 800;
 }
 
-.muted,.hint { color: var(--muted); }
-.center { text-align: center; }
+.muted, .hint {
+  color: var(--muted);
+}
+
+.center {
+  text-align: center;
+}
 
 .die {
   font-size: 72px;
@@ -121,7 +141,9 @@ button:disabled {
   background: #09070d;
 }
 
-.mediaBox { margin: 14px 0; }
+.mediaBox {
+  margin: 14px 0;
+}
 
 .label {
   font-weight: 700;
@@ -144,18 +166,34 @@ table {
   font-size: 13px;
 }
 
-th,td {
+th, td {
   padding: 9px 6px;
   text-align: left;
   border-bottom: 1px solid #544365;
   overflow-wrap: anywhere;
 }
 
-th { color: var(--accent); }
-.scroll { overflow-x: auto; }
-.error { color: #ffb9c2; white-space: pre-wrap; }
-.success { color: #b8f5cb; }
-.notice { font-size: 13px; color: var(--muted); }
+th {
+  color: var(--accent);
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+.error {
+  color: #ffb9c2;
+  white-space: pre-wrap;
+}
+
+.success {
+  color: #b8f5cb;
+}
+
+.notice {
+  font-size: 13px;
+  color: var(--muted);
+}
 </style>
 </head>
 
@@ -178,8 +216,11 @@ Roll the D12. Survive as long as you can.
     the moment you enter the game.
   </p>
 
-  <label for="playerName" class="label"
-    style="display:block;text-align:left;margin:12px 0 6px">
+  <label
+    for="playerName"
+    class="label"
+    style="display:block;text-align:left;margin:12px 0 6px"
+  >
     Your username
   </label>
 
@@ -195,10 +236,9 @@ Roll the D12. Survive as long as you can.
     Enter your username before starting.
   </p>
 
-<button id="start" type="button"
-  onclick="document.getElementById('home').classList.add('hidden');document.getElementById('game').classList.remove('hidden');alert('Start button is working!');">
-  I agree to risk it all
-</button>
+  <button id="start" type="button">
+    I agree to risk it all
+  </button>
 
 </section>
 
@@ -213,10 +253,15 @@ Roll the D12. Survive as long as you can.
   <div class="die" id="die">12</div>
 
   <div class="row">
-    <button id="roll" type="button">Roll D12</button>
+    <button id="roll" type="button">
+      Roll D12
+    </button>
 
-    <button id="accept" type="button"
-      class="secondary hidden">
+    <button
+      id="accept"
+      type="button"
+      class="secondary hidden"
+    >
       Accept Consequences
     </button>
   </div>
@@ -227,26 +272,40 @@ Roll the D12. Survive as long as you can.
 
     <h2 id="slideTitle"></h2>
     <p id="slideDescription"></p>
+
     <div id="slideMedia"></div>
+
     <p class="label" id="hunter"></p>
     <p class="hint" id="consequence"></p>
 
-    <button id="finish" type="button"
-      class="secondary" style="width:100%">
+    <button
+      id="finish"
+      type="button"
+      class="secondary"
+      style="width:100%"
+    >
       I Came
     </button>
 
   </div>
 
-  <button id="tapOut" type="button"
-    class="danger" style="width:100%;margin-top:12px">
+  <button
+    id="tapOut"
+    type="button"
+    class="danger"
+    style="width:100%;margin-top:12px"
+  >
     I’m Tapping out
   </button>
 
   <p class="center" id="status" aria-live="polite"></p>
 
-  <button id="retrySave" type="button"
-    class="secondary hidden" style="width:100%">
+  <button
+    id="retrySave"
+    type="button"
+    class="secondary hidden"
+    style="width:100%"
+  >
     Retry Saving Score
   </button>
 
@@ -257,7 +316,9 @@ Roll the D12. Survive as long as you can.
 
   <h2>Soldier Leaderboard</h2>
 
-  <p class="notice" id="boardMode">Loading scores…</p>
+  <p class="notice" id="boardMode">
+    Loading scores…
+  </p>
 
   <div class="scroll">
     <table>
@@ -270,7 +331,9 @@ Roll the D12. Survive as long as you can.
         </tr>
       </thead>
       <tbody id="soldierRows">
-        <tr><td colspan="4">Loading…</td></tr>
+        <tr>
+          <td colspan="4">Loading…</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -295,7 +358,9 @@ Roll the D12. Survive as long as you can.
         </tr>
       </thead>
       <tbody id="hunterRows">
-        <tr><td colspan="2">Loading…</td></tr>
+        <tr>
+          <td colspan="2">Loading…</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -315,9 +380,11 @@ Roll the D12. Survive as long as you can.
 
 const $ = id => document.getElementById(id);
 
-function setText(id,value) {
+function setText(id, value) {
   const element = $(id);
-  if(element) element.textContent = String(value ?? '');
+  if (element) {
+    element.textContent = String(value ?? '');
+  }
 }
 
 const TAP_OUT_MARKER = '__TAPPED_OUT__';
@@ -347,24 +414,27 @@ let scoreSaved = false;
 let rollLocked = false;
 let configLoaded = false;
 
+let rerollUnlockTimer = null;
+let rerollUnlockAt = 0;
+
 // ========================================
 // TIME
 // ========================================
 
 function fmt(ms) {
-  const s = Math.max(0,Math.floor(ms / 1000));
+  const s = Math.max(0, Math.floor(ms / 1000));
 
   return [
     Math.floor(s / 3600),
     Math.floor(s % 3600 / 60),
     s % 60
-  ].map(x => String(x).padStart(2,'0')).join(':');
+  ].map(x => String(x).padStart(2, '0')).join(':');
 }
 
 function updateClock() {
-  if(startedAt && !endingStarted) {
+  if (startedAt && !endingStarted) {
     elapsed = Date.now() - startedAt;
-    setText('timer',fmt(elapsed));
+    setText('timer', fmt(elapsed));
   }
 }
 
@@ -385,17 +455,18 @@ function online() {
   );
 }
 
-async function request(path,options={}) {
+async function request(path, options = {}) {
   const base = String(config.supabaseUrl || '')
-    .trim().replace(/\/$/,'');
+    .trim()
+    .replace(/\/$/, '');
 
   const key = String(config.supabaseKey || '').trim();
 
-  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(base)) {
+  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(base)) {
     throw Error('Invalid Supabase URL');
   }
 
-  if(!online()) {
+  if (!online()) {
     throw Error('Invalid Supabase public key');
   }
 
@@ -405,9 +476,8 @@ async function request(path,options={}) {
     ...(options.headers || {})
   };
 
-  // Legacy anon JWT keys may need bearer authorization.
-  if(key.startsWith('eyJ')) {
-    headers.Authorization = 'Bearer '+key;
+  if (key.startsWith('eyJ')) {
+    headers.Authorization = 'Bearer ' + key;
   }
 
   let response;
@@ -415,22 +485,27 @@ async function request(path,options={}) {
   try {
     response = await fetch(
       base + '/rest/v1/' + path,
-      {...options,headers}
+      {...options, headers}
     );
-  } catch(e) {
-    throw Error('Browser request: '+e.name+': '+e.message);
+  } catch (e) {
+    throw Error('Browser request: ' + e.name + ': ' + e.message);
   }
 
-  if(!response.ok) {
-    const detail = await response.text().catch(()=>'');
+  if (!response.ok) {
+    const detail = await response.text().catch(() => '');
+
     throw Error(
-      'Supabase HTTP '+response.status+': '+detail.slice(0,220)
+      'Supabase HTTP ' +
+      response.status +
+      ': ' +
+      detail.slice(0, 220)
     );
   }
 
-  if(response.status === 204) return null;
+  if (response.status === 204) return null;
 
   const body = await response.text();
+
   return body ? JSON.parse(body) : null;
 }
 
@@ -438,40 +513,69 @@ async function request(path,options={}) {
 // SLIDES
 // ========================================
 
-function normalizeSlide(s,index) {
-  if(!s || typeof s !== 'object') return null;
+function normalizeSlide(s, index) {
+  if (!s || typeof s !== 'object') return null;
 
   const id = Number(
     s.id ?? s.slide ?? s.number ?? index + 1
   );
 
-  if(!Number.isInteger(id) || id < 1) return null;
+  if (!Number.isInteger(id) || id < 1) {
+    return null;
+  }
+
+  const destinationValue =
+    s.destination ??
+    s.nextSlide ??
+    s.next ??
+    s.consequenceSlide ??
+    null;
 
   return {
     ...s,
     id,
-    title: s.title || s.name || 'Slide '+id,
+    title: s.title || s.name || 'Slide ' + id,
     description: s.description || s.text || s.body || '',
-    redditUser: s.redditUser || s.reddit_user || s.hunter || '',
-    media: s.media || s.mediaUrl || s.mediaURL ||
-      s.image || s.video || s.url || '',
-    consequence: s.consequence || s.consequences || '',
-    destination: s.destination ?? s.nextSlide ??
-      s.next ?? s.consequenceSlide ?? null
+    redditUser:
+      s.redditUser ||
+      s.reddit_user ||
+      s.hunter ||
+      '',
+    media:
+      s.media ||
+      s.mediaUrl ||
+      s.mediaURL ||
+      s.image ||
+      s.video ||
+      s.url ||
+      '',
+    consequence:
+      s.consequence ??
+      s.consequences ??
+      false,
+    destination:
+      destinationValue === '' ||
+      destinationValue === null
+        ? null
+        : Number(destinationValue),
+    rerollLockSeconds: Math.max(
+      0,
+      Number(s.rerollLockSeconds || 0) || 0
+    )
   };
 }
 
 function parseSlides(raw) {
   let data = raw;
 
-  if(!Array.isArray(data) && data && typeof data === 'object') {
-    data = Object.entries(data).map(([id,v]) => ({
+  if (!Array.isArray(data) && data && typeof data === 'object') {
+    data = Object.entries(data).map(([id, v]) => ({
       ...v,
       id: v?.id ?? id
     }));
   }
 
-  if(!Array.isArray(data)) return [];
+  if (!Array.isArray(data)) return [];
 
   return data.map(normalizeSlide).filter(Boolean);
 }
@@ -481,33 +585,36 @@ function parseSlides(raw) {
 // ========================================
 
 function mediaNode(value) {
-  if(!value) return null;
+  if (!value) return null;
 
   const source = typeof value === 'string'
     ? value
     : (value.url || value.src || value.data || '');
 
-  if(!source) return null;
+  if (!source) return null;
 
   const url = String(source).trim();
 
-  if(!/^(https?:|data:image\/|data:video\/|blob:)/i.test(url)) {
+  if (!/^(https?:|data:image\/|data:video\/|blob:)/i.test(url)) {
     return null;
   }
 
-  const kind = (typeof value === 'object' && value.type) || '';
+  const kind =
+    (typeof value === 'object' && value.type) || '';
 
   const video =
     /^video/i.test(kind) ||
     /\.(mp4|webm|mov)(\?|#|$)/i.test(url) ||
     /^data:video\//i.test(url);
 
-  const node = document.createElement(video ? 'video' : 'img');
+  const node = document.createElement(
+    video ? 'video' : 'img'
+  );
 
   node.className = 'media';
   node.src = url;
 
-  if(video) {
+  if (video) {
     node.controls = true;
     node.playsInline = true;
     node.preload = 'metadata';
@@ -518,15 +625,15 @@ function mediaNode(value) {
   return node;
 }
 
-function showMedia(id,media) {
+function showMedia(id, media) {
   const box = $(id);
-  if(!box) return;
+  if (!box) return;
 
   box.replaceChildren();
 
   const node = mediaNode(media);
 
-  if(node) {
+  if (node) {
     const wrapper = document.createElement('div');
     wrapper.className = 'mediaBox';
     wrapper.append(node);
@@ -541,60 +648,80 @@ function showMedia(id,media) {
 async function loadPublished() {
   try {
     const response = await fetch(
-      './game-config.json?ts='+Date.now(),
-      {cache:'no-store'}
+      './game-config.json?ts=' + Date.now(),
+      {cache: 'no-store'}
     );
 
-    if(!response.ok) {
-      throw Error('game-config.json HTTP '+response.status);
+    if (!response.ok) {
+      throw Error(
+        'game-config.json HTTP ' + response.status
+      );
     }
 
     const c = await response.json();
-    config = {...DEFAULT,...c};
+    config = {...DEFAULT, ...c};
 
-    setText('gameTitle',c.title || c.gameTitle || DEFAULT.title);
+    setText(
+      'gameTitle',
+      c.title || c.gameTitle || DEFAULT.title
+    );
 
-    setText('subtitle',
-      c.subtitle || c.introTitle ||
+    setText(
+      'subtitle',
+      c.subtitle ||
+      c.introTitle ||
       'Roll the D12. Survive as long as you can.'
     );
 
-    setText('intro',
-      c.intro || c.introText || c.instructions ||
+    setText(
+      'intro',
+      c.intro ||
+      c.introText ||
+      c.instructions ||
       'Risk it all. Your Survival Time starts on your first roll.'
     );
 
     showMedia(
       'homeMedia',
-      c.homeImage || c.homeMedia ||
-      c.homeImageUrl || c.homeMediaUrl || ''
+      c.homeImage ||
+      c.homeMedia ||
+      c.homeImageUrl ||
+      c.homeMediaUrl ||
+      ''
     );
 
     const arr = parseSlides(
       c.slides || c.gameSlides || c.cards || []
     );
 
-    slides = new Map(arr.map(s => [s.id,s]));
+    slides = new Map(
+      arr.map(s => [s.id, s])
+    );
+
     configLoaded = true;
 
     setText(
       'configStatus',
       arr.length
-        ? 'Game configuration loaded · '+arr.length+' slides'
+        ? 'Game configuration loaded · ' +
+          arr.length + ' slides'
         : 'Game configuration loaded, but no slides found.'
     );
 
-  } catch(e) {
-    setText('configStatus',
-      'Could not load game-config.json: '+e.message
+  } catch (e) {
+    setText(
+      'configStatus',
+      'Could not load game-config.json: ' + e.message
     );
   }
 
-  // Leaderboard loading never blocks gameplay.
   try {
     await board();
-  } catch(e) {
-    console.warn('Initial leaderboard refresh:',e);
+  } catch (e) {
+    console.warn(
+      'Initial leaderboard refresh:',
+      e
+    );
   }
 }
 
@@ -603,108 +730,242 @@ async function loadPublished() {
 // ========================================
 
 function begin() {
-  const input = document.getElementById('playerName');
-  const home = document.getElementById('home');
-  const game = document.getElementById('game');
+  const input = $('playerName');
+  const home = $('home');
+  const game = $('game');
 
   const name = input.value.trim();
 
-  if(!name) {
-    setText('nameHint','Please enter your username first.');
+  if (!name) {
+    setText(
+      'nameHint',
+      'Please enter your username first.'
+    );
     input.focus();
     return;
   }
 
-  if(playerName || finished || endingStarted) return;
+  if (playerName || finished || endingStarted) {
+    return;
+  }
 
   playerName = name;
 
   home.classList.add('hidden');
   game.classList.remove('hidden');
 
-  setText('soldierName','Soldier: '+playerName);
-  setText('status','Rolling the D12…');
+  setText(
+    'soldierName',
+    'Soldier: ' + playerName
+  );
 
-  // The first button starts the timer and rolls.
+  setText('status', 'Rolling the D12…');
+
+  // Starts the timer and rolls immediately.
   roll();
 }
 
 // ========================================
-// GAMEPLAY
+// CONSEQUENCE AND REROLL LOGIC
 // ========================================
 
 function getSlide(id) {
   return slides.get(Number(id)) || null;
 }
 
+function clearRerollTimer() {
+  if (rerollUnlockTimer !== null) {
+    clearTimeout(rerollUnlockTimer);
+    rerollUnlockTimer = null;
+  }
+
+  rerollUnlockAt = 0;
+}
+
+function isRequiredConsequence(s) {
+  return (
+    s.consequence === true ||
+    s.consequence === 'true' ||
+    s.mustAccept === true ||
+    s.forceConsequence === true
+  );
+}
+
+function validDestination(s) {
+  const destination = Number(s.destination);
+
+  if (
+    !Number.isInteger(destination) ||
+    destination < 1
+  ) {
+    return null;
+  }
+
+  return getSlide(destination);
+}
+
 function showSlide(s) {
-  if(endingStarted) return;
+  if (endingStarted) return;
+
+  clearRerollTimer();
 
   current = s;
   $('slideArea').classList.remove('hidden');
 
-  setText('slideTitle',s.title || 'Slide '+s.id);
-  setText('slideDescription',s.description || '');
-  showMedia('slideMedia',s.media);
+  setText(
+    'slideTitle',
+    s.title || 'Slide ' + s.id
+  );
 
-  setText('hunter',
+  setText(
+    'slideDescription',
+    s.description || ''
+  );
+
+  showMedia('slideMedia', s.media);
+
+  setText(
+    'hunter',
     s.redditUser
-      ? 'Featured: '+s.redditUser
+      ? 'Featured: ' + s.redditUser
       : 'Featured: Not assigned'
   );
 
-  setText('consequence',
-    typeof s.consequence === 'string' ? s.consequence : ''
+  // Slide 16 always wins immediately.
+  if (s.id === 16) {
+    $('accept').classList.add('hidden');
+    $('roll').disabled = true;
+    rollLocked = true;
+
+    setText(
+      'consequence',
+      'You survived. Victory is yours!'
+    );
+
+    setText('rollHint', '');
+
+    finishGame(true, false);
+    return;
+  }
+
+  const target = validDestination(s);
+  const required = isRequiredConsequence(s);
+
+  // Only base slides can offer consequence paths.
+  const canAccept = s.id <= 12 && !!target;
+
+  $('accept').classList.toggle(
+    'hidden',
+    !canAccept
   );
 
-  const destination = s.destination ?? s.id + 12;
+  // Required consequences override timed reroll settings.
+  if (required) {
+    rollLocked = true;
+    $('roll').disabled = true;
 
-  const hasConsequence =
-    s.id <= 12 &&
-    !!getSlide(destination);
+    setText(
+      'consequence',
+      canAccept
+        ? 'You must accept the consequences to continue.'
+        : 'This slide requires consequences, but its destination is missing or invalid.'
+    );
 
-  $('accept').classList.toggle('hidden',!hasConsequence);
+    setText(
+      'rollHint',
+      canAccept
+        ? 'Reroll locked. Tap Accept Consequences.'
+        : 'Fix this slide destination in Admin Studio.'
+    );
 
-  rollLocked = !!(
-    s.lockReroll ||
-    s.noReroll ||
-    s.rerollLocked ||
-    s.mustAccept ||
-    s.forceConsequence
+    return;
+  }
+
+  setText(
+    'consequence',
+    typeof s.consequence === 'string' &&
+    s.consequence !== 'true' &&
+    s.consequence !== 'false'
+      ? s.consequence
+      : ''
   );
 
-  $('roll').disabled = rollLocked;
-
-  setText('rollHint',
-    rollLocked ? 'Reroll locked for this slide.' : ''
+  const lockSeconds = Math.max(
+    0,
+    Number(s.rerollLockSeconds) || 0
   );
 
-  if(s.id === 16) {
-    finishGame(true,false);
+  if (lockSeconds > 0) {
+    rollLocked = true;
+    $('roll').disabled = true;
+
+    rerollUnlockAt =
+      Date.now() + lockSeconds * 1000;
+
+    setText(
+      'rollHint',
+      'Reroll locked for ' +
+      lockSeconds +
+      ' seconds.'
+    );
+
+    rerollUnlockTimer = setTimeout(() => {
+      rerollUnlockTimer = null;
+      rerollUnlockAt = 0;
+
+      if (finished || endingStarted) {
+        return;
+      }
+
+      rollLocked = false;
+      $('roll').disabled = false;
+      setText('rollHint', '');
+
+    }, lockSeconds * 1000);
+
+  } else {
+    rollLocked = false;
+    $('roll').disabled = false;
+    setText('rollHint', '');
   }
 }
 
 function roll() {
-  if(finished || endingStarted || rollLocked) return;
-
-  if(!startedAt) {
-    startedAt = Date.now();
-    tick = setInterval(updateClock,250);
+  if (
+    finished ||
+    endingStarted ||
+    rollLocked
+  ) {
+    return;
   }
 
-  const n = Math.floor(Math.random()*12)+1;
-  setText('die',n);
+  if (!startedAt) {
+    startedAt = Date.now();
+
+    tick = setInterval(
+      updateClock,
+      250
+    );
+  }
+
+  const n =
+    Math.floor(Math.random() * 12) + 1;
+
+  setText('die', n);
 
   const s = getSlide(n);
 
-  if(s) {
+  if (s) {
     showSlide(s);
   } else {
     current = null;
+
     $('slideArea').classList.add('hidden');
 
-    setText('rollHint',
-      'Slide '+n+' is not configured. Check game-config.json.'
+    setText(
+      'rollHint',
+      'Slide ' + n +
+      ' is not configured. Check game-config.json.'
     );
   }
 
@@ -712,18 +973,25 @@ function roll() {
 }
 
 function accept() {
-  if(!current || finished || endingStarted) return;
+  if (
+    !current ||
+    finished ||
+    endingStarted
+  ) {
+    return;
+  }
 
-  const destination = current.destination ?? current.id + 12;
-  const target = getSlide(destination);
+  const target = validDestination(current);
 
-  if(!target) {
-    setText('rollHint',
-      'Consequence slide '+destination+' is not configured.'
+  if (!target) {
+    setText(
+      'rollHint',
+      'No valid consequence destination configured.'
     );
     return;
   }
 
+  // Direct navigation; do not roll the die again.
   showSlide(target);
 }
 
@@ -731,24 +999,47 @@ function accept() {
 // FINISH GAME - AUTOMATIC SAVE
 // ========================================
 
-function finishGame(won=false,tappedOut=false) {
-  if(finished || endingStarted || saving || scoreSaved) return;
-  if(!current && !tappedOut) return;
+function finishGame(
+  won = false,
+  tappedOut = false
+) {
+  if (
+    finished ||
+    endingStarted ||
+    saving ||
+    scoreSaved
+  ) {
+    return;
+  }
+
+  if (!current && !tappedOut) {
+    return;
+  }
 
   finishKind = tappedOut
     ? 'tapped_out'
-    : (won || current.id === 16 ? 'winner' : 'ruined');
+    : (
+      won || current.id === 16
+        ? 'winner'
+        : 'ruined'
+    );
 
   updateClock();
+
   endingStarted = true;
+
   clearInterval(tick);
+  clearRerollTimer();
 
   $('roll').disabled = true;
   $('finish').disabled = true;
   $('tapOut').disabled = true;
   $('accept').classList.add('hidden');
 
-  setText('status','Saving your Survival Time…');
+  setText(
+    'status',
+    'Saving your Survival Time…'
+  );
 
   saveScore();
 }
@@ -762,7 +1053,7 @@ function localScores() {
     return JSON.parse(
       localStorage.getItem('d12_scores_v5') || '[]'
     );
-  } catch(e) {
+  } catch (e) {
     return [];
   }
 }
@@ -771,14 +1062,17 @@ function localScores() {
 // LEADERBOARDS
 // ========================================
 
-function safeCell(tr,value) {
+function safeCell(tr, value) {
   const td = document.createElement('td');
   td.textContent = String(value ?? '');
   tr.append(td);
 }
 
 function isTappedOut(r) {
-  return r.featured_reddit_user === TAP_OUT_MARKER;
+  return (
+    r.featured_reddit_user ===
+    TAP_OUT_MARKER
+  );
 }
 
 function renderBoards(rows) {
@@ -789,69 +1083,99 @@ function renderBoards(rows) {
   hunter.replaceChildren();
 
   const sorted = [...rows]
-    .sort((a,b) =>
-      Number(a.duration_ms || 0) -
-      Number(b.duration_ms || 0)
+    .sort(
+      (a, b) =>
+        Number(a.duration_ms || 0) -
+        Number(b.duration_ms || 0)
     )
-    .slice(0,100);
+    .slice(0, 100);
 
-  if(!sorted.length) {
+  if (!sorted.length) {
     const tr = document.createElement('tr');
     const td = document.createElement('td');
+
     td.colSpan = 4;
     td.textContent = 'No scores yet.';
+
     tr.append(td);
     soldier.append(tr);
   }
 
-  for(const r of sorted) {
+  for (const r of sorted) {
     const tr = document.createElement('tr');
 
-    safeCell(tr,r.name || 'Anonymous');
-    safeCell(tr,fmt(r.duration_ms || 0));
+    safeCell(
+      tr,
+      r.name || 'Anonymous'
+    );
+
+    safeCell(
+      tr,
+      fmt(r.duration_ms || 0)
+    );
 
     const resultLabel = isTappedOut(r)
       ? 'Tapped Out'
       : r.result === 'winner'
         ? 'Winner'
-        : 'Finished by '+(r.featured_reddit_user || 'Unassigned');
+        : 'Finished by ' +
+          (r.featured_reddit_user || 'Unassigned');
 
-    safeCell(tr,resultLabel);
-    safeCell(tr,isTappedOut(r) ? '—' : (r.ending_slide ?? '—'));
+    safeCell(tr, resultLabel);
+
+    safeCell(
+      tr,
+      isTappedOut(r)
+        ? '—'
+        : (r.ending_slide ?? '—')
+    );
 
     soldier.append(tr);
   }
 
   const counts = new Map();
 
-  for(const r of rows) {
-    if(
+  for (const r of rows) {
+    if (
       r.result === 'winner' ||
       isTappedOut(r) ||
       !r.featured_reddit_user
-    ) continue;
+    ) {
+      continue;
+    }
 
-    const name = String(r.featured_reddit_user).trim();
-    counts.set(name,(counts.get(name) || 0)+1);
+    const name =
+      String(r.featured_reddit_user).trim();
+
+    counts.set(
+      name,
+      (counts.get(name) || 0) + 1
+    );
   }
 
   const ranked = [...counts].sort(
-    (a,b) => b[1]-a[1] || a[0].localeCompare(b[0])
+    (a, b) =>
+      b[1] - a[1] ||
+      a[0].localeCompare(b[0])
   );
 
-  if(!ranked.length) {
+  if (!ranked.length) {
     const tr = document.createElement('tr');
     const td = document.createElement('td');
+
     td.colSpan = 2;
     td.textContent = 'No hunter claims yet.';
+
     tr.append(td);
     hunter.append(tr);
   }
 
-  for(const [name,count] of ranked) {
+  for (const [name, count] of ranked) {
     const tr = document.createElement('tr');
-    safeCell(tr,name);
-    safeCell(tr,count);
+
+    safeCell(tr, name);
+    safeCell(tr, count);
+
     hunter.append(tr);
   }
 }
@@ -860,27 +1184,35 @@ async function board() {
   try {
     let rows;
 
-    if(online()) {
+    if (online()) {
       rows = await request(
         'd12_scores?select=name,duration_ms,result,ending_slide,featured_reddit_user,created_at&order=created_at.desc&limit=1000'
       );
 
-      setText('boardMode',
+      setText(
+        'boardMode',
         'Public leaderboard · online · showing up to 1,000 recent scores'
       );
     } else {
       rows = localScores();
-      setText('boardMode',
+
+      setText(
+        'boardMode',
         'Local preview only · check Supabase settings in game-config.json'
       );
     }
 
-    renderBoards(Array.isArray(rows) ? rows : []);
-
-  } catch(e) {
-    setText('boardMode',
-      'Leaderboard refresh unavailable: '+e.message
+    renderBoards(
+      Array.isArray(rows) ? rows : []
     );
+
+  } catch (e) {
+    setText(
+      'boardMode',
+      'Leaderboard refresh unavailable: ' +
+      e.message
+    );
+
     throw e;
   }
 }
@@ -890,23 +1222,34 @@ async function board() {
 // ========================================
 
 async function saveScore() {
-  if(saving || scoreSaved || !endingStarted) return;
+  if (
+    saving ||
+    scoreSaved ||
+    !endingStarted
+  ) {
+    return;
+  }
 
   saving = true;
+
   $('retrySave').classList.add('hidden');
 
-  const tappedOut = finishKind === 'tapped_out';
+  const tappedOut =
+    finishKind === 'tapped_out';
 
-  // The database requires a valid ending slide.
-  // Use the marker to distinguish tap-outs.
   const endingSlide = tappedOut
     ? (current ? current.id : 1)
     : current.id;
 
   const record = {
     name: playerName,
-    duration_ms: Math.max(100,Math.round(elapsed)),
-    result: tappedOut ? 'ruined' : finishKind,
+    duration_ms: Math.max(
+      100,
+      Math.round(elapsed)
+    ),
+    result: tappedOut
+      ? 'ruined'
+      : finishKind,
     ending_slide: endingSlide,
     featured_reddit_user: tappedOut
       ? TAP_OUT_MARKER
@@ -916,47 +1259,72 @@ async function saveScore() {
   };
 
   try {
-    if(online()) {
-      await request('d12_scores',{
-        method:'POST',
-        headers:{Prefer:'return=minimal'},
-        body:JSON.stringify(record)
+    if (online()) {
+      await request('d12_scores', {
+        method: 'POST',
+        headers: {
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify(record)
       });
     } else {
       const rows = localScores();
+
       rows.push(record);
-      localStorage.setItem('d12_scores_v5',JSON.stringify(rows));
+
+      localStorage.setItem(
+        'd12_scores_v5',
+        JSON.stringify(rows)
+      );
     }
-  } catch(e) {
+  } catch (e) {
     saving = false;
 
-    setText('status','Score could not be saved: '+e.message);
+    setText(
+      'status',
+      'Score could not be saved: ' +
+      e.message
+    );
+
     $('retrySave').classList.remove('hidden');
+
     return;
   }
 
   scoreSaved = true;
   finished = true;
   saving = false;
+
   $('retrySave').classList.add('hidden');
 
   const outcome = tappedOut
     ? 'Tapped Out'
     : finishKind === 'winner'
       ? 'Winner!'
-      : 'Finished by '+(current.redditUser || 'Unassigned');
+      : 'Finished by ' +
+        (current.redditUser || 'Unassigned');
 
-  setText('status',
-    outcome+' · Survival Time: '+fmt(elapsed)+' · Score saved!'
+  setText(
+    'status',
+    outcome +
+    ' · Survival Time: ' +
+    fmt(elapsed) +
+    ' · Score saved!'
   );
 
   try {
     await board();
-  } catch(e) {
-    console.warn('Score saved, leaderboard refresh failed:',e);
+  } catch (e) {
+    console.warn(
+      'Score saved, leaderboard refresh failed:',
+      e
+    );
 
-    setText('status',
-      outcome+' · Survival Time: '+fmt(elapsed)+
+    setText(
+      'status',
+      outcome +
+      ' · Survival Time: ' +
+      fmt(elapsed) +
       ' · Score saved! Leaderboard refresh unavailable.'
     );
   }
@@ -966,21 +1334,44 @@ async function saveScore() {
 // BUTTON EVENTS
 // ========================================
 
-$('start').addEventListener('click',begin);
-$('roll').addEventListener('click',roll);
-$('accept').addEventListener('click',accept);
+$('start').addEventListener(
+  'click',
+  begin
+);
 
-$('finish').addEventListener('click',
-  () => finishGame(false,false));
+$('roll').addEventListener(
+  'click',
+  roll
+);
 
-$('tapOut').addEventListener('click',
-  () => finishGame(false,true));
+$('accept').addEventListener(
+  'click',
+  accept
+);
 
-$('retrySave').addEventListener('click',saveScore);
+$('finish').addEventListener(
+  'click',
+  () => finishGame(false, false)
+);
 
-$('playerName').addEventListener('keydown',e => {
-  if(e.key === 'Enter') begin();
-});
+$('tapOut').addEventListener(
+  'click',
+  () => finishGame(false, true)
+);
+
+$('retrySave').addEventListener(
+  'click',
+  saveScore
+);
+
+$('playerName').addEventListener(
+  'keydown',
+  e => {
+    if (e.key === 'Enter') {
+      begin();
+    }
+  }
+);
 
 // ========================================
 // INITIALIZE
