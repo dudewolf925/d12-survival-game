@@ -378,18 +378,56 @@ renderClaims(recentScores);
 function online(){
 return /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(config.supabaseUrl)&&!!config.supabaseKey;
 }
-async function request(path,options={}){
-const r=await fetch(config.supabaseUrl.replace(/\/$/,'')+'/rest/v1/'+path,{
-...options,
-headers:{
-apikey:config.supabaseKey,
-'Content-Type':'application/json',
-...options.headers
+
+async function request(path, options = {}) {
+  const base = String(config.supabaseUrl || "").trim();
+  const key = String(config.supabaseKey || "").trim();
+
+  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(base)) {
+    throw Error("Invalid Supabase URL");
+  }
+
+  if (!key.startsWith("sb_publishable_")) {
+    throw Error("Expected a Supabase publishable key");
+  }
+
+  if (!/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) {
+    throw Error("Publishable key contains invalid characters");
+  }
+
+  const url = base.replace(/\/$/, "") + "/rest/v1/" + path;
+
+  const headers = {
+    "apikey": key,
+    "Content-Type": "application/json",
+    ...options.headers
+  };
+
+  // Do not send a publishable key as a Bearer token.
+  delete headers.Authorization;
+
+  let response;
+
+  try {
+    response = await fetch(url, {
+      ...options,
+      headers
+    });
+  } catch (e) {
+    throw Error("Browser request: " + e.name + ": " + e.message);
+  }
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw Error(
+      "Supabase HTTP " + response.status +
+      ": " + detail.slice(0, 250)
+    );
+  }
+
+  return response.status === 204 ? null : response.json();
 }
-});
-if(!r.ok)throw Error('Server returned '+r.status);
-return r.status===204?null:r.json();
-}
+
 async function board(){
 let rows=[];
 try{
