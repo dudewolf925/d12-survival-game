@@ -301,7 +301,7 @@ body.huntOpen { overflow: hidden; }
 
 .winnerPopup label { text-align: left; }
 
-/* NEW TAP OUT POPUP */
+/* TAP OUT POPUP WITH DIRECT IMGUR GIF */
 
 .tapPopup {
   border: 2px solid #72d8e5;
@@ -321,21 +321,11 @@ body.huntOpen { overflow: hidden; }
 
 .tapBanner {
   background: linear-gradient(120deg, #246c83, #5b3b96);
-  border-radius: 12px;
+  border-radius: 0 0 12px 12px;
   padding: 14px 10px;
   text-align: center;
   font-size: 18px;
   font-weight: 900;
-}
-
-.tapEmbed {
-  display: block;
-  width: 100%;
-  height: 300px;
-  border: 0;
-  border-radius: 12px;
-  background: #09070d;
-  margin: 12px 0 5px;
 }
 
 .tapGifLink {
@@ -643,7 +633,7 @@ Roll the D12. Survive as long as you can.
   </div>
 </div>
 
-<!-- NEW TAP OUT POPUP -->
+<!-- TAP OUT POPUP: DIRECT HOSTED GIF -->
 
 <div
   id="tapOverlay"
@@ -658,25 +648,24 @@ Roll the D12. Survive as long as you can.
       🛡️ TAPPED OUT!
     </h2>
 
+    <img
+      id="tapGif"
+      class="huntGif"
+      src="https://i.imgur.com/OmH8OpB.gif"
+      alt="Tap Out animated GIF"
+    >
+
     <div class="tapBanner">
       YOU HELD IT TOGETHER!
     </div>
 
-    <iframe
-      id="tapGifFrame"
-      class="tapEmbed"
-      title="Tap out Imgur animation"
-      loading="lazy"
-      allowfullscreen
-    ></iframe>
-
     <a
       class="tapGifLink"
-      href="https://imgur.com/a/N7DHuUR#OmH8OpB"
+      href="https://i.imgur.com/OmH8OpB.gif"
       target="_blank"
       rel="noopener noreferrer"
     >
-      ▶ Open the animation on Imgur
+      ▶ View animation on Imgur
     </a>
 
     <p class="huntTime" id="tapTime"></p>
@@ -716,7 +705,6 @@ Roll the D12. Survive as long as you can.
     >
       Close and View My Score
     </button>
-
   </div>
 </div>
 
@@ -739,11 +727,8 @@ const TAP_OUT_MARKER = '__TAPPED_OUT__';
 const HUNT_GIF =
   'https://i.imgur.com/9CEEzCM.gif';
 
-const TAP_OUT_IMGUR =
-  'https://imgur.com/a/N7DHuUR#OmH8OpB';
-
-const TAP_OUT_EMBED =
-  'https://imgur.com/a/N7DHuUR/embed';
+const TAP_OUT_GIF =
+  'https://i.imgur.com/OmH8OpB.gif';
 
 const REDDIT_COMMUNITY =
   'NoNutNovemberChalleng';
@@ -1474,7 +1459,7 @@ function shareVictoryToReddit() {
   window.location.href = url;
 }
 
-// NEW TAP OUT POPUP
+// TAP OUT POPUP WITH WORKING IMGUR GIF
 
 function showTapOutCelebration() {
   setText(
@@ -1490,8 +1475,9 @@ function showTapOutCelebration() {
     ' in the D12 Survival Game.\n\n' +
     'Why I decided to tap out:\n\n';
 
-  // Load the Imgur album only when tapped out.
-  $('tapGifFrame').src = TAP_OUT_EMBED;
+  // Load the confirmed direct Imgur GIF.
+  $('tapGif').src =
+    TAP_OUT_GIF + '?play=' + Date.now();
 
   $('tapOverlay').classList.remove('hidden');
   document.body.classList.add('huntOpen');
@@ -1502,9 +1488,6 @@ function showTapOutCelebration() {
 function closeTapOutCelebration() {
   $('tapOverlay').classList.add('hidden');
   document.body.classList.remove('huntOpen');
-
-  // Stop the embedded media when closed.
-  $('tapGifFrame').removeAttribute('src');
 
   $('game').setAttribute('tabindex', '-1');
   $('game').focus();
@@ -1905,7 +1888,7 @@ $('closeWinner').addEventListener(
   closeWinnerCelebration
 );
 
-// New tap out popup buttons.
+// Tap Out popup buttons.
 $('shareTap').addEventListener(
   'click',
   shareTapOutToReddit
