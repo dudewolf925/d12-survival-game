@@ -595,40 +595,27 @@ function accept() {
   showSlide(target);
 }
 
-function finishGame(won=false,tappedOut=false) {
-  if(finished||(!current&&!tappedOut)) return;
 
-  finishKind=tappedOut
+function finishGame(won=false,tappedOut=false) {
+  if(finished || saving || scoreSaved) return;
+  if(!current && !tappedOut) return;
+
+  finishKind = tappedOut
     ? 'tapped_out'
-    : won||current.id===16
-      ? 'winner'
-      : 'ruined';
+    : (won || current.id === 16 ? 'winner' : 'ruined');
 
   updateClock();
 
-  setText(
-    'finalSummary',
-    (
-      tappedOut
-        ? 'Tapped Out'
-        : finishKind==='winner'
-          ? 'Winner!'
-          : 'Finished by '+
-            (current.redditUser||'Unassigned Reddit user')
-    )+' · Survival Time: '+fmt(elapsed)
-  );
+  $('roll').disabled = true;
+  $('finish').disabled = true;
+  $('tapOut').disabled = true;
+  $('accept').classList.add('hidden');
 
-  setText('savingAs','Soldier: '+playerName);
-  setText('saveStatus','');
+  setText('status', 'Saving your Survival Time…');
 
-  $('modalTitle').textContent=tappedOut
-    ? 'Save Tapped Out Result'
-    : finishKind==='winner'
-      ? 'Save Winning Time'
-      : 'Save Survival Time';
-
-  $('modal').showModal();
+  saveScore();
 }
+
 
 function localScores() {
   try {
