@@ -301,7 +301,7 @@ body.huntOpen { overflow: hidden; }
 
 .winnerPopup label { text-align: left; }
 
-/* TAP OUT POPUP WITH DIRECT IMGUR GIF */
+/* TAP OUT POPUP */
 
 .tapPopup {
   border: 2px solid #72d8e5;
@@ -339,6 +339,102 @@ body.huntOpen { overflow: hidden; }
 .tapShare {
   background: linear-gradient(120deg, #246c83, #ff4500);
   border: 1px solid #91e9f2;
+}
+
+/* NEW: DOUBLES POPUP */
+
+.doublesPopup {
+  border: 3px solid #ffcf56;
+  background: linear-gradient(
+    145deg,
+    #472069,
+    #241435 55%,
+    #44265b
+  );
+  box-shadow:
+    0 0 35px #e5a83d66,
+    inset 0 0 30px #9a5bff22;
+  text-align: center;
+}
+
+.doublesIcon {
+  font-size: 58px;
+  line-height: 1.2;
+  margin: 8px 0;
+}
+
+.doublesPopup h2 {
+  color: #ffdf78;
+  font-size: clamp(36px, 10vw, 54px);
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px #ffb74377;
+  margin: 5px 0 10px;
+}
+
+.doublesDescription {
+  color: #f0dcff;
+  font-size: 17px;
+  margin: 12px 0;
+}
+
+.doublesNumbers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.doublesNumberBox {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #a883d2;
+  border-radius: 15px;
+  padding: 15px 5px;
+  background: #160f27;
+}
+
+.doublesNumber {
+  font-size: clamp(40px, 12vw, 65px);
+  font-weight: 900;
+  line-height: 1.2;
+  color: #e5d0ff;
+}
+
+.doublesNumber.final {
+  color: #ffdf78;
+}
+
+.doublesNumberLabel {
+  font-size: 12px;
+  color: #c9bfd7;
+}
+
+.doublesArrow {
+  font-size: 30px;
+  color: #ffdf78;
+}
+
+.doublesDestination {
+  font-size: 18px;
+  color: #ffdf78;
+  font-weight: 800;
+  margin: 12px 0;
+}
+
+.doublesContinue {
+  background: linear-gradient(
+    120deg,
+    #a66713,
+    #7b3fc3
+  );
+  border: 2px solid #ffcf56;
+  font-size: 19px;
+}
+
+.doublesPopup button {
+  width: 100%;
+  margin-top: 12px;
 }
 </style>
 </head>
@@ -504,6 +600,78 @@ Roll the D12. Survive as long as you can.
 
 </main>
 
+<!-- NEW: DOUBLES POPUP -->
+
+<div
+  id="doublesOverlay"
+  class="huntOverlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="doublesHeading"
+>
+  <div class="huntPopup doublesPopup">
+
+    <div class="doublesIcon">🎲⚡🎲</div>
+
+    <h2 id="doublesHeading">
+      DOUBLES!
+    </h2>
+
+    <p class="doublesDescription">
+      Your roll has been doubled!
+    </p>
+
+    <div class="doublesNumbers">
+
+      <div class="doublesNumberBox">
+        <div
+          id="doublesOriginal"
+          class="doublesNumber"
+        >
+          8
+        </div>
+        <div class="doublesNumberLabel">
+          ORIGINAL ROLL
+        </div>
+      </div>
+
+      <div class="doublesArrow">➜</div>
+
+      <div class="doublesNumberBox">
+        <div
+          id="doublesResult"
+          class="doublesNumber final"
+        >
+          16
+        </div>
+        <div class="doublesNumberLabel">
+          DOUBLED ROLL
+        </div>
+      </div>
+
+    </div>
+
+    <p
+      class="doublesDestination"
+      id="doublesDestination"
+    >
+      Advancing to Slide 16!
+    </p>
+
+    <button
+      id="continueDoubles"
+      type="button"
+      class="doublesContinue"
+    >
+      ⚡ Continue to Slide
+    </button>
+
+    <p class="huntSmall">
+      Your Survival Time keeps running!
+    </p>
+  </div>
+</div>
+
 <!-- HUNT SUCCESS POPUP -->
 
 <div
@@ -633,7 +801,7 @@ Roll the D12. Survive as long as you can.
   </div>
 </div>
 
-<!-- TAP OUT POPUP: DIRECT HOSTED GIF -->
+<!-- TAP OUT POPUP -->
 
 <div
   id="tapOverlay"
@@ -651,7 +819,7 @@ Roll the D12. Survive as long as you can.
     <img
       id="tapGif"
       class="huntGif"
-      src="https://i.imgur.com/OmH8OpB.gif"
+      src="./tapout.GIF"
       alt="Tap Out animated GIF"
     >
 
@@ -660,13 +828,13 @@ Roll the D12. Survive as long as you can.
     </div>
 
     <a
-  class="tapGifLink"
-  href="./tapout.GIF"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  ▶ View Tap Out animation
-</a>
+      class="tapGifLink"
+      href="./tapout.GIF"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ▶ View Tap Out animation
+    </a>
 
     <p class="huntTime" id="tapTime"></p>
 
@@ -728,10 +896,14 @@ const HUNT_GIF =
   'https://i.imgur.com/9CEEzCM.gif';
 
 const TAP_OUT_GIF =
-'./tapout.GIF';
+  './tapout.GIF';
 
 const REDDIT_COMMUNITY =
   'NoNutNovemberChalleng';
+
+// NEW: DOUBLES SETTINGS
+const DOUBLES_CHANCE = 0.20;
+const DOUBLES_START_ROLL = 2;
 
 const DEFAULT = {
   title: 'D12 Survival Game',
@@ -760,6 +932,11 @@ let configLoaded = false;
 
 let rerollUnlockTimer = null;
 let rerollUnlockAt = 0;
+
+// NEW: DOUBLES STATE
+let rollCount = 0;
+let doublesPending = false;
+let doublesTarget = null;
 
 // TIME
 
@@ -1283,11 +1460,78 @@ function showSlide(s) {
   }
 }
 
+// NEW: DOUBLES MECHANIC
+
+function showDoubles(originalRoll, target) {
+  if (doublesPending || endingStarted) {
+    return;
+  }
+
+  doublesPending = true;
+  doublesTarget = target;
+
+  // Hide the previous slide while DOUBLES is active.
+  $('slideArea').classList.add('hidden');
+
+  // Prevent actions until the player continues.
+  $('roll').disabled = true;
+  $('accept').classList.add('hidden');
+  $('finish').disabled = true;
+  $('tapOut').disabled = true;
+
+  setText('doublesOriginal', originalRoll);
+  setText('doublesResult', target.id);
+
+  setText(
+    'doublesDestination',
+    target.id === 16
+      ? '🏆 Slide 16 — VICTORY!'
+      : '⚡ Advancing to Slide ' + target.id + '!'
+  );
+
+  setText(
+    'rollHint',
+    'DOUBLES! Continue to Slide ' + target.id + '.'
+  );
+
+  $('doublesOverlay').classList.remove('hidden');
+  document.body.classList.add('huntOpen');
+
+  $('continueDoubles').focus();
+}
+
+function continueDoubles() {
+  if (!doublesPending || !doublesTarget) {
+    return;
+  }
+
+  const target = doublesTarget;
+
+  doublesPending = false;
+  doublesTarget = null;
+
+  $('doublesOverlay').classList.add('hidden');
+  document.body.classList.remove('huntOpen');
+
+  // Restore normal controls before applying the slide.
+  $('finish').disabled = false;
+  $('tapOut').disabled = false;
+
+  // The destination slide controls whether rerolling
+  // or accepting consequences is allowed.
+  showSlide(target);
+
+  updateClock();
+}
+
+// ROLL D12
+
 function roll() {
   if (
     finished ||
     endingStarted ||
-    rollLocked
+    rollLocked ||
+    doublesPending
   ) {
     return;
   }
@@ -1299,8 +1543,29 @@ function roll() {
 
   const n = Math.floor(Math.random() * 12) + 1;
 
+  // Count only actual dice rolls, not consequence moves.
+  rollCount++;
+
   setText('die', n);
 
+  // NEW: DOUBLES starts on roll 2.
+  // The doubled slide must exist.
+  const doubledSlide = getSlide(n * 2);
+
+  const canDouble =
+    rollCount >= DOUBLES_START_ROLL &&
+    doubledSlide !== null;
+
+  if (
+    canDouble &&
+    Math.random() < DOUBLES_CHANCE
+  ) {
+    showDoubles(n, doubledSlide);
+    updateClock();
+    return;
+  }
+
+  // Normal roll behavior stays unchanged.
   const s = getSlide(n);
 
   if (s) {
@@ -1323,7 +1588,8 @@ function accept() {
   if (
     !current ||
     finished ||
-    endingStarted
+    endingStarted ||
+    doublesPending
   ) {
     return;
   }
@@ -1459,7 +1725,7 @@ function shareVictoryToReddit() {
   window.location.href = url;
 }
 
-// TAP OUT POPUP WITH WORKING IMGUR GIF
+// TAP OUT POPUP
 
 function showTapOutCelebration() {
   setText(
@@ -1475,7 +1741,7 @@ function showTapOutCelebration() {
     ' in the D12 Survival Game.\n\n' +
     'Why I decided to tap out:\n\n';
 
-  // Load the confirmed direct Imgur GIF.
+  // GitHub-hosted GIF, exact case-sensitive filename.
   $('tapGif').src =
     TAP_OUT_GIF + '?play=' + Date.now();
 
@@ -1525,7 +1791,8 @@ function finishGame(
     finished ||
     endingStarted ||
     saving ||
-    scoreSaved
+    scoreSaved ||
+    doublesPending
   ) {
     return;
   }
@@ -1559,7 +1826,6 @@ function finishGame(
     'Saving your Survival Time…'
   );
 
-  // Three distinct endings.
   if (finishKind === 'ruined') {
     showHuntSuccess();
   } else if (finishKind === 'winner') {
@@ -1568,7 +1834,6 @@ function finishGame(
     showTapOutCelebration();
   }
 
-  // Save score with the original rules.
   saveScore();
 }
 
@@ -1851,6 +2116,12 @@ $('start').addEventListener('click', begin);
 $('roll').addEventListener('click', roll);
 $('accept').addEventListener('click', accept);
 
+// NEW: DOUBLES BUTTON
+$('continueDoubles').addEventListener(
+  'click',
+  continueDoubles
+);
+
 $('finish').addEventListener(
   'click',
   () => finishGame(false, false)
@@ -1866,7 +2137,6 @@ $('retrySave').addEventListener(
   saveScore
 );
 
-// Hunt popup buttons.
 $('shareReddit').addEventListener(
   'click',
   shareHuntToReddit
@@ -1877,7 +2147,6 @@ $('closeHunt').addEventListener(
   closeHuntSuccess
 );
 
-// Winner popup buttons.
 $('shareVictory').addEventListener(
   'click',
   shareVictoryToReddit
@@ -1888,7 +2157,6 @@ $('closeWinner').addEventListener(
   closeWinnerCelebration
 );
 
-// Tap Out popup buttons.
 $('shareTap').addEventListener(
   'click',
   shareTapOutToReddit
