@@ -749,17 +749,88 @@ async function board() {
   }
 }
 
+
 async function saveScore() {
-  if(saving||scoreSaved) return;
+  if(saving || scoreSaved) return;
 
-  const name=playerName;
+  saving = true;
 
-  if(!name) {
+  const tappedOut = finishKind === 'tapped_out';
+
+  const record = {
+    name: playerName,
+    duration_ms: Math.max(100, Math.round(elapsed)),
+    result: tappedOut ? 'ruined' : finishKind,
+    ending_slide: tappedOut
+      ? (current ? current.id : 1)
+      : current.id,
+    featured_reddit_user: tappedOut
+      ? '__TAPPED_OUT__'
+      : finishKind === 'winner'
+        ? null
+        : (current.redditUser || null)
+  };
+
+  try {
+    if(online()) {
+      await request('d12_scores', {
+        method: 'POST',
+        headers: {Prefer: 'return=minimal'},
+        body: JSON.stringify(record)
+      });
+    } else {
+      const rows = localScores();
+      rows.push(record);
+      localStorage.setItem(
+        'd12_scores_v5',
+        JSON.stringify(rows)
+      );
+    }
+  } catch(e) {
+    saving = false;
+
     setText(
-      'saveStatus',
-      'Username missing. Return to the start screen.'
+      'status',
+      'Score could not be saved: ' + e.message
     );
+
+    // Allow retry without starting a new game.
+    $('tapOut').disabled = false;
+    if(current) $('finish').disabled = false;
     return;
+  }
+
+  scoreSaved = true;
+  finished = true;
+  saving = false;
+
+  clearInterval(tick);
+
+  const outcome = tappedOut
+    ? 'Tapped Out'
+    : finishKind === 'winner'
+      ? 'Winner!'
+      : 'Finished by ' +
+        (current.redditUser || 'Unassigned');
+
+  setText(
+    'status',
+    outcome +
+    ' · Survival Time: ' +
+    fmt(elapsed) +
+    ' · Score saved!'
+  );
+
+  try {
+    await board();
+  } catch(e) {
+    console.warn(
+      'Score saved; leaderboard refresh failed:',
+      e
+    );
+  }
+}
+
   }
 
   saving=true;
