@@ -17,17 +17,11 @@
   --muted: #c9bfd7;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  background: radial-gradient(
-    ellipse at top,
-    #2b1a43,
-    var(--bg) 70%
-  );
+  background: radial-gradient(ellipse at top, #2b1a43, var(--bg) 70%);
   color: var(--text);
   font: 16px/1.5 system-ui, -apple-system, sans-serif;
 }
@@ -38,9 +32,7 @@ main {
   padding: 20px 14px 50px;
 }
 
-h1, h2, h3 {
-  line-height: 1.2;
-}
+h1, h2, h3 { line-height: 1.2; }
 
 h1 {
   text-align: center;
@@ -75,9 +67,7 @@ h2 {
   align-items: center;
 }
 
-.row > * {
-  flex: 1;
-}
+.row > * { flex: 1; }
 
 button {
   border: 1px solid #ad85ec;
@@ -106,9 +96,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-.hidden {
-  display: none !important;
-}
+.hidden { display: none !important; }
 
 .timer {
   font-variant-numeric: tabular-nums;
@@ -117,13 +105,8 @@ button:disabled {
   font-weight: 800;
 }
 
-.muted, .hint {
-  color: var(--muted);
-}
-
-.center {
-  text-align: center;
-}
+.muted, .hint { color: var(--muted); }
+.center { text-align: center; }
 
 .die {
   font-size: 72px;
@@ -141,17 +124,14 @@ button:disabled {
   background: #09070d;
 }
 
-.mediaBox {
-  margin: 14px 0;
-}
+.mediaBox { margin: 14px 0; }
 
 .label {
   font-weight: 700;
   color: var(--accent);
 }
 
-input,
-textarea {
+input, textarea {
   width: 100%;
   border: 1px solid #85759a;
   border-radius: 10px;
@@ -179,31 +159,22 @@ th, td {
   overflow-wrap: anywhere;
 }
 
-th {
-  color: var(--accent);
-}
-
-.scroll {
-  overflow-x: auto;
-}
+th { color: var(--accent); }
+.scroll { overflow-x: auto; }
 
 .error {
   color: #ffb9c2;
   white-space: pre-wrap;
 }
 
-.success {
-  color: #b8f5cb;
-}
+.success { color: #b8f5cb; }
 
 .notice {
   font-size: 13px;
   color: var(--muted);
 }
 
-/* ========================================
-   HUNT SUCCESS POPUP
-   ======================================== */
+/* ALL ENDING POPUPS */
 
 .huntOverlay {
   position: fixed;
@@ -245,11 +216,7 @@ th {
 }
 
 .huntBanner {
-  background: linear-gradient(
-    120deg,
-    #682d9f,
-    #a43c6f
-  );
+  background: linear-gradient(120deg, #682d9f, #a43c6f);
   border-radius: 0 0 12px 12px;
   padding: 15px 10px;
   text-align: center;
@@ -272,9 +239,7 @@ th {
   margin: 12px 0 6px;
 }
 
-.huntPopup textarea {
-  margin-bottom: 12px;
-}
+.huntPopup textarea { margin-bottom: 12px; }
 
 .huntPopup button {
   width: 100%;
@@ -292,13 +257,9 @@ th {
   color: var(--muted);
 }
 
-body.huntOpen {
-  overflow: hidden;
-}
+body.huntOpen { overflow: hidden; }
 
-/* ========================================
-   NEW GOLD AND PURPLE WINNER POPUP
-   ======================================== */
+/* WINNER CELEBRATION */
 
 .winnerPopup {
   border: 2px solid #ffd76b;
@@ -334,16 +295,60 @@ body.huntOpen {
 }
 
 .winnerShare {
-  background: linear-gradient(
-    120deg,
-    #a56c14,
-    #6b3ca5
-  );
+  background: linear-gradient(120deg, #a56c14, #6b3ca5);
   border: 1px solid #ffd76b;
 }
 
-.winnerPopup label {
-  text-align: left;
+.winnerPopup label { text-align: left; }
+
+/* NEW TAP OUT POPUP */
+
+.tapPopup {
+  border: 2px solid #72d8e5;
+  background: linear-gradient(
+    160deg,
+    #182b3d,
+    #211a32 65%,
+    #292045
+  );
+  box-shadow: 0 0 45px #42d9e544;
+}
+
+.tapPopup h2 {
+  color: #91e9f2;
+  font-size: 27px;
+}
+
+.tapBanner {
+  background: linear-gradient(120deg, #246c83, #5b3b96);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.tapEmbed {
+  display: block;
+  width: 100%;
+  height: 300px;
+  border: 0;
+  border-radius: 12px;
+  background: #09070d;
+  margin: 12px 0 5px;
+}
+
+.tapGifLink {
+  display: block;
+  text-align: center;
+  color: #91e9f2;
+  font-size: 13px;
+  padding: 6px 0;
+}
+
+.tapShare {
+  background: linear-gradient(120deg, #246c83, #ff4500);
+  border: 1px solid #91e9f2;
 }
 </style>
 </head>
@@ -358,8 +363,8 @@ Roll the D12. Survive as long as you can.
 </p>
 
 <!-- START SCREEN -->
-<section class="panel center" id="home">
 
+<section class="panel center" id="home">
   <div id="homeMedia"></div>
 
   <p id="intro">
@@ -390,10 +395,10 @@ Roll the D12. Survive as long as you can.
   <button id="start" type="button">
     I agree to risk it all
   </button>
-
 </section>
 
 <!-- GAME SCREEN -->
+
 <section class="panel hidden" id="game">
 
   <p class="center muted" id="soldierName"></p>
@@ -404,9 +409,7 @@ Roll the D12. Survive as long as you can.
   <div class="die" id="die">12</div>
 
   <div class="row">
-    <button id="roll" type="button">
-      Roll D12
-    </button>
+    <button id="roll" type="button">Roll D12</button>
 
     <button
       id="accept"
@@ -420,12 +423,9 @@ Roll the D12. Survive as long as you can.
   <p class="center" id="rollHint"></p>
 
   <div id="slideArea" class="hidden">
-
     <h2 id="slideTitle"></h2>
     <p id="slideDescription"></p>
-
     <div id="slideMedia"></div>
-
     <p class="label" id="hunter"></p>
     <p class="hint" id="consequence"></p>
 
@@ -437,7 +437,6 @@ Roll the D12. Survive as long as you can.
     >
       I Came
     </button>
-
   </div>
 
   <button
@@ -459,12 +458,11 @@ Roll the D12. Survive as long as you can.
   >
     Retry Saving Score
   </button>
-
 </section>
 
 <!-- SOLDIER LEADERBOARD -->
-<section class="panel">
 
+<section class="panel">
   <h2>Soldier Leaderboard</h2>
 
   <p class="notice" id="boardMode">
@@ -482,18 +480,15 @@ Roll the D12. Survive as long as you can.
         </tr>
       </thead>
       <tbody id="soldierRows">
-        <tr>
-          <td colspan="4">Loading…</td>
-        </tr>
+        <tr><td colspan="4">Loading…</td></tr>
       </tbody>
     </table>
   </div>
-
 </section>
 
 <!-- HUNTER SCOREBOARD -->
-<section class="panel">
 
+<section class="panel">
   <h2>Hunter Scoreboard</h2>
 
   <p class="notice">
@@ -509,22 +504,17 @@ Roll the D12. Survive as long as you can.
         </tr>
       </thead>
       <tbody id="hunterRows">
-        <tr>
-          <td colspan="2">Loading…</td>
-        </tr>
+        <tr><td colspan="2">Loading…</td></tr>
       </tbody>
     </table>
   </div>
-
 </section>
 
 <p class="center notice" id="configStatus"></p>
 
 </main>
 
-<!-- ========================================
-     HUNT SUCCESS POPUP
-     ======================================== -->
+<!-- HUNT SUCCESS POPUP -->
 
 <div
   id="huntOverlay"
@@ -533,7 +523,6 @@ Roll the D12. Survive as long as you can.
   aria-modal="true"
   aria-labelledby="huntHeading"
 >
-
   <div class="huntPopup">
 
     <h2 id="huntHeading">
@@ -588,14 +577,10 @@ Roll the D12. Survive as long as you can.
     >
       Close and View My Score
     </button>
-
   </div>
-
 </div>
 
-<!-- ========================================
-     NEW WINNER CELEBRATION POPUP
-     ======================================== -->
+<!-- WINNER CELEBRATION POPUP -->
 
 <div
   id="winnerOverlay"
@@ -604,7 +589,6 @@ Roll the D12. Survive as long as you can.
   aria-modal="true"
   aria-labelledby="winnerHeading"
 >
-
   <div class="huntPopup winnerPopup">
 
     <div class="winnerTrophy">🏆</div>
@@ -656,17 +640,90 @@ Roll the D12. Survive as long as you can.
     >
       Close and View My Score
     </button>
+  </div>
+</div>
+
+<!-- NEW TAP OUT POPUP -->
+
+<div
+  id="tapOverlay"
+  class="huntOverlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="tapHeading"
+>
+  <div class="huntPopup tapPopup">
+
+    <h2 id="tapHeading">
+      🛡️ TAPPED OUT!
+    </h2>
+
+    <div class="tapBanner">
+      YOU HELD IT TOGETHER!
+    </div>
+
+    <iframe
+      id="tapGifFrame"
+      class="tapEmbed"
+      title="Tap out Imgur animation"
+      loading="lazy"
+      allowfullscreen
+    ></iframe>
+
+    <a
+      class="tapGifLink"
+      href="https://imgur.com/a/N7DHuUR#OmH8OpB"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ▶ Open the animation on Imgur
+    </a>
+
+    <p class="huntTime" id="tapTime"></p>
+
+    <p class="center">
+      You walked away before losing control.
+    </p>
+
+    <label for="tapPost">
+      ✍️ Customize your tap-out post
+    </label>
+
+    <textarea
+      id="tapPost"
+      maxlength="10000"
+      placeholder="Tell the community why you tapped out..."
+    ></textarea>
+
+    <button
+      id="shareTap"
+      type="button"
+      class="tapShare"
+    >
+      🟠 Share Tap Out to Reddit
+    </button>
+
+    <p class="huntSmall">
+      Opens r/NoNutNovemberChalleng with your
+      message prefilled. You can edit it
+      before submitting.
+    </p>
+
+    <button
+      id="closeTap"
+      type="button"
+      class="secondary"
+    >
+      Close and View My Score
+    </button>
 
   </div>
-
 </div>
 
 <script>
 'use strict';
 
-// ========================================
 // HELPERS AND STATE
-// ========================================
 
 const $ = id => document.getElementById(id);
 
@@ -681,6 +738,12 @@ const TAP_OUT_MARKER = '__TAPPED_OUT__';
 
 const HUNT_GIF =
   'https://i.imgur.com/9CEEzCM.gif';
+
+const TAP_OUT_IMGUR =
+  'https://imgur.com/a/N7DHuUR#OmH8OpB';
+
+const TAP_OUT_EMBED =
+  'https://imgur.com/a/N7DHuUR/embed';
 
 const REDDIT_COMMUNITY =
   'NoNutNovemberChalleng';
@@ -713,9 +776,7 @@ let configLoaded = false;
 let rerollUnlockTimer = null;
 let rerollUnlockAt = 0;
 
-// ========================================
 // TIME
-// ========================================
 
 function fmt(ms) {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -734,9 +795,7 @@ function readableTime(ms) {
   );
 
   const hours = Math.floor(total / 3600);
-  const minutes = Math.floor(
-    (total % 3600) / 60
-  );
+  const minutes = Math.floor((total % 3600) / 60);
   const seconds = total % 60;
 
   const parts = [];
@@ -749,16 +808,12 @@ function readableTime(ms) {
 
   if (minutes) {
     parts.push(
-      minutes + (
-        minutes === 1 ? ' minute' : ' minutes'
-      )
+      minutes + (minutes === 1 ? ' minute' : ' minutes')
     );
   }
 
   parts.push(
-    seconds + (
-      seconds === 1 ? ' second' : ' seconds'
-    )
+    seconds + (seconds === 1 ? ' second' : ' seconds')
   );
 
   return parts.join(', ');
@@ -771,9 +826,7 @@ function updateClock() {
   }
 }
 
-// ========================================
 // SUPABASE
-// ========================================
 
 function online() {
   const url = String(config.supabaseUrl || '').trim();
@@ -822,8 +875,7 @@ async function request(path, options = {}) {
     );
   } catch (e) {
     throw Error(
-      'Browser request: ' +
-      e.name + ': ' + e.message
+      'Browser request: ' + e.name + ': ' + e.message
     );
   }
 
@@ -845,9 +897,7 @@ async function request(path, options = {}) {
   return body ? JSON.parse(body) : null;
 }
 
-// ========================================
 // SLIDES
-// ========================================
 
 function normalizeSlide(s, index) {
   if (!s || typeof s !== 'object') return null;
@@ -921,9 +971,7 @@ function parseSlides(raw) {
   return data.map(normalizeSlide).filter(Boolean);
 }
 
-// ========================================
 // MEDIA
-// ========================================
 
 function mediaNode(value) {
   if (!value) return null;
@@ -985,9 +1033,7 @@ function showMedia(id, media) {
   }
 }
 
-// ========================================
 // LOAD CONFIG
-// ========================================
 
 async function loadPublished() {
   try {
@@ -1038,9 +1084,7 @@ async function loadPublished() {
       c.slides || c.gameSlides || c.cards || []
     );
 
-    slides = new Map(
-      arr.map(s => [s.id, s])
-    );
+    slides = new Map(arr.map(s => [s.id, s]));
 
     configLoaded = true;
 
@@ -1063,16 +1107,11 @@ async function loadPublished() {
   try {
     await board();
   } catch (e) {
-    console.warn(
-      'Initial leaderboard refresh:',
-      e
-    );
+    console.warn('Initial leaderboard refresh:', e);
   }
 }
 
-// ========================================
 // START GAME
-// ========================================
 
 function begin() {
   const input = $('playerName');
@@ -1090,11 +1129,7 @@ function begin() {
     return;
   }
 
-  if (
-    playerName ||
-    finished ||
-    endingStarted
-  ) {
+  if (playerName || finished || endingStarted) {
     return;
   }
 
@@ -1103,19 +1138,13 @@ function begin() {
   home.classList.add('hidden');
   game.classList.remove('hidden');
 
-  setText(
-    'soldierName',
-    'Soldier: ' + playerName
-  );
-
+  setText('soldierName', 'Soldier: ' + playerName);
   setText('status', 'Rolling the D12…');
 
   roll();
 }
 
-// ========================================
-// CONSEQUENCE AND REROLL LOGIC
-// ========================================
+// CONSEQUENCES AND REROLL
 
 function getSlide(id) {
   return slides.get(Number(id)) || null;
@@ -1160,15 +1189,8 @@ function showSlide(s) {
   current = s;
   $('slideArea').classList.remove('hidden');
 
-  setText(
-    'slideTitle',
-    s.title || 'Slide ' + s.id
-  );
-
-  setText(
-    'slideDescription',
-    s.description || ''
-  );
+  setText('slideTitle', s.title || 'Slide ' + s.id);
+  setText('slideDescription', s.description || '');
 
   showMedia('slideMedia', s.media);
 
@@ -1287,15 +1309,10 @@ function roll() {
 
   if (!startedAt) {
     startedAt = Date.now();
-
-    tick = setInterval(
-      updateClock,
-      250
-    );
+    tick = setInterval(updateClock, 250);
   }
 
-  const n =
-    Math.floor(Math.random() * 12) + 1;
+  const n = Math.floor(Math.random() * 12) + 1;
 
   setText('die', n);
 
@@ -1305,7 +1322,6 @@ function roll() {
     showSlide(s);
   } else {
     current = null;
-
     $('slideArea').classList.add('hidden');
 
     setText(
@@ -1340,9 +1356,7 @@ function accept() {
   showSlide(target);
 }
 
-// ========================================
 // HUNT SUCCESS POPUP
-// ========================================
 
 function showHuntSuccess() {
   if (!current) return;
@@ -1366,13 +1380,11 @@ function showHuntSuccess() {
     '⏱️ Survival Time: ' + fmt(elapsed)
   );
 
-  const post =
+  $('redditPost').value =
     'I lasted ' + time +
     ' in the NNN Challenge, but ultimately ' +
     'lost myself to ' + hunter + '. 🎲\n\n' +
     'My D12 Survival Game experience:\n\n';
-
-  $('redditPost').value = post;
 
   $('huntOverlay').classList.remove('hidden');
   document.body.classList.add('huntOpen');
@@ -1414,9 +1426,7 @@ function shareHuntToReddit() {
   window.location.href = url;
 }
 
-// ========================================
-// NEW WINNER CELEBRATION
-// ========================================
+// WINNER CELEBRATION
 
 function showWinnerCelebration() {
   setText('winnerTime', fmt(elapsed));
@@ -1464,9 +1474,65 @@ function shareVictoryToReddit() {
   window.location.href = url;
 }
 
-// ========================================
+// NEW TAP OUT POPUP
+
+function showTapOutCelebration() {
+  setText(
+    'tapTime',
+    '⏱️ Survival Time: ' + fmt(elapsed)
+  );
+
+  $('tapPost').value =
+    'I tried my fate at the NNN Challenge, ' +
+    'but I held it together and tapped out ' +
+    'before I lost it. 🎲\n\n' +
+    'I lasted ' + readableTime(elapsed) +
+    ' in the D12 Survival Game.\n\n' +
+    'Why I decided to tap out:\n\n';
+
+  // Load the Imgur album only when tapped out.
+  $('tapGifFrame').src = TAP_OUT_EMBED;
+
+  $('tapOverlay').classList.remove('hidden');
+  document.body.classList.add('huntOpen');
+
+  $('closeTap').focus();
+}
+
+function closeTapOutCelebration() {
+  $('tapOverlay').classList.add('hidden');
+  document.body.classList.remove('huntOpen');
+
+  // Stop the embedded media when closed.
+  $('tapGifFrame').removeAttribute('src');
+
+  $('game').setAttribute('tabindex', '-1');
+  $('game').focus();
+}
+
+function shareTapOutToReddit() {
+  const post = $('tapPost').value.trim();
+
+  if (!post) {
+    alert('Please enter a message to share.');
+    $('tapPost').focus();
+    return;
+  }
+
+  const title =
+    '🛡️ I Tapped Out Before I Lost It - D12 NNN Challenge';
+
+  const url =
+    'https://www.reddit.com/r/' +
+    REDDIT_COMMUNITY +
+    '/submit?type=TEXT' +
+    '&title=' + encodeURIComponent(title) +
+    '&text=' + encodeURIComponent(post);
+
+  window.location.href = url;
+}
+
 // FINISH GAME - AUTOMATIC SAVE
-// ========================================
 
 function finishGame(
   won = false,
@@ -1510,20 +1576,20 @@ function finishGame(
     'Saving your Survival Time…'
   );
 
-  // Show the appropriate popup immediately.
-  // Score saving continues independently.
+  // Three distinct endings.
   if (finishKind === 'ruined') {
     showHuntSuccess();
   } else if (finishKind === 'winner') {
     showWinnerCelebration();
+  } else if (finishKind === 'tapped_out') {
+    showTapOutCelebration();
   }
 
+  // Save score with the original rules.
   saveScore();
 }
 
-// ========================================
 // LOCAL SCORES
-// ========================================
 
 function localScores() {
   try {
@@ -1535,9 +1601,7 @@ function localScores() {
   }
 }
 
-// ========================================
 // LEADERBOARDS
-// ========================================
 
 function safeCell(tr, value) {
   const td = document.createElement('td');
@@ -1581,15 +1645,8 @@ function renderBoards(rows) {
   for (const r of sorted) {
     const tr = document.createElement('tr');
 
-    safeCell(
-      tr,
-      r.name || 'Anonymous'
-    );
-
-    safeCell(
-      tr,
-      fmt(r.duration_ms || 0)
-    );
+    safeCell(tr, r.name || 'Anonymous');
+    safeCell(tr, fmt(r.duration_ms || 0));
 
     const resultLabel = isTappedOut(r)
       ? 'Tapped Out'
@@ -1694,9 +1751,7 @@ async function board() {
   }
 }
 
-// ========================================
 // SAVE SCORE AUTOMATICALLY
-// ========================================
 
 async function saveScore() {
   if (
@@ -1807,24 +1862,11 @@ async function saveScore() {
   }
 }
 
-// ========================================
 // BUTTON EVENTS
-// ========================================
 
-$('start').addEventListener(
-  'click',
-  begin
-);
-
-$('roll').addEventListener(
-  'click',
-  roll
-);
-
-$('accept').addEventListener(
-  'click',
-  accept
-);
+$('start').addEventListener('click', begin);
+$('roll').addEventListener('click', roll);
+$('accept').addEventListener('click', accept);
 
 $('finish').addEventListener(
   'click',
@@ -1852,7 +1894,7 @@ $('closeHunt').addEventListener(
   closeHuntSuccess
 );
 
-// New winner popup buttons.
+// Winner popup buttons.
 $('shareVictory').addEventListener(
   'click',
   shareVictoryToReddit
@@ -1861,6 +1903,17 @@ $('shareVictory').addEventListener(
 $('closeWinner').addEventListener(
   'click',
   closeWinnerCelebration
+);
+
+// New tap out popup buttons.
+$('shareTap').addEventListener(
+  'click',
+  shareTapOutToReddit
+);
+
+$('closeTap').addEventListener(
+  'click',
+  closeTapOutCelebration
 );
 
 $('playerName').addEventListener(
@@ -1872,9 +1925,7 @@ $('playerName').addEventListener(
   }
 );
 
-// ========================================
 // INITIALIZE
-// ========================================
 
 loadPublished();
 
