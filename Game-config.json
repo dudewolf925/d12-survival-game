@@ -1,7 +1,7 @@
 {
-  "title": "D12 Consequences",
-  "introTitle": "Your fate awaits",
-  "introText": "Roll the twelve-sided die to begin.",
+  "title": "A NNN challenge ",
+  "introTitle": "Do you have what it takes to survive the hunt?",
+  "introText": "Roll the die if you’re willing to risk it all.",
   "homeImageUrl": "",
   "supabaseUrl": "https://nustqxwldlgsdncebwxt.supabase.co/",
   "supabaseKey": "sb_publishable_eHWFWDOvdBpcn1B_9mYryg_KjiCvEdr",
@@ -12,7 +12,7 @@
       "description": "Placeholder for slide 1",
       "type": "placeholder",
       "url": "",
-      "redditUser": "u/teasinghunter",
+      "redditUser": "u/Hunter1",
       "consequence": false,
       "destination": 1,
       "rerollLockSeconds": 0
@@ -111,7 +111,7 @@
       "description": "Placeholder for slide 10",
       "type": "placeholder",
       "url": "",
-      "redditUser": "",
+      "redditUser": "u/Hunter10",
       "consequence": false,
       "destination": 1,
       "rerollLockSeconds": 0
@@ -133,7 +133,7 @@
       "description": "Placeholder for slide 12",
       "type": "placeholder",
       "url": "",
-      "redditUser": "",
+      "redditUser": "u/hunter12",
       "consequence": false,
       "destination": 1,
       "rerollLockSeconds": 0
