@@ -1,0 +1,321 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D12 Admin Studio</title>
+<style>
+*{box-sizing:border-box}
+:root{font-family:system-ui,sans-serif;color-scheme:dark}
+body{margin:0;background:linear-gradient(150deg,#302044,#0d0d18 65%);color:#f6f0ff}
+main{max-width:850px;margin:auto;padding:16px}
+h1{font-size:27px}h2{font-size:20px;margin-top:0}
+p,small{color:#c6bbd6;line-height:1.5}
+section{background:#1b1727;border:1px solid #554768;border-radius:18px;padding:17px;margin:15px 0}
+label{display:block;margin:14px 0;font-size:14px;color:#e4d9f3}
+input,textarea,select{display:block;width:100%;margin-top:6px;padding:12px;background:#0e0d19;border:1px solid #625674;border-radius:10px;color:white;font:inherit}
+input[type=checkbox]{display:inline;width:auto}
+textarea{min-height:90px}
+button{background:#332743;border:1px solid #79658c;border-radius:10px;color:white;padding:12px;font:inherit;cursor:pointer}
+button.primary{background:#c7aaff;color:#21112d;font-weight:bold}
+button.active{background:#c7aaff;color:#21112d}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.slides{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.preview{height:260px;background:#100e1c;border:1px solid #57446c;border-radius:15px;display:grid;place-items:center;overflow:hidden}
+.preview img,.preview video{width:100%;height:100%;object-fit:contain}
+.notice{white-space:pre-wrap;color:#e7cfff}
+@media(max-width:500px){.slides{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<main>
+<h1>🎲 D12 Admin Studio</h1>
+<p>Edit your game on your iPhone. Copy the configuration and publish it in GitHub when ready.</p>
+
+<section>
+<h2>Game settings</h2>
+<label>Game title<input id="title"></label>
+<label>Home heading<input id="introTitle"></label>
+<label>Home message<textarea id="introText"></textarea></label>
+<label>Home image URL<input id="homeImageUrl" placeholder="https://..."></label>
+<label>Choose home photo<input id="homeFile" type="file" accept="image/*"></label>
+<div class="preview" id="homePreview"></div>
+<small>For a public game, hosted image URLs are recommended. Small photos can be embedded in the configuration.</small>
+</section>
+
+<section>
+<h2>Slides</h2>
+<p>D12 rolls select slides 1–12. Consequence branches can lead to slides 13–24. Slide 16 is the winning slide.</p>
+<div class="slides" id="slideButtons"></div>
+<label>Slide title<input id="slideTitle"></label>
+<label>Description<textarea id="description"></textarea></label>
+<label>Featured Reddit Hunter<input id="redditUser" placeholder="u/username"></label>
+<label>Media type
+<select id="type">
+<option value="placeholder">Placeholder</option>
+<option value="image">Image</option>
+<option value="video">Video</option>
+</select>
+</label>
+<label>Image or video URL<input id="url" placeholder="https://..."></label>
+<label>Choose slide photo or video<input id="slideFile" type="file" accept="image/*,video/*"></label>
+<div class="preview" id="preview"></div>
+<label><input type="checkbox" id="consequence"> Require Accept Consequences</label>
+<label>Consequence destination
+<select id="destination"></select>
+</label>
+<label>Reroll lockout in seconds
+<input id="rerollLockSeconds" type="number" min="0" max="86400">
+</label>
+<div class="actions">
+<button id="add">Add bonus slide</button>
+<button id="remove">Remove bonus slide</button>
+</div>
+</section>
+
+<section>
+<h2>Supabase leaderboard</h2>
+<p>Enter only your public project URL and publishable/anon key. Never enter a secret or service_role key.</p>
+<label>Supabase project URL<input id="supabaseUrl" placeholder="https://project.supabase.co"></label>
+<label>Supabase publishable / anon key<input id="supabaseKey"></label>
+</section>
+
+<section>
+<h2>Save and publish</h2>
+<p>Save Draft stores edits on this iPhone. Copy Configuration gives you the JSON to paste into a GitHub file named <strong>game-config.json</strong>.</p>
+<div class="actions">
+<button id="save">Save Draft</button>
+<button class="primary" id="copy">Copy Configuration</button>
+<button id="reset">Reset Defaults</button>
+</div>
+<p id="notice" class="notice"></p>
+</section>
+</main>
+
+<script>
+const DEFAULT={
+title:"D12 Consequences",
+introTitle:"Your fate awaits",
+introText:"Roll the twelve-sided die to begin.",
+homeImageUrl:"",
+supabaseUrl:"",
+supabaseKey:"",
+slides:Array.from({length:24},(_,i)=>({
+id:i+1,
+title:"Outcome "+(i+1),
+description:"Placeholder for slide "+(i+1),
+type:"placeholder",
+url:"",
+redditUser:"",
+consequence:false,
+destination:1,
+rerollLockSeconds:0
+}))
+};
+const el=id=>document.getElementById(id);
+const clone=x=>JSON.parse(JSON.stringify(x));
+let cfg=clone(DEFAULT),selected=1;
+try{
+const saved=JSON.parse(localStorage.getItem("d12_config_v5"));
+if(saved&&Array.isArray(saved.slides))cfg=saved;
+}catch(e){}
+
+function message(t){el("notice").textContent=t}
+function slide(){return cfg.slides.find(s=>s.id===selected)}
+function preview(id,type,url,n){
+const box=el(id);
+box.replaceChildren();
+if(url&&(/^(https?:\/\/|data:)/i).test(url)){
+const m=document.createElement(type==="video"?"video":"img");
+m.src=url;
+if(type==="video"){m.controls=true;m.playsInline=true}
+m.onerror=()=>{box.textContent="Media could not load"};
+box.append(m);
+}else box.textContent=n||"No media selected";
+}
+function buttons(){
+const box=el("slideButtons");
+box.replaceChildren();
+cfg.slides.sort((a,b)=>a.id-b.id);
+cfg.slides.forEach(s=>{
+const b=document.createElement("button");
+b.textContent=s.id;
+b.className=s.id===selected?"active":"";
+b.onclick=()=>{
+commit();
+selected=s.id;
+buttons();
+edit();
+};
+box.append(b);
+});
+const d=el("destination");
+d.replaceChildren();
+cfg.slides.forEach(s=>{
+const o=document.createElement("option");
+o.value=s.id;
+o.textContent="Slide "+s.id;
+d.append(o);
+});
+}
+function edit(){
+const s=slide();
+el("slideTitle").value=s.title;
+el("description").value=s.description;
+el("redditUser").value=s.redditUser;
+el("type").value=s.type;
+el("url").value=s.url;
+el("consequence").checked=s.consequence;
+el("destination").value=s.destination;
+el("rerollLockSeconds").value=s.rerollLockSeconds||0;
+el("remove").disabled=selected<=24;
+preview("preview",s.type,s.url,"Slide "+s.id);
+}
+function fill(){
+["title","introTitle","introText","homeImageUrl","supabaseUrl","supabaseKey"].forEach(k=>{
+el(k).value=cfg[k]||"";
+});
+buttons();
+edit();
+preview("homePreview","image",cfg.homeImageUrl,"D12 home image");
+}
+function commit(){
+const s=slide();
+if(s){
+s.title=el("slideTitle").value;
+s.description=el("description").value;
+s.redditUser=el("redditUser").value.trim();
+s.type=el("type").value;
+s.url=el("url").value.trim();
+s.consequence=el("consequence").checked;
+s.destination=Number(el("destination").value);
+s.rerollLockSeconds=Math.max(0,Math.min(86400,
+Math.floor(Number(el("rerollLockSeconds").value)||0)));
+}
+["title","introTitle","introText","homeImageUrl","supabaseUrl","supabaseKey"].forEach(k=>{
+cfg[k]=el(k).value;
+});
+}
+function validate(){
+if(/service_role|sb_secret_/i.test(cfg.supabaseKey))
+throw Error("Never publish a Supabase secret/service_role key.");
+for(const s of cfg.slides){
+if(s.redditUser&&!/^u\/[A-Za-z0-9_-]{3,20}$/.test(s.redditUser))
+throw Error("Slide "+s.id+": use a Reddit name like u/username");
+if(s.consequence&&!cfg.slides.some(x=>x.id===s.destination))
+throw Error("Slide "+s.id+": destination missing");
+}
+}
+function save(){
+commit();
+validate();
+try{
+localStorage.setItem("d12_config_v5",JSON.stringify(cfg));
+message("Draft saved on this device. Copy Configuration to publish.");
+}catch(e){
+message("Browser storage is full. Use Copy Configuration to preserve your edits.");
+}
+}
+el("save").onclick=()=>{
+try{save()}catch(e){message(e.message)}
+};
+el("copy").onclick=async()=>{
+try{
+commit();
+validate();
+const json=JSON.stringify(cfg,null,2);
+if(navigator.clipboard&&window.isSecureContext){
+await navigator.clipboard.writeText(json);
+message("Configuration copied! Paste it into game-config.json on GitHub.");
+}else{
+const t=document.createElement("textarea");
+t.value=json;
+document.body.append(t);
+t.select();
+document.execCommand("copy");
+t.remove();
+message("Copy attempted. Paste into GitHub to confirm.");
+}
+}catch(e){message("Copy failed: "+e.message)}
+};
+el("add").onclick=()=>{
+commit();
+const id=Math.max(...cfg.slides.map(s=>s.id))+1;
+if(id>99)return message("Maximum slide number is 99.");
+cfg.slides.push({
+id,title:"Bonus slide "+id,description:"",
+type:"placeholder",url:"",redditUser:"",
+consequence:false,destination:1,rerollLockSeconds:0
+});
+selected=id;
+buttons();
+edit();
+};
+el("remove").onclick=()=>{
+if(selected<=24)return;
+cfg.slides=cfg.slides.filter(s=>s.id!==selected);
+cfg.slides.forEach(s=>{
+if(s.destination===selected)s.destination=1;
+});
+selected=1;
+buttons();
+edit();
+};
+el("reset").onclick=()=>{
+if(!confirm("Reset all edits on this device?"))return;
+cfg=clone(DEFAULT);
+selected=1;
+fill();
+message("Defaults restored. Save or copy to keep them.");
+};
+async function upload(file,kind){
+if(!file)return null;
+const max=file.type.startsWith("video/")?8:3;
+if(file.size>max*1024*1024)
+throw Error("File exceeds "+max+" MB. Use a hosted URL instead.");
+if(kind==="home"&&!file.type.startsWith("image/"))
+throw Error("Choose an image.");
+return new Promise((resolve,reject)=>{
+const r=new FileReader();
+r.onload=()=>resolve(r.result);
+r.onerror=()=>reject(Error("Could not read file."));
+r.readAsDataURL(file);
+});
+}
+el("homeFile").onchange=async()=>{
+try{
+const u=await upload(el("homeFile").files[0],"home");
+if(!u)return;
+el("homeImageUrl").value=u;
+cfg.homeImageUrl=u;
+preview("homePreview","image",u);
+message("Home photo loaded. Copy Configuration to publish.");
+}catch(e){message(e.message)}
+};
+el("slideFile").onchange=async()=>{
+try{
+const f=el("slideFile").files[0];
+const u=await upload(f,"slide");
+if(!u)return;
+el("type").value=f.type.startsWith("video/")?"video":"image";
+el("url").value=u;
+commit();
+preview("preview",slide().type,u,"Slide "+selected);
+message("Media loaded for slide "+selected+".");
+}catch(e){message(e.message)}
+};
+el("homeImageUrl").oninput=()=>{
+preview("homePreview","image",el("homeImageUrl").value);
+};
+["slideTitle","description","redditUser","type","url",
+"consequence","destination","rerollLockSeconds"].forEach(id=>{
+el(id).addEventListener("input",()=>{
+commit();
+preview("preview",slide().type,slide().url,"Slide "+selected);
+});
+});
+fill();
+</script>
+</body>
+</html>
