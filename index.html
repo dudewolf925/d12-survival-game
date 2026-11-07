@@ -3,575 +3,898 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>D12 — Play</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>D12 Survival Game</title>
 <style>
-:root{font-family:Inter,system-ui,sans-serif;color-scheme:dark}
-*{box-sizing:border-box}
-body{margin:0;background:radial-gradient(circle at top,#32244a,#0c0d16 65%);color:#f8f5ff}
-main{max-width:980px;margin:auto;padding:22px}
-header,.line{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-h1{font-size:22px;margin:0}h2{font-size:18px}
-p,.muted{color:#bdb7cd}
-button,input,textarea,select{font:inherit}
-button{border:1px solid #655c7e;border-radius:12px;background:#30283f;color:white;padding:12px 16px;cursor:pointer}
-button:hover{filter:brightness(1.12)}
-button:disabled{opacity:.4;cursor:not-allowed}
-.primary{background:#bda1ff;color:#170e28;border:0;font-weight:800}
-.gold{background:#684621;border-color:#b38a48;color:#ffdd9c;font-weight:800}
-.panel{background:#191724;border:1px solid #4a425e;border-radius:20px;padding:18px;margin-top:16px}
-.stage{height:min(56vw,510px);min-height:290px;border:1px solid #504464;border-radius:20px;position:relative;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,#392653,#13131e)}
-.stage img,.stage video{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:#080710}
-.placeholder{text-align:center;padding:20px}
-.big{font-size:clamp(70px,17vw,150px);font-weight:900;color:#cfb8ff}
-.pill{position:absolute;top:12px;left:12px;z-index:1;background:#15101edc;padding:8px 12px;border-radius:30px}
-.controls{display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:center}
-.die{font-size:76px;line-height:1;background:none;border:0;padding:4px;display:flex;align-items:center;flex-direction:column;gap:8px}
-.die small{font-size:13px}
-.die.roll{animation:shake .13s infinite alternate}
-@keyframes shake{to{transform:rotate(16deg)}}
-.stack{display:grid;gap:10px}
-.timer{font-variant-numeric:tabular-nums;font-size:25px;font-weight:800}
-.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-label{display:grid;gap:6px;margin:12px 0;font-size:13px;color:#d8d1e4}
-input,textarea,select{width:100%;background:#0d0d18;border:1px solid #5b536d;color:white;border-radius:10px;padding:12px}
-textarea{min-height:85px}
-table{width:100%;border-collapse:collapse}
-td,th{padding:9px;text-align:left;border-bottom:1px solid #40374f}
-td:last-child,th:last-child{text-align:right}
-.hidden{display:none!important}
-.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;padding:18px;z-index:9}
-.dialog{width:min(480px,100%);background:#201a2d;border:1px solid #796b90;border-radius:20px;padding:22px}
-.status{font-size:13px;color:#c9bed9}
-.badge{background:#4b355f;padding:6px 10px;border-radius:99px;font-size:12px}
-.help{font-size:13px;line-height:1.55}
-@media(max-width:640px){
-main{padding:12px}
-.cols{grid-template-columns:1fr}
-.controls{grid-template-columns:100px 1fr;gap:8px}
-.die{font-size:60px}
-.stage{height:390px}
+:root {
+  color-scheme:dark;
+  --bg:#110d1c;
+  --panel:#211a32;
+  --edge:#534367;
+  --accent:#c3a3ff;
+  --text:#f8f3ff;
+  --muted:#c9bfd7;
 }
-.home-art{position:absolute;inset:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(circle at 50% 35%,#7657a3 0%,#32234e 35%,#0c0b18 85%);text-align:center}
-.home-art:before{content:"";position:absolute;width:310px;height:310px;border:2px solid #bda1ff44;border-radius:50%;box-shadow:0 0 0 35px #bda1ff10,0 0 0 80px #bda1ff08}
-.home-orbit{font-size:28px;color:#f1c67d;z-index:1}
-.home-symbol{font-size:clamp(70px,15vw,130px);color:#e5c5ff;text-shadow:0 0 36px #bda1ff;line-height:1;z-index:1}
-.home-heading{font-size:clamp(66px,15vw,125px);font-weight:1000;letter-spacing:.08em;line-height:1;color:white;text-shadow:0 4px 28px #110b24;z-index:1}
-.home-subheading{font-size:clamp(13px,3vw,22px);font-weight:800;letter-spacing:.28em;color:#f0d7ff;z-index:1}
-.home-hint{margin-top:24px;font-size:12px;letter-spacing:.25em;color:#d3bedf;z-index:1}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:radial-gradient(ellipse at top,#2b1a43,var(--bg) 70%);
+  color:var(--text);
+  font:16px/1.5 system-ui,-apple-system,sans-serif;
+}
+main {max-width:760px;margin:auto;padding:20px 14px 50px}
+h1,h2,h3 {line-height:1.2}
+h1 {text-align:center;font-size:clamp(30px,7vw,48px);margin:14px 0 4px}
+h2 {font-size:23px;margin:0 0 12px}
+.sub {text-align:center;color:var(--muted);margin:0 0 20px}
+.panel {
+  background:rgba(33,26,50,.96);
+  border:1px solid var(--edge);
+  border-radius:17px;
+  padding:18px;
+  margin:16px 0;
+  box-shadow:0 8px 26px #0003;
+}
+.row {display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row>* {flex:1}
+button {
+  border:1px solid #ad85ec;
+  background:#6b3ca5;
+  color:white;
+  border-radius:12px;
+  padding:13px 15px;
+  font:700 16px system-ui;
+  cursor:pointer;
+  min-height:46px;
+}
+button.secondary {background:#332648;border-color:#75628e}
+button.danger {background:#b42335;border-color:#ff6174;color:#fff}
+button.danger:hover {background:#cf3045}
+button:disabled {opacity:.45;cursor:not-allowed}
+.hidden {display:none!important}
+.timer {
+  font-variant-numeric:tabular-nums;
+  font-size:30px;
+  text-align:center;
+  font-weight:800;
+}
+.muted,.hint {color:var(--muted)}
+.center {text-align:center}
+.die {
+  font-size:72px;
+  font-weight:900;
+  text-align:center;
+  color:var(--accent);
+  padding:4px 0;
+}
+.media {
+  width:100%;
+  max-height:470px;
+  object-fit:contain;
+  border-radius:12px;
+  background:#09070d;
+}
+.mediaBox {margin:14px 0}
+.label {font-weight:700;color:var(--accent)}
+input {
+  width:100%;
+  border:1px solid #85759a;
+  border-radius:10px;
+  background:#140e21;
+  color:white;
+  font:inherit;
+  padding:12px;
+}
+table {border-collapse:collapse;width:100%;font-size:13px}
+th,td {
+  padding:9px 6px;
+  text-align:left;
+  border-bottom:1px solid #544365;
+  overflow-wrap:anywhere;
+}
+th {color:var(--accent)}
+.scroll {overflow-x:auto}
+.error {color:#ffb9c2;white-space:pre-wrap}
+.success {color:#b8f5cb}
+.notice {font-size:13px;color:var(--muted)}
+dialog {
+  width:min(95vw,460px);
+  background:#211a32;
+  color:var(--text);
+  border:1px solid #8a6aa9;
+  border-radius:16px;
+  padding:20px;
+}
+dialog::backdrop {background:#000b}
+a {color:#d3b7ff}
+.badge {
+  display:inline-block;
+  border:1px solid var(--edge);
+  border-radius:99px;
+  padding:3px 10px;
+  font-size:13px;
+  color:var(--muted);
+}
 </style>
 </head>
 <body>
-<div style="background:#bda1ff;color:#170e28;padding:12px;text-align:center;font-weight:bold">
-D12 TEST V2
-</div>
 <main>
-<header>
-<div>
-<div class="badge">PLAYER EDITION</div>
-<h1 id="gameTitle">D12 Consequences</h1>
-</div>
-<div><span class="muted">Survival Time</span> <span class="timer" id="clock">00:00:00</span></div>
-</header>
-<section class="panel">
-<div class="stage" id="stage"></div>
-<h2 id="slideTitle">Your fate awaits</h2>
-<p id="description">Roll the die to begin.</p>
-<div class="controls">
-<button id="die" class="die" aria-label="Ready for Next Challenge — roll D12">🎲<small id="dieLabel">NEXT CHALLENGE</small></button>
-<div class="stack">
-<button class="primary" id="roll">Ready for Next Challenge</button>
-<button class="gold hidden" id="accept">Accept Consequences</button>
-<button id="finish" disabled>I Came — Stop Timer</button>
-<span class="status" id="status">Timer starts on the first roll.</span>
-<p id="lockCountdown" class="status" aria-live="polite"></p>
-</div>
-</div>
+
+<h1 id="gameTitle">D12 Survival Game</h1>
+<p class="sub" id="subtitle">Roll the D12. Survive as long as you can.</p>
+
+<section class="panel center" id="home">
+  <div id="homeMedia"></div>
+  <p id="intro">Roll to begin. Your Survival Time starts with your first roll.</p>
+
+  <label for="playerName" class="label"
+    style="display:block;text-align:left;margin:12px 0 6px">
+    Your username
+  </label>
+
+  <input id="playerName" maxlength="32"
+    placeholder="u/YourName" autocomplete="nickname" required>
+
+  <p class="hint" id="nameHint" aria-live="polite">
+    Enter your username before starting.
+  </p>
+
+  <button id="start">Let’s do this</button>
 </section>
-<div class="cols">
-<section class="panel">
-<h2>Your journey</h2>
-<div id="history" class="status">No rolls yet.</div>
-<button id="restart" style="margin-top:14px">Start new game</button>
+
+<section class="panel hidden" id="game">
+  <div class="timer" id="timer">00:00:00</div>
+  <p class="center muted">Survival Time</p>
+
+  <div class="die" id="die">12</div>
+
+  <div class="row">
+    <button id="roll">Roll D12</button>
+    <button id="accept" class="secondary hidden">
+      Accept Consequences
+    </button>
+  </div>
+
+  <p class="center" id="rollHint"></p>
+
+  <div id="slideArea" class="hidden">
+    <h2 id="slideTitle"></h2>
+    <p id="slideDescription"></p>
+    <div id="slideMedia"></div>
+    <p class="label" id="hunter"></p>
+    <p class="hint" id="consequence"></p>
+    <button id="finish" class="secondary">I Came</button>
+  </div>
+
+  <button id="tapOut" class="danger"
+    style="width:100%;margin-top:12px">
+    I’m Tapping out
+  </button>
+
+  <p class="center" id="status" aria-live="polite"></p>
 </section>
+
 <section class="panel">
-<div class="line">
-<h2>Soldier Leaderboard</h2>
-<button id="refresh">Refresh</button>
-</div>
-<div class="status" id="boardStatus">Loading…</div>
-<div class="status" id="featuredUser" aria-live="polite"></div>
-<table>
-<thead><tr><th>#</th><th>Name</th><th>Survival Time</th><th>Result</th><th>Slide</th></tr></thead>
-<tbody id="scores"></tbody>
-</table>
-<div class="line">
-<h2>Hunter Scoreboard</h2>
-<button id="toggleHunters" type="button">View Full Rankings</button>
-</div>
-<table>
-<thead><tr><th>Reddit user</th><th>Soldiers Claimed</th></tr></thead>
-<tbody id="claims"></tbody>
-</table>
+  <h2>Soldier Leaderboard</h2>
+  <p class="notice" id="boardMode">Loading scores…</p>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Soldier</th>
+          <th>Survival Time</th>
+          <th>Result</th>
+          <th>Ending Slide</th>
+        </tr>
+      </thead>
+      <tbody id="soldierRows">
+        <tr><td colspan="4">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
-</div>
-<p class="status">For your privacy, use a nickname. Player names, times, featured Reddit usernames, and ending slides are public when an online leaderboard is connected.</p>
+
+<section class="panel">
+  <h2>Hunter Scoreboard</h2>
+  <p class="notice">Soldiers Claimed by each Reddit hunter</p>
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Hunter</th>
+          <th>Soldiers Claimed</th>
+        </tr>
+      </thead>
+      <tbody id="hunterRows">
+        <tr><td colspan="2">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<p class="center notice" id="configStatus"></p>
 </main>
-<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="finishHeading">
-<div class="dialog">
-<h2 id="finishHeading">Game complete!</h2>
-<p id="finalResult"></p>
-<p>Your Survival Time: <strong id="finalTime"></strong></p>
-<label>Leaderboard nickname<input id="name" maxlength="24" autocomplete="nickname" placeholder="Choose a nickname"></label>
-<div class="line">
-<button id="cancel">Back</button>
-<button class="primary" id="save">Save Survival Time</button>
-</div>
-<p class="status" id="saveStatus"></p>
-</div>
-</div>
+
+<dialog id="modal">
+  <h2 id="modalTitle">Save Survival Time</h2>
+  <p id="finalSummary"></p>
+  <p id="savingAs" class="hint"></p>
+
+  <div class="row" style="margin-top:14px">
+    <button id="save">Save Survival Time</button>
+    <button id="cancel" class="secondary">Cancel</button>
+  </div>
+
+  <p id="saveStatus" aria-live="polite"></p>
+</dialog>
+
 <script>
-let showAllHunters=false;
-const DEFAULT={
-title:'D12 Consequences',
-introTitle:'Your fate awaits',
-introText:'Roll the twelve-sided die to begin.',
-homeImageUrl:'',
-supabaseUrl:'',
-supabaseKey:'',
-slides:Array.from({length:24},(_,i)=>({
-id:i+1,
-title:'Outcome '+(i+1),
-description:'Placeholder for slide '+(i+1),
-type:'placeholder',
-url:'',
-redditUser:'',
-consequence:false,
-destination:1,
-rerollLockSeconds:0
-}))
-};
-const clone=x=>JSON.parse(JSON.stringify(x));
-function normalize(x){
-if(!x||!Array.isArray(x.slides))throw Error('Missing slides array');
-const y=clone(DEFAULT);
-for(const k of ['title','introTitle','introText','homeImageUrl','supabaseUrl','supabaseKey'])
-if(typeof x[k]==='string')y[k]=x[k];
-y.slides=x.slides.filter(s=>Number.isInteger(s.id)&&s.id>=1&&s.id<=99).map(s=>({
-id:s.id,
-title:String(s.title||''),
-description:String(s.description||''),
-type:['placeholder','image','video'].includes(s.type)?s.type:'placeholder',
-url:String(s.url||''),
-redditUser:String(s.redditUser||''),
-consequence:!!s.consequence,
-destination:Number(s.destination)||1,
-rerollLockSeconds:Math.max(0,Math.min(86400,Number(s.rerollLockSeconds)||0))
-}));
-for(let i=1;i<=24;i++)
-if(!y.slides.some(s=>s.id===i))y.slides.push(clone(DEFAULT.slides[i-1]));
-y.slides.sort((a,b)=>a.id-b.id);
-return y;
-}
-function getConfig(){
-try{
-const x=localStorage.getItem('d12_config_v5');
-return x?normalize(JSON.parse(x)):clone(DEFAULT);
-}catch{return clone(DEFAULT)}
-}
-function fmt(ms){
-let t=Math.floor(ms/1000);
-return String(Math.floor(t/3600)).padStart(2,'0')+':'+
-String(Math.floor(t/60)%60).padStart(2,'0')+':'+
-String(t%60).padStart(2,'0');
-}
-function validUrl(u){
-if(typeof u==='string'&&/^data:(image\/(?:png|jpeg|webp|gif)|video\/(?:mp4|webm));base64,/i.test(u))return true;
-try{
-const v=new URL(u);
-return v.protocol==='https:'||v.protocol==='http:'&&['localhost','127.0.0.1'].includes(v.hostname);
-}catch{return false}
-}
-function setText(id,text){document.getElementById(id).textContent=text}
-function drawMedia(container,s){
-container.replaceChildren();
-if(!s){
-const imageUrl=config.homeImageUrl;
-if(imageUrl&&validUrl(imageUrl)){
-const img=document.createElement('img');
-img.src=imageUrl;
-img.alt='Home page artwork';
-img.onerror=()=>{img.remove();homeFallback()};
-container.append(img);
-return;
-}
-homeFallback();
-return;
-}
-function homeFallback(){
-const wrap=document.createElement('div');
-wrap.className='home-art';
-wrap.innerHTML='<div class="home-orbit">✦</div><div class="home-symbol">⬡</div><div class="home-heading">D12</div><div class="home-subheading">YOUR FATE AWAITS</div><div class="home-hint">ROLL THE DIE TO BEGIN</div>';
-container.append(wrap);
-}
-const badge=document.createElement('div');
-badge.className='pill';
-badge.textContent='SLIDE '+s.id;
-container.append(badge);
-if(s.url&&validUrl(s.url)&&['image','video'].includes(s.type)){
-const media=document.createElement(s.type==='image'?'img':'video');
-media.src=s.url;
-if(s.type==='image')media.alt=s.title;
-else{
-media.controls=true;
-media.playsInline=true;
-media.preload='metadata';
-}
-media.onerror=()=>{media.remove();fallback()};
-container.append(media);
-}else fallback();
-function fallback(){
-const div=document.createElement('div');
-div.className='placeholder';
-const n=document.createElement('div');
-n.className='big';
-n.textContent=s.id;
-const h=document.createElement('h2');
-h.textContent=s.title;
-div.append(n,h);
-container.append(div);
-}
-}
-</script>
-<script>
-let lockUntil=0;
-let config=getConfig(),start=null,elapsed=0,finished=false,rolling=false,current=null,journey=[],tick=null,finishKind='ruined',recentScores=[];
-const el=id=>document.getElementById(id);
-document.title=config.title+' — Play';
-setText('gameTitle',config.title);
-setText('slideTitle',config.introTitle);
-setText('description',config.introText);
-drawMedia(el('stage'),null);
+'use strict';
 
-function updateClock(){
-if(start!==null&&!finished)elapsed=performance.now()-start;
-setText('clock',fmt(elapsed));
-updateLock();
-}
-function updateLock(){
-const remaining=Math.max(0,Math.ceil((lockUntil-performance.now())/1000));
-const locked=!!current&&!finished&&remaining>0;
-const blocked=finished||rolling||!!current?.consequence||locked;
-el('roll').disabled=blocked;
-el('die').disabled=blocked;
-setText('lockCountdown',locked?'Ready for Next Challenge in '+Math.floor(remaining/60)+':'+String(remaining%60).padStart(2,'0'):'');
-if(!locked&&current&&!finished&&!current.consequence)
-setText('status','Ready for Next Challenge, or finish whenever you like.');
-}
-function show(s){
-current=s;
-lockUntil=performance.now()+(s.rerollLockSeconds||0)*1000;
-drawMedia(el('stage'),s);
-setText('slideTitle',s.title);
-setText('description',s.description);
-renderFeatured();
-if(s.id===16){
-endGame('winner');
-setText('status','Winning slide reached! Enter your nickname to record your victory.');
-return;
-}
-el('accept').classList.toggle('hidden',!s.consequence);
-el('roll').disabled=!!s.consequence;
-el('die').disabled=!!s.consequence;
-setText('status',s.consequence?'Accept consequences to follow this slide’s path. You may still finish anytime.':'Ready for Next Challenge, or finish whenever you like.');
-updateLock();
-}
-function addJourney(t){
-journey.push(t);
-setText('history',journey.join(' → '));
-}
-function roll(){
-if(rolling||finished||current?.consequence||performance.now()<lockUntil)return;
-rolling=true;
-el('roll').disabled=true;
-el('die').classList.add('roll');
-if(start===null){
-start=performance.now();
-tick=setInterval(updateClock,200);
-el('finish').disabled=false;
-}
-let n=1+Math.floor(Math.random()*12);
-setTimeout(()=>{
-rolling=false;
-el('die').classList.remove('roll');
-setText('dieLabel','D12: '+n);
-const s=config.slides.find(x=>x.id===n);
-addJourney('🎲 '+n);
-show(s);
-updateClock();
-},500);
-}
-el('roll').onclick=roll;
-el('die').onclick=roll;
-el('accept').onclick=()=>{
-if(!current?.consequence||finished)return;
-const dest=config.slides.find(s=>s.id===current.destination);
-if(!dest){
-setText('status','Destination slide is missing. Contact the game administrator.');
-return;
-}
-addJourney('→ '+dest.id);
-show(dest);
+const $ = id => document.getElementById(id);
+const setText = (id,value) => {
+  $(id).textContent = String(value ?? '');
 };
-function endGame(kind){
-if(start===null||finished||rolling)return;
-finishKind=kind;
-updateClock();
-clearInterval(tick);
-finished=true;
-updateLock();
-el('modal').classList.remove('hidden');
-setText('finishHeading',kind==='winner'?'You won!':'Game complete!');
-setText('finalResult',kind==='winner'?'You reached slide 16 — Winner!':'Slide '+current.id+' — Finished by '+(current.redditUser||'Unassigned Reddit user'));
-setText('finalTime',fmt(elapsed));
-setText('saveStatus','');
-if(kind==='winner'){
-el('roll').disabled=true;
-el('die').disabled=true;
-el('accept').classList.add('hidden');
-}
-}
-el('finish').onclick=()=>endGame('ruined');
-el('cancel').onclick=()=>{
-if(finishKind==='winner'){
-setText('saveStatus','A win must be recorded. Enter a nickname to save your result.');
-return;
-}
-el('modal').classList.add('hidden');
-setText('status','Game ended. Use Start new game for another run.');
+
+const DEFAULT = {
+  title:'D12 Survival Game',
+  slides:[],
+  supabaseUrl:'',
+  supabaseKey:''
 };
-function renderFeatured(){
-setText('featuredUser',current?'Slide '+current.id+' · Featured: '+(current.redditUser||'Not assigned'):'');
-}
-function renderClaims(rows){
-const counts=new Map();
-rows.filter(r=>r.result!=='winner'&&r.featured_reddit_user).forEach(r=>{
-const key=r.featured_reddit_user.toLowerCase();
-const entry=counts.get(key)||{name:r.featured_reddit_user,count:0};
-entry.count++;
-counts.set(key,entry);
-});
-el('claims').replaceChildren();
-const ranked=[...counts.values()].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name));
-(showAllHunters?ranked:ranked.slice(0,5)).forEach(r=>{
-const tr=document.createElement('tr');
-[r.name,r.count].forEach(v=>{
-const td=document.createElement('td');
-td.textContent=v;
-tr.append(td);
-});
-el('claims').append(tr);
-});
-}
-el('toggleHunters').onclick=()=>{
-showAllHunters=!showAllHunters;
-setText('toggleHunters',showAllHunters?'Show Top 5':'View Full Rankings');
-renderClaims(recentScores);
+
+let config = {...DEFAULT};
+let slides = new Map();
+let current = null;
+let elapsed = 0;
+let startedAt = 0;
+let tick = null;
+let finished = false;
+let finishKind = 'ruined';
+let playerName = '';
+let saving = false;
+let scoreSaved = false;
+let rollLocked = false;
+let lastRoll = null;
+
+const fmt = ms => {
+  const s = Math.max(0,Math.floor(ms/1000));
+  return [
+    Math.floor(s/3600),
+    Math.floor(s%3600/60),
+    s%60
+  ].map(x=>String(x).padStart(2,'0')).join(':');
 };
-function online(){
-return /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(config.supabaseUrl)&&!!config.supabaseKey;
+
+function updateClock() {
+  if(startedAt && !finished) {
+    elapsed = Date.now()-startedAt;
+    setText('timer',fmt(elapsed));
+  }
 }
 
-async function request(path, options = {}) {
-  const base = String(config.supabaseUrl || "").trim();
-  const key = String(config.supabaseKey || "").trim();
+function online() {
+  return /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(
+    String(config.supabaseUrl||'').trim()
+  ) && /^sb_publishable_[A-Za-z0-9_-]+$/.test(
+    String(config.supabaseKey||'').trim()
+  );
+}
 
-  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(base)) {
-    throw Error("Invalid Supabase URL");
+async function request(path,options={}) {
+  const base = String(config.supabaseUrl||'')
+    .trim().replace(/\/$/,'');
+  const key = String(config.supabaseKey||'').trim();
+
+  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(base)) {
+    throw Error('Invalid Supabase URL');
   }
 
-  if (!key.startsWith("sb_publishable_")) {
-    throw Error("Expected a Supabase publishable key");
+  if(!/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) {
+    throw Error('Invalid Supabase publishable key');
   }
-
-  if (!/^sb_publishable_[A-Za-z0-9_-]+$/.test(key)) {
-    throw Error("Publishable key contains invalid characters");
-  }
-
-  const url = base.replace(/\/$/, "") + "/rest/v1/" + path;
 
   const headers = {
-    "apikey": key,
-    "Content-Type": "application/json",
-    ...options.headers
+    'apikey':key,
+    'Content-Type':'application/json',
+    ...(options.headers||{})
   };
 
-  // Do not send a publishable key as a Bearer token.
   delete headers.Authorization;
+  delete headers.authorization;
 
   let response;
 
   try {
-    response = await fetch(url, {
-      ...options,
-      headers
-    });
-  } catch (e) {
-    throw Error("Browser request: " + e.name + ": " + e.message);
+    response = await fetch(
+      base+'/rest/v1/'+path,
+      {...options,headers}
+    );
+  } catch(e) {
+    throw Error('Browser request: '+e.name+': '+e.message);
   }
 
-  if (!response.ok) {
-    const detail = await response.text();
+  if(!response.ok) {
+    const detail = await response.text().catch(()=>'');
     throw Error(
-      "Supabase HTTP " + response.status +
-      ": " + detail.slice(0, 250)
+      'Supabase HTTP '+response.status+': '+detail.slice(0,220)
     );
   }
 
-  return response.status === 204 ? null : response.json();
+  if(response.status===204) return null;
+
+  const body = await response.text();
+  return body ? JSON.parse(body) : null;
 }
 
-async function board(){
-let rows=[];
-try{
-if(online()){
-rows=await request('d12_scores?select=name,duration_ms,result,ending_slide,featured_reddit_user&order=created_at.asc&limit=1000');
-setText('boardStatus','Public leaderboard · online (up to 1,000 results)');
-}else{
-rows=JSON.parse(localStorage.getItem('d12_scores_v5')||'[]');
-setText('boardStatus','Local preview only — admin must connect Supabase for public scores');
-}
-}catch(e){
-setText('boardStatus','Leaderboard unavailable: '+e.message);
-}
-recentScores=rows;
-renderFeatured();
-renderClaims(rows);
-el('scores').replaceChildren();
-rows.slice().sort((a,b)=>
-(a.result==='winner'?0:1)-(b.result==='winner'?0:1)||b.duration_ms-a.duration_ms
-).slice(0,30).forEach((r,i)=>{
-const tr=document.createElement('tr');
-[
-i+1,
-r.name,
-fmt(r.duration_ms),
-r.result==='winner'?'🏆 Winner':'Finished by '+(r.featured_reddit_user||'Unassigned'),
-r.ending_slide??'—'
-].forEach(t=>{
-const td=document.createElement('td');
-td.textContent=t;
-tr.append(td);
-});
-el('scores').append(tr);
-});
-}
-el('refresh').onclick=board;
-el('save').onclick=async()=>{
-const name=el('name').value.trim();
-if(!name||name.length>24){
-setText('saveStatus','Enter a nickname (1–24 characters).');
-return;
-}
-el('save').disabled=true;
-setText('saveStatus','Saving…');
-try{
-const record={
-name,
-duration_ms:Math.max(100,Math.round(elapsed)),
-result:finishKind,
-ending_slide:current.id,
-featured_reddit_user:finishKind==='winner'?null:(current.redditUser||null)
-};
-if(online()){
-await request('d12_scores',{
-method:'POST',
-headers:{Prefer:'return=minimal'},
-body:JSON.stringify(record)
-});
-}else{
-const a=JSON.parse(localStorage.getItem('d12_scores_v5')||'[]');
-a.push(record);
-localStorage.setItem('d12_scores_v5',JSON.stringify(a));
-}
-finished=true;
-clearInterval(tick);
-el('modal').classList.add('hidden');
-el('roll').disabled=true;
-el('die').disabled=true;
-el('accept').classList.add('hidden');
-el('finish').disabled=true;
+function normalizeSlide(s,index) {
+  if(!s || typeof s!=='object') return null;
 
-setText(
-  'status',
-  'Score saved! ' +
-  (finishKind === 'winner'
-    ? 'Winner! '
-    : 'Finished by ' +
-      (current.redditUser || 'Unassigned') + '. ') +
-  'Survival Time: ' + fmt(elapsed)
+  const id = Number(
+    s.id ?? s.slide ?? s.number ?? index+1
+  );
+
+  if(!Number.isInteger(id) || id<1) return null;
+
+  return {
+    ...s,
+    id,
+    title:s.title||s.name||'Slide '+id,
+    description:s.description||s.text||s.body||'',
+    redditUser:s.redditUser||s.reddit_user||s.hunter||'',
+    media:s.media||s.mediaUrl||s.mediaURL||
+      s.image||s.video||s.url||'',
+    consequence:s.consequence||s.consequences||'',
+    destination:s.destination??s.nextSlide??
+      s.next??s.consequenceSlide??null
+  };
+}
+
+function parseSlides(raw) {
+  let data=raw;
+
+  if(!Array.isArray(data) && data &&
+     typeof data==='object') {
+    data=Object.entries(data).map(([id,v])=>({
+      ...v,
+      id:v?.id??id
+    }));
+  }
+
+  if(!Array.isArray(data)) return [];
+
+  return data.map(normalizeSlide).filter(Boolean);
+}
+
+function mediaNode(value) {
+  if(!value) return null;
+
+  const source = typeof value==='string'
+    ? value
+    : (value.url||value.src||value.data||'');
+
+  if(!source) return null;
+
+  let url=String(source).trim();
+
+  if(!/^(https?:|data:image\/|data:video\/|blob:)/i.test(url)) {
+    return null;
+  }
+
+  const kind=(typeof value==='object'&&value.type)||'';
+
+  const video=/^video/i.test(kind)||
+    /\.(mp4|webm|mov)(\?|#|$)/i.test(url)||
+    /^data:video\//i.test(url);
+
+  const el=document.createElement(video?'video':'img');
+  el.className='media';
+  el.src=url;
+
+  if(video) {
+    el.controls=true;
+    el.playsInline=true;
+    el.preload='metadata';
+  } else {
+    el.alt='Game media';
+  }
+
+  return el;
+}
+
+function showMedia(id,media) {
+  const box=$(id);
+  box.replaceChildren();
+
+  const node=mediaNode(media);
+
+  if(node) {
+    const wrapper=document.createElement('div');
+    wrapper.className='mediaBox';
+    wrapper.append(node);
+    box.append(wrapper);
+  }
+}
+
+async function loadPublished() {
+  try {
+    const r=await fetch(
+      './game-config.json?ts='+Date.now(),
+      {cache:'no-store'}
+    );
+
+    if(!r.ok) {
+      throw Error('game-config.json HTTP '+r.status);
+    }
+
+    const c=await r.json();
+    config={...DEFAULT,...c};
+
+    setText(
+      'gameTitle',
+      c.title||c.gameTitle||DEFAULT.title
+    );
+
+    setText(
+      'subtitle',
+      c.subtitle||
+      'Roll the D12. Survive as long as you can.'
+    );
+
+    setText(
+      'intro',
+      c.intro||c.instructions||
+      'Roll to begin. Your Survival Time starts with your first roll.'
+    );
+
+    showMedia(
+      'homeMedia',
+      c.homeImage||c.homeMedia||
+      c.homeImageUrl||c.homeMediaUrl||''
+    );
+
+    const arr=parseSlides(
+      c.slides||c.gameSlides||c.cards||[]
+    );
+
+    slides=new Map(arr.map(s=>[s.id,s]));
+
+    setText(
+      'configStatus',
+      arr.length
+        ? 'Game configuration loaded · '+arr.length+' slides'
+        : 'Game configuration loaded, but no slides found. Check game-config.json.'
+    );
+
+  } catch(e) {
+    setText(
+      'configStatus',
+      'Could not load game-config.json: '+e.message
+    );
+  }
+
+  await board();
+}
+
+function begin() {
+  if(playerName||finished) return;
+
+  const name=$('playerName').value.trim();
+
+  if(!name) {
+    setText(
+      'nameHint',
+      'Please enter your username to start.'
+    );
+    $('playerName').focus();
+    return;
+  }
+
+  playerName=name;
+  $('home').classList.add('hidden');
+  $('game').classList.remove('hidden');
+
+  setText('status','Roll the D12 to begin.');
+}
+
+function getSlide(id) {
+  return slides.get(Number(id))||null;
+}
+
+function showSlide(s) {
+  current=s;
+  $('slideArea').classList.remove('hidden');
+
+  setText('slideTitle',s.title||'Slide '+s.id);
+  setText('slideDescription',s.description||'');
+
+  showMedia('slideMedia',s.media);
+
+  setText(
+    'hunter',
+    s.redditUser
+      ? 'Featured: '+s.redditUser
+      : 'Featured: Not assigned'
+  );
+
+  setText(
+    'consequence',
+    typeof s.consequence==='string'
+      ? s.consequence
+      : ''
+  );
+
+  $('accept').classList.toggle(
+    'hidden',
+    !(s.id<=12 && getSlide(s.destination??s.id+12))
+  );
+
+  rollLocked=!!(
+    s.lockReroll||
+    s.noReroll||
+    s.rerollLocked||
+    s.mustAccept||
+    s.forceConsequence
+  );
+
+  $('roll').disabled=rollLocked;
+
+  setText(
+    'rollHint',
+    rollLocked?'Reroll locked for this slide.':''
+  );
+
+  if(s.id===16) {
+    finishKind='winner';
+    finishGame(true);
+  }
+}
+
+function roll() {
+  if(finished||rollLocked) return;
+
+  if(!startedAt) {
+    startedAt=Date.now();
+    tick=setInterval(updateClock,250);
+  }
+
+  const n=Math.floor(Math.random()*12)+1;
+  lastRoll=n;
+
+  setText('die',n);
+
+  const s=getSlide(n);
+
+  if(s) {
+    showSlide(s);
+  } else {
+    setText(
+      'rollHint',
+      'Slide '+n+' is not configured. Add it in Admin Studio.'
+    );
+    $('slideArea').classList.add('hidden');
+  }
+
+  updateClock();
+}
+
+function accept() {
+  if(!current||finished) return;
+
+  const dest=current.destination??current.id+12;
+  const target=getSlide(dest);
+
+  if(!target) {
+    setText(
+      'rollHint',
+      'Consequence slide '+dest+' is not configured.'
+    );
+    return;
+  }
+
+  showSlide(target);
+}
+
+function finishGame(won=false,tappedOut=false) {
+  if(finished||(!current&&!tappedOut)) return;
+
+  finishKind=tappedOut
+    ? 'tapped_out'
+    : won||current.id===16
+      ? 'winner'
+      : 'ruined';
+
+  updateClock();
+
+  setText(
+    'finalSummary',
+    (
+      tappedOut
+        ? 'Tapped Out'
+        : finishKind==='winner'
+          ? 'Winner!'
+          : 'Finished by '+
+            (current.redditUser||'Unassigned Reddit user')
+    )+' · Survival Time: '+fmt(elapsed)
+  );
+
+  setText('savingAs','Soldier: '+playerName);
+  setText('saveStatus','');
+
+  $('modalTitle').textContent=tappedOut
+    ? 'Save Tapped Out Result'
+    : finishKind==='winner'
+      ? 'Save Winning Time'
+      : 'Save Survival Time';
+
+  $('modal').showModal();
+}
+
+function localScores() {
+  try {
+    return JSON.parse(
+      localStorage.getItem('d12_scores_v5')||'[]'
+    );
+  } catch {
+    return [];
+  }
+}
+
+function safeCell(tr,value) {
+  const td=document.createElement('td');
+  td.textContent=String(value??'');
+  tr.append(td);
+}
+
+function renderBoards(rows) {
+  const soldier=$('soldierRows');
+  const hunter=$('hunterRows');
+
+  soldier.replaceChildren();
+  hunter.replaceChildren();
+
+  const sorted=[...rows]
+    .sort(
+      (a,b)=>Number(a.duration_ms||0)-
+             Number(b.duration_ms||0)
+    )
+    .slice(0,100);
+
+  if(!sorted.length) {
+    const tr=document.createElement('tr');
+    const td=document.createElement('td');
+    td.colSpan=4;
+    td.textContent='No scores yet.';
+    tr.append(td);
+    soldier.append(tr);
+  }
+
+  for(const r of sorted) {
+    const tr=document.createElement('tr');
+
+    safeCell(tr,r.name||'Anonymous');
+    safeCell(tr,fmt(r.duration_ms||0));
+
+    safeCell(
+      tr,
+      Number(r.ending_slide)===0&&r.result==='ruined'
+        ? 'Tapped Out'
+        : r.result==='winner'
+          ? 'Winner'
+          : 'Finished by '+
+            (r.featured_reddit_user||'Unassigned')
+    );
+
+    safeCell(
+      tr,
+      Number(r.ending_slide)===0&&r.result==='ruined'
+        ? '—'
+        : r.ending_slide??'—'
+    );
+
+    soldier.append(tr);
+  }
+
+  const counts=new Map();
+
+  for(const r of rows) {
+    if(
+      r.result==='winner'||
+      (Number(r.ending_slide)===0&&r.result==='ruined')||
+      !r.featured_reddit_user
+    ) continue;
+
+    const name=String(r.featured_reddit_user).trim();
+    counts.set(name,(counts.get(name)||0)+1);
+  }
+
+  const ranked=[...counts].sort(
+    (a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])
+  );
+
+  if(!ranked.length) {
+    const tr=document.createElement('tr');
+    const td=document.createElement('td');
+    td.colSpan=2;
+    td.textContent='No hunter claims yet.';
+    tr.append(td);
+    hunter.append(tr);
+  }
+
+  for(const [name,count] of ranked) {
+    const tr=document.createElement('tr');
+    safeCell(tr,name);
+    safeCell(tr,count);
+    hunter.append(tr);
+  }
+}
+
+async function board() {
+  try {
+    let rows;
+
+    if(online()) {
+      rows=await request(
+        'd12_scores?select=name,duration_ms,result,ending_slide,featured_reddit_user,created_at&order=created_at.desc&limit=1000'
+      );
+
+      setText(
+        'boardMode',
+        'Public leaderboard · online · showing up to 1,000 recent scores'
+      );
+    } else {
+      rows=localScores();
+
+      setText(
+        'boardMode',
+        'Local preview only · check Supabase URL and publishable key in game-config.json'
+      );
+    }
+
+    renderBoards(Array.isArray(rows)?rows:[]);
+
+  } catch(e) {
+    setText(
+      'boardMode',
+      'Leaderboard refresh unavailable: '+e.message
+    );
+    throw e;
+  }
+}
+
+async function saveScore() {
+  if(saving||scoreSaved) return;
+
+  const name=playerName;
+
+  if(!name) {
+    setText(
+      'saveStatus',
+      'Username missing. Return to the start screen.'
+    );
+    return;
+  }
+
+  saving=true;
+  $('save').disabled=true;
+  setText('saveStatus','Saving score…');
+
+  const tappedOut=finishKind==='tapped_out';
+
+  const record={
+    name,
+    duration_ms:Math.max(100,Math.round(elapsed)),
+    result:tappedOut?'ruined':finishKind,
+    ending_slide:tappedOut?0:current.id,
+    featured_reddit_user:
+      tappedOut||finishKind==='winner'
+        ? null
+        : (current.redditUser||null)
+  };
+
+  // Only the database write is inside this try/catch.
+  try {
+    if(online()) {
+      await request('d12_scores',{
+        method:'POST',
+        headers:{Prefer:'return=minimal'},
+        body:JSON.stringify(record)
+      });
+    } else {
+      const rows=localScores();
+      rows.push(record);
+
+      localStorage.setItem(
+        'd12_scores_v5',
+        JSON.stringify(rows)
+      );
+    }
+  } catch(e) {
+    setText('saveStatus','Could not save: '+e.message);
+    saving=false;
+    $('save').disabled=false;
+    return;
+  }
+
+  // Score has been saved successfully.
+  // Prevent duplicate submissions.
+  scoreSaved=true;
+  finished=true;
+  clearInterval(tick);
+
+  $('roll').disabled=true;
+  $('accept').classList.add('hidden');
+  $('finish').disabled=true;
+  $('tapOut').disabled=true;
+  $('cancel').disabled=true;
+
+  setText('saveStatus','Score saved successfully!');
+
+  setText(
+    'status',
+    (
+      tappedOut
+        ? 'Tapped Out. '
+        : finishKind==='winner'
+          ? 'Winner! '
+          : 'Finished by '+
+            (current.redditUser||'Unassigned')+'. '
+    )+
+    'Survival Time: '+fmt(elapsed)+
+    ' · Score saved!'
+  );
+
+  try {
+    $('modal').close();
+  } catch(e) {
+    console.warn('Dialog close:',e);
+  }
+
+  // Leaderboard refresh cannot turn a saved score
+  // into a false "Could not save" error.
+  try {
+    await board();
+  } catch(e) {
+    console.warn(
+      'Score saved, but leaderboard refresh failed:',
+      e
+    );
+
+    setText(
+      'status',
+      'Score saved successfully! Leaderboard refresh is temporarily unavailable.'
+    );
+  }
+
+  saving=false;
+}
+
+$('start').addEventListener('click',begin);
+$('roll').addEventListener('click',roll);
+$('accept').addEventListener('click',accept);
+
+$('finish').addEventListener(
+  'click',
+  ()=>finishGame(false)
 );
 
-try {
-  await board();
-} catch (refreshError) {
-  console.warn(
-    'Score saved, but leaderboard refresh failed:',
-    refreshError
-  );
-}
+$('tapOut').addEventListener(
+  'click',
+  ()=>finishGame(false,true)
+);
 
-await board();
-}catch(e){
-setText('saveStatus','Could not save: '+e.message);
-}finally{
-el('save').disabled=false;
-}
-};
-el('restart').onclick=()=>{
-clearInterval(tick);
-start=null;
-elapsed=0;
-finished=false;
-rolling=false;
-current=null;
-lockUntil=0;
-journey=[];
-finishKind='ruined';
-el('roll').disabled=false;
-el('die').disabled=false;
-el('finish').disabled=true;
-el('accept').classList.add('hidden');
-setText('clock','00:00:00');
-setText('lockCountdown','');
-setText('dieLabel','NEXT CHALLENGE');
-setText('history','No rolls yet.');
-setText('slideTitle',config.introTitle);
-setText('description',config.introText);
-setText('status','Timer starts on the first roll.');
-drawMedia(el('stage'),null);
-renderFeatured();
-};
-async function loadPublished(){
-if(location.protocol==='file:')return;
-try{
-const r=await fetch('./game-config.json',{cache:'no-store'});
-if(!r.ok)return;
-const remote=normalize(await r.json());
-config=remote;
-document.title=config.title+' — Play';
-setText('gameTitle',config.title);
-setText('slideTitle',config.introTitle);
-setText('description',config.introText);
-drawMedia(el('stage'),null);
-board();
-}catch(e){
-console.warn('Using local/default config:',e);
-}
-}
-document.title = "D12 TEST V2";
+$('save').addEventListener('click',saveScore);
+
+$('cancel').addEventListener(
+  'click',
+  ()=>$('modal').close()
+);
+
+$('playerName').addEventListener('keydown',e=>{
+  if(e.key==='Enter') begin();
+});
+
 loadPublished();
-board();
 </script>
 </body>
 </html>
