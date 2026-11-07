@@ -1094,102 +1094,103 @@ el("loadGitHub").onclick = async () => {
 el("publishGitHub").onclick = async () => {
   const button = el("publishGitHub");
 
-  const password =
-    el("publishPassword").value;
+  // Automatically save draft BEFORE publishing.
+  try {
+    commit();
+    validate();
+
+    localStorage.setItem(
+      "d12_config_v5",
+      JSON.stringify(cfg)
+    );
+
+    message("Draft automatically saved on this iPhone.");
+    publishMessage("Draft saved. Preparing to publish...");
+  } catch(error) {
+    publishMessage(
+      "Draft could not be saved: " + error.message
+    );
+    return;
+  }
 
   if(!githubExpectedSha) {
     publishMessage(
-      "Load the GitHub configuration first."
+      "Draft saved. Load from GitHub before publishing."
     );
     return;
   }
+
+  const password = el("publishPassword").value;
 
   if(!password) {
     publishMessage(
-      "Enter your publishing password."
+      "Draft saved. Enter your publishing password."
     );
     return;
   }
 
-  const projectUrl =
-    el("supabaseUrl")
-    .value.trim()
-    .replace(/\/$/,"");
+  const projectUrl = el("supabaseUrl")
+    .value.trim().replace(/\/$/, "");
 
-  const publicKey =
-    el("supabaseKey").value.trim();
+  const publicKey = el("supabaseKey").value.trim();
 
   if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(
-      projectUrl
-    )
+    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(projectUrl)
   ) {
     publishMessage(
-      "Enter a valid Supabase project URL."
+      "Draft saved. Enter a valid Supabase project URL."
     );
     return;
   }
 
   if(!publicKey) {
     publishMessage(
-      "Enter your public Supabase key."
+      "Draft saved. Enter your public Supabase key."
     );
     return;
   }
 
-  try {
-    commit();
-    validate();
-  } catch(error) {
+  if(!confirm(
+    "Your draft was saved automatically.\n\n" +
+    "Publish these changes to GitHub?"
+  )) {
     publishMessage(
-      "Validation failed: " + error.message
+      "Draft saved. GitHub publishing cancelled."
     );
-    return;
-  }
-
-  if(
-    !confirm(
-      "Publish your current slide changes to GitHub?\n\n" +
-      "This will update the live game's configuration."
-    )
-  ) {
     return;
   }
 
   button.disabled = true;
-
   publishMessage(
-    "Publishing game configuration..."
+    "Draft saved. Publishing to GitHub..."
   );
 
   try {
     const response = await fetch(
-      projectUrl +
-      "/functions/v1/publish-game-config",
+      projectUrl + "/functions/v1/publish-game-config",
       {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "apikey":publicKey
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": publicKey
         },
-        body:JSON.stringify({
+        body: JSON.stringify({
           password,
-          expectedSha:githubExpectedSha,
-          config:cfg
+          expectedSha: githubExpectedSha,
+          config: cfg
         })
       }
     );
 
     const raw = await response.text();
-
     let result;
 
     try {
       result = JSON.parse(raw);
-    } catch(e) {
+    } catch(error) {
       throw Error(
         "Unexpected server response: " +
-        raw.slice(0,180)
+        raw.slice(0, 180)
       );
     }
 
@@ -1201,25 +1202,24 @@ el("publishGitHub").onclick = async () => {
       );
     }
 
-    githubExpectedSha =
-      result.sha || null;
-
+    githubExpectedSha = result.sha || null;
     el("publishPassword").value = "";
 
     publishMessage(
-      "Success! game-config.json was published to GitHub. " +
-      "Refresh your game after GitHub Pages updates."
+      "Success! Draft saved automatically and " +
+      "game-config.json published to GitHub."
     );
 
   } catch(error) {
     publishMessage(
-      "Publish failed: " + error.message
+      "Draft saved, but publishing failed: " +
+      error.message
     );
   } finally {
-    button.disabled =
-      !githubExpectedSha;
+    button.disabled = !githubExpectedSha;
   }
 };
+
 
 fill();
 </script>
