@@ -3,13 +3,14 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>D12 Admin Studio</title>
 
 <style>
 *{box-sizing:border-box}
 :root{font-family:system-ui,-apple-system,sans-serif;color-scheme:dark}
 body{margin:0;background:#000;color:#f8f8f8}
+body.popupOpen{overflow:hidden}
 main{max-width:850px;margin:auto;padding:16px}
 h1{font-size:28px;margin-bottom:4px}
 h2{font-size:20px;margin-top:0}
@@ -20,7 +21,7 @@ label{display:block;margin:14px 0;font-size:14px;color:#eee}
 input,textarea,select{display:block;width:100%;margin-top:6px;padding:12px;background:#101010;border:1px solid #888;border-radius:10px;color:white;font:inherit}
 input[type=checkbox]{display:inline;width:auto}
 textarea{min-height:90px}
-button{background:#333;border:1px solid #999;border-radius:12px;color:white;padding:12px;font:inherit;cursor:pointer}
+button{background:#333;border:1px solid #999;border-radius:12px;color:white;padding:12px;font:inherit;cursor:pointer;min-height:44px}
 button.primary,button.active{background:#16803c;border-color:#5ad783;color:white;font-weight:bold}
 button.danger{background:#b42335;border-color:#ff6174;color:white;font-weight:bold}
 button:disabled{opacity:.5;cursor:not-allowed}
@@ -30,11 +31,35 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .preview img,.preview video{width:100%;height:100%;object-fit:contain}
 .preview iframe{width:100%;height:100%;border:0}
 .mediaHelp{color:#c5c5c5;font-size:13px;line-height:1.5}
-.notice{white-space:pre-wrap;color:#eee}
+.notice{white-space:pre-wrap;color:#eee;overflow-wrap:anywhere}
 .warning{color:#ffb8c3}
 .success{color:#a8f0bc}
 .secondMediaPanel{margin:18px 0;padding:15px;border:1px solid #777;border-radius:13px;background:#101010}
 .secondMediaPanel h3{margin:0 0 8px}
+
+/* SWIPE MESSAGE EDITOR */
+
+.swipePanel{
+  margin:18px 0;
+  padding:16px;
+  border:2px solid #b42335;
+  border-radius:14px;
+  background:#230d13;
+}
+.swipePanel h3{
+  margin:0 0 8px;
+  color:#ff8393;
+}
+.swipePanel textarea{
+  min-height:110px;
+}
+.swipePanel button{
+  width:100%;
+  margin-top:8px;
+}
+
+/* GAME PREVIEW */
+
 .gameMock{border:1px solid #666;border-radius:17px;padding:15px;background:#171717;max-width:520px;margin:auto}
 .mockStats{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #555;padding-bottom:13px;margin-bottom:15px}
 .mockTimer{font-size:27px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -52,55 +77,176 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .mockTap{background:#000;border:2px solid #eee}
 
 /* TWO-MEDIA SWIPE GALLERY */
+
 .gallery{width:100%;overflow:hidden}
-.galleryTrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x pan-y}
+.galleryTrack{
+  display:flex;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  touch-action:pan-x pan-y;
+}
 .galleryTrack::-webkit-scrollbar{display:none}
-.galleryPage{flex:0 0 100%;min-width:0;scroll-snap-align:start;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px}
-.galleryPage img,.galleryPage video{display:block;width:100%;max-height:390px;object-fit:contain}
-.galleryPage iframe{display:block;width:100%;height:350px;border:0}
+.galleryPage{
+  flex:0 0 100%;
+  min-width:0;
+  scroll-snap-align:start;
+  background:#080808;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:180px;
+}
+.galleryPage img,.galleryPage video{
+  display:block;
+  width:100%;
+  max-height:390px;
+  object-fit:contain;
+}
+.galleryPage iframe{
+  display:block;
+  width:100%;
+  height:350px;
+  border:0;
+}
 .galleryPage a{color:#9cdbff;font-size:12px;margin:8px}
-.galleryNav{display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 0}
+.galleryNav{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  padding:10px 0;
+}
 .galleryNav button{min-width:48px;min-height:42px}
 .galleryCounter{color:white;font-size:14px;font-weight:700}
-.galleryHint{text-align:center;font-size:12px;color:#aaa;margin:0 0 10px}
+.galleryHint{
+  text-align:center;
+  font-size:13px;
+  color:#ff8393;
+  font-weight:800;
+  margin:0 0 10px;
+}
 .galleryEmpty{padding:60px 12px;text-align:center;color:#aaa}
+
+/* FIVE-SECOND POPUP */
+
+.swipeOverlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.96);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  padding-top:max(16px,env(safe-area-inset-top));
+  padding-bottom:max(16px,env(safe-area-inset-bottom));
+}
+.swipePopup{
+  width:100%;
+  max-width:500px;
+  max-height:95dvh;
+  overflow-y:auto;
+  padding:25px 18px;
+  text-align:center;
+  border:3px solid #ff6174;
+  border-radius:22px;
+  background:linear-gradient(145deg,#351018,#111 65%,#291018);
+  box-shadow:0 0 45px #b4233580;
+}
+.swipeIcon{font-size:65px}
+.swipeHeading{
+  font-size:clamp(29px,8vw,43px);
+  color:#ff8393;
+  font-weight:900;
+  margin:12px 0;
+}
+.swipePopupMessage{
+  font-size:clamp(18px,5vw,24px);
+  line-height:1.5;
+  font-weight:700;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.swipeCountdown{
+  color:#ccc;
+  font-size:14px;
+  margin-top:24px;
+}
+.swipeProgress{
+  height:7px;
+  border-radius:20px;
+  background:#555;
+  overflow:hidden;
+  margin-top:12px;
+}
+.swipeFill{
+  width:100%;
+  height:100%;
+  background:#ff6174;
+}
+
 @media(max-width:500px){
-.slides{grid-template-columns:repeat(4,1fr)}
-main{padding:12px}
-.gameMock{padding:12px}
+  .slides{grid-template-columns:repeat(4,1fr)}
+  main{padding:12px}
+  .gameMock{padding:12px}
 }
 </style>
 </head>
 
 <body>
 <main>
+
 <h1>🎲 D12 Admin Studio</h1>
-<p>Edit your game on your iPhone and publish changes directly to GitHub using your secure Supabase connection. Saved drafts are preserved when checking GitHub.</p>
+
+<p>
+Edit your game on your iPhone and publish changes
+directly to GitHub using your secure Supabase connection.
+Saved drafts are preserved when checking GitHub.
+</p>
 
 <section>
 <h2>Game settings</h2>
+
 <label>Game title
 <input id="title">
 </label>
+
 <label>Home heading
 <input id="introTitle">
 </label>
+
 <label>Home message
 <textarea id="introText"></textarea>
 </label>
+
 <label>Home image URL
 <input id="homeImageUrl" placeholder="https://...">
 </label>
+
 <label>Choose home photo
 <input id="homeFile" type="file" accept="image/*">
 </label>
+
 <div class="preview" id="homePreview"></div>
-<small>Hosted image URLs are recommended. Embedded files can make your configuration too large to publish.</small>
+
+<small>
+Hosted image URLs are recommended.
+Embedded files can make your configuration too large to publish.
+</small>
 </section>
 
 <section>
 <h2>Slides</h2>
-<p>D12 rolls select slides 1–12. Consequence branches can lead to slides 13–24. Slide 16 is the winning slide.</p>
+
+<p>
+D12 rolls select slides 1–12.
+Consequence branches can lead to slides 13–24.
+Slide 16 is the winning slide.
+</p>
 
 <div class="slides" id="slideButtons"></div>
 
@@ -128,7 +274,11 @@ main{padding:12px}
 <input id="url" placeholder="https://www.redgifs.com/watch/...">
 </label>
 
-<p class="mediaHelp">Paste a RedGIFs watch link, an Imgur link, or a direct image/video URL. The game detects supported media automatically.</p>
+<p class="mediaHelp">
+Paste a RedGIFs watch link, an Imgur link,
+or a direct image/video URL.
+The game detects supported media automatically.
+</p>
 
 <label>Choose first slide photo or video
 <input id="slideFile" type="file" accept="image/*,video/*">
@@ -136,9 +286,17 @@ main{padding:12px}
 
 <div class="preview" id="preview"></div>
 
+<!-- SECOND MEDIA -->
+
 <div class="secondMediaPanel">
+
 <h3>🖼️ Second Gallery Item</h3>
-<p class="mediaHelp">Optional. Add a second image, GIF, or video. Your game will display a swipe gallery when both media URLs are filled in.</p>
+
+<p class="mediaHelp">
+Optional. Add a second image, GIF, or video.
+Your game displays a swipe gallery when
+both media URLs are filled in.
+</p>
 
 <label>Media 2 URL
 <input id="media2" placeholder="https://www.redgifs.com/watch/...">
@@ -149,32 +307,91 @@ main{padding:12px}
 </label>
 
 <div class="preview" id="secondMediaPreview"></div>
+
 </div>
 
+<!-- SWIPE MESSAGE -->
+
+<div class="swipePanel">
+
+<h3>😈 Swipe Left If You Dare</h3>
+
+<p class="mediaHelp">
+When a player swipes from Media 1 to Media 2,
+a surprise popup appears for 5 seconds.
+You can customize its message for every slide.
+</p>
+
+<label>Surprise popup message
+<textarea
+  id="swipeMessage"
+  placeholder="You couldn't resist, could you? 😈"></textarea>
+</label>
+
+<button id="previewSwipe" class="primary" type="button">
+😈 Preview 5-Second Popup
+</button>
+
+<p class="mediaHelp">
+Leave this blank to use the default popup message.
+The message is stored in the
+<code>swipeMessage</code> field for each slide.
+</p>
+
+</div>
+
+<!-- LIVE PREVIEW -->
+
 <h3>Live Game Layout Preview</h3>
-<p class="mediaHelp">The preview updates as you edit. Swipe left or right between media items, or use the arrow buttons.</p>
+
+<p class="mediaHelp">
+The preview updates as you edit.
+Swipe left to see the second item
+and test the surprise popup.
+</p>
 
 <div class="gameMock">
+
 <div class="mockStats">
+
 <div>
 <div class="mockTimer">00:03:42</div>
 <div class="mockCaption">Survival Time</div>
 </div>
+
 <div class="mockDie">
 <div class="mockDieNumber" id="mockDie">1</div>
 <div class="mockCaption">D12 Roll</div>
 </div>
+
 </div>
 
 <h3 class="mockTitle" id="mockTitle">Slide 1</h3>
-<div class="mockMedia" id="mockMedia">No media selected</div>
-<p class="mockDescription" id="mockDescription">Slide description</p>
+
+<div class="mockMedia" id="mockMedia">
+No media selected
+</div>
+
+<p class="mockDescription" id="mockDescription">
+Slide description
+</p>
+
 <p class="mockHunter" id="mockHunter"></p>
 
 <div class="mockControls">
-<button class="mockRoll" id="mockRoll">🎲 Roll Again</button>
-<button class="mockCame">💦 I Came 💦</button>
-<button class="mockTap">🏳️ I'm Tapping Out 🏳️</button>
+
+<button class="mockRoll" id="mockRoll">
+🎲 Roll Again
+</button>
+
+<button class="mockCame">
+💦 I Came 💦
+</button>
+
+<button class="mockTap">
+🏳️ I'm Tapping Out 🏳️
+</button>
+
 </div>
 </div>
 
@@ -188,91 +405,205 @@ Require Accept Consequences
 </label>
 
 <label>Reroll lockout in seconds
-<input id="rerollLockSeconds" type="number" min="0" max="86400">
+<input
+  id="rerollLockSeconds"
+  type="number"
+  min="0"
+  max="86400">
 </label>
 
 <div class="actions">
 <button id="add" type="button">Add bonus slide</button>
 <button id="remove" type="button">Remove bonus slide</button>
 </div>
+
 </section>
 
 <section>
 <h2>Supabase leaderboard</h2>
-<p>Enter only your public project URL and publishable/anon key. Never enter a secret or service_role key.</p>
+
+<p>
+Enter only your public project URL and publishable/anon key.
+Never enter a secret or service_role key.
+</p>
+
 <label>Supabase project URL
-<input id="supabaseUrl" placeholder="https://project.supabase.co">
+<input
+  id="supabaseUrl"
+  placeholder="https://project.supabase.co">
 </label>
+
 <label>Supabase publishable / anon key
 <input id="supabaseKey">
 </label>
+
 </section>
 
 <section>
 <h2>Reset Leaderboards</h2>
-<p class="warning"><strong>Danger zone:</strong> This permanently deletes every saved player score. The Soldier Leaderboard and Hunter Scoreboard will both reset to empty.</p>
+
+<p class="warning">
+<strong>Danger zone:</strong>
+This permanently deletes every saved player score.
+The Soldier Leaderboard and Hunter Scoreboard
+will both reset to empty.
+</p>
+
 <p>Your game slides and configuration will not be deleted.</p>
 
 <label>Admin reset password
-<input id="resetPassword" type="password" placeholder="Enter your private reset password" autocomplete="off">
+<input
+  id="resetPassword"
+  type="password"
+  placeholder="Enter your private reset password"
+  autocomplete="off">
 </label>
 
-<button id="resetLeaderboards" class="danger" type="button">Reset Both Leaderboards</button>
+<button
+  id="resetLeaderboards"
+  class="danger"
+  type="button">
+Reset Both Leaderboards
+</button>
+
 <p id="resetNotice" class="notice" aria-live="polite"></p>
-<small>The password is sent only to your protected Supabase function. It is not saved in your game configuration.</small>
+
+<small>
+The password is sent only to your protected Supabase function.
+It is not saved in your game configuration.
+</small>
 </section>
 
 <section>
 <h2>🚀 Publish to GitHub</h2>
-<p>Your saved draft loads automatically. Publishing saves your draft first, then checks GitHub's version without replacing your edits.</p>
+
+<p>
+Your saved draft loads automatically.
+Publishing saves your draft first,
+then checks GitHub's version without replacing your edits.
+</p>
 
 <div class="actions">
-<button id="loadGitHub" type="button">Load from GitHub (replace editor)</button>
+<button id="loadGitHub" type="button">
+Load from GitHub (replace editor)
+</button>
 </div>
 
 <label>Publishing password
-<input id="publishPassword" type="password" placeholder="Enter your private publishing password" autocomplete="off">
+<input
+  id="publishPassword"
+  type="password"
+  placeholder="Enter your private publishing password"
+  autocomplete="off">
 </label>
 
-<button id="publishGitHub" class="primary" type="button">🚀 Publish to GitHub</button>
+<button
+  id="publishGitHub"
+  class="primary"
+  type="button">
+🚀 Publish to GitHub
+</button>
+
 <p id="publishNotice" class="notice" aria-live="polite"></p>
 
-<small>Your GitHub token stays securely in Supabase. Your publishing password is never saved in game-config.json. If GitHub changed since your draft's known version, publishing stops rather than overwriting those changes.</small>
+<small>
+Your GitHub token stays securely in Supabase.
+Your publishing password is never saved in game-config.json.
+If GitHub changed since your draft's known version,
+publishing stops rather than overwriting those changes.
+</small>
 </section>
 
 <section>
 <h2>Save and publish</h2>
-<p>Save Draft stores edits on this iPhone. Publish to GitHub saves automatically. Copy Configuration provides a manual backup.</p>
+
+<p>
+Save Draft stores edits on this iPhone.
+Publish to GitHub saves automatically.
+Copy Configuration provides a manual backup.
+</p>
 
 <div class="actions">
-<button id="save" type="button">Save Draft</button>
-<button class="primary" id="copy" type="button">Copy Configuration</button>
-<button id="reset" type="button">Reset Defaults</button>
+
+<button id="save" type="button">
+Save Draft
+</button>
+
+<button class="primary" id="copy" type="button">
+Copy Configuration
+</button>
+
+<button id="reset" type="button">
+Reset Defaults
+</button>
+
 </div>
 
 <p id="notice" class="notice" aria-live="polite"></p>
+
 </section>
+
 </main>
+
+<!-- SURPRISE POPUP -->
+
+<div
+  id="swipeOverlay"
+  class="swipeOverlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="swipeHeading">
+
+<div class="swipePopup">
+
+<div class="swipeIcon">😈</div>
+
+<div id="swipeHeading" class="swipeHeading">
+YOU DARED!
+</div>
+
+<div
+  id="swipePopupMessage"
+  class="swipePopupMessage"></div>
+
+<div
+  id="swipeCountdown"
+  class="swipeCountdown">
+Continuing in 5 seconds…
+</div>
+
+<div class="swipeProgress">
+<div id="swipeFill" class="swipeFill"></div>
+</div>
+
+</div>
+</div>
 
 <script>
 "use strict";
 
-/* DEFAULT GAME CONFIGURATION */
+/* DEFAULT CONFIGURATION */
+
+const DEFAULT_SWIPE_MESSAGE =
+  "You were warned... now face what comes next! 😈";
+
+const SWIPE_DURATION_MS = 5000;
 
 const DEFAULT = {
-  title: "D12 Consequences",
-  introTitle: "Your fate awaits",
-  introText: "Roll the twelve-sided die to begin.",
-  homeImageUrl: "",
-  supabaseUrl: "",
-  supabaseKey: "",
-  slides: Array.from({length:24}, (_,i) => ({
+  title:"D12 Consequences",
+  introTitle:"Your fate awaits",
+  introText:"Roll the twelve-sided die to begin.",
+  homeImageUrl:"",
+  supabaseUrl:"",
+  supabaseKey:"",
+  slides:Array.from({length:24},(_,i)=>({
     id:i+1,
     title:"Outcome "+(i+1),
     description:"Placeholder for slide "+(i+1),
     type:"placeholder",
     url:"",
     media2:"",
+    swipeMessage:"",
     redditUser:"",
     consequence:false,
     destination:1,
@@ -281,18 +612,44 @@ const DEFAULT = {
 };
 
 const el = id => document.getElementById(id);
-const clone = value => JSON.parse(JSON.stringify(value));
+
+const clone = value =>
+  JSON.parse(JSON.stringify(value));
 
 const DRAFT_KEY = "d12_config_v5";
 const SHA_KEY = "d12_github_sha_v1";
 
 const GITHUB_CONFIG_API =
-  "https://api.github.com/repos/dudewolf925/d12-survival-game/contents/game-config.json?ref=main";
+  "https://api.github.com/repos/" +
+  "dudewolf925/d12-survival-game/" +
+  "contents/game-config.json?ref=main";
 
 let cfg = clone(DEFAULT);
 let selected = 1;
 let githubExpectedSha = null;
 let hasSavedDraft = false;
+
+let swipeTimeout = null;
+let swipeInterval = null;
+let swipeOpen = false;
+
+/* NORMALIZE OLDER CONFIGURATIONS */
+
+function normalizeConfig(data) {
+  if (!data || !Array.isArray(data.slides)) {
+    throw Error("Configuration must contain a slides array.");
+  }
+
+  return {
+    ...data,
+    slides:data.slides.map(s=>({
+      ...s,
+      media2:s.media2 ?? "",
+      swipeMessage:s.swipeMessage ?? "",
+      rerollLockSeconds:s.rerollLockSeconds ?? 0
+    }))
+  };
+}
 
 /* RESTORE SAVED DRAFT */
 
@@ -300,14 +657,11 @@ try {
   const stored = localStorage.getItem(DRAFT_KEY);
 
   if (stored) {
-    const saved = JSON.parse(stored);
+    cfg = normalizeConfig(JSON.parse(stored));
+    hasSavedDraft = true;
 
-    if (saved && Array.isArray(saved.slides)) {
-      cfg = saved;
-      hasSavedDraft = true;
-      githubExpectedSha =
-        localStorage.getItem(SHA_KEY) || null;
-    }
+    githubExpectedSha =
+      localStorage.getItem(SHA_KEY) || null;
   }
 } catch(error) {
   console.warn("Could not restore saved draft:",error);
@@ -337,7 +691,10 @@ function resolveMedia(value,type) {
     /^blob:/i.test(url)
   ) {
     return {
-      kind:/^data:video\//i.test(url) ? "video" : "image",
+      kind:
+        /^data:video\//i.test(url)
+          ? "video"
+          : "image",
       url
     };
   }
@@ -362,6 +719,8 @@ function resolveMedia(value,type) {
     .split("/")
     .filter(Boolean);
 
+  /* REDGIFS */
+
   if (
     host === "redgifs.com" ||
     host === "v3.redgifs.com"
@@ -380,6 +739,8 @@ function resolveMedia(value,type) {
       };
     }
   }
+
+  /* IMGUR */
 
   if (
     host === "imgur.com" ||
@@ -415,6 +776,8 @@ function resolveMedia(value,type) {
     }
   }
 
+  /* IMGUR GIFV */
+
   if (
     host === "i.imgur.com" &&
     /\.gifv$/i.test(parsed.pathname)
@@ -427,6 +790,8 @@ function resolveMedia(value,type) {
       url:parsed.href
     };
   }
+
+  /* DIRECT MEDIA */
 
   return {
     kind:
@@ -488,19 +853,91 @@ function preview(id,type,url,fallback) {
   const node = makeMedia(url,type);
 
   if (!node) {
-    box.textContent = fallback || "No media selected";
+    box.textContent =
+      fallback || "No media selected";
     return;
   }
 
   node.onerror = () => {
     box.textContent =
-      "Media could not load. Check the URL or open it at its source.";
+      "Media could not load. Check the URL.";
   };
 
   box.append(node);
 }
 
-/* TWO-ITEM SWIPE GALLERY */
+/* FIVE-SECOND POPUP */
+
+function closeSwipePopup() {
+  clearTimeout(swipeTimeout);
+  clearInterval(swipeInterval);
+
+  swipeTimeout = null;
+  swipeInterval = null;
+  swipeOpen = false;
+
+  el("swipeOverlay").classList.add("hidden");
+  document.body.classList.remove("popupOpen");
+}
+
+function showSwipePopup() {
+  if (swipeOpen) return;
+
+  const s = slide();
+
+  const customMessage =
+    String(
+      el("swipeMessage").value ||
+      s?.swipeMessage ||
+      ""
+    ).trim();
+
+  el("swipePopupMessage").textContent =
+    customMessage || DEFAULT_SWIPE_MESSAGE;
+
+  swipeOpen = true;
+
+  el("swipeOverlay").classList.remove("hidden");
+  document.body.classList.add("popupOpen");
+
+  const start = Date.now();
+
+  el("swipeFill").style.width = "100%";
+
+  el("swipeCountdown").textContent =
+    "Continuing in 5 seconds…";
+
+  swipeInterval = setInterval(() => {
+    const remaining = Math.max(
+      0,
+      SWIPE_DURATION_MS - (Date.now()-start)
+    );
+
+    const seconds = Math.ceil(remaining/1000);
+
+    el("swipeCountdown").textContent =
+      seconds > 0
+        ? "Continuing in "+seconds+
+          (seconds===1 ? " second…" : " seconds…")
+        : "Continuing…";
+
+    el("swipeFill").style.width =
+      (remaining/SWIPE_DURATION_MS*100)+"%";
+
+  },100);
+
+  swipeTimeout = setTimeout(
+    closeSwipePopup,
+    SWIPE_DURATION_MS
+  );
+}
+
+el("previewSwipe").onclick = () => {
+  commit();
+  showSwipePopup();
+};
+
+/* TWO-MEDIA GALLERY */
 
 function renderGallery() {
   const box = el("mockMedia");
@@ -511,9 +948,15 @@ function renderGallery() {
   if (!s) return;
 
   const items = [
-    {url:String(s.url || "").trim(),type:s.type},
-    {url:String(s.media2 || "").trim(),type:"image"}
-  ].filter(item => item.url);
+    {
+      url:String(s.url || "").trim(),
+      type:s.type
+    },
+    {
+      url:String(s.media2 || "").trim(),
+      type:"image"
+    }
+  ].filter(item=>item.url);
 
   if (!items.length) {
     const empty = document.createElement("div");
@@ -538,14 +981,22 @@ function renderGallery() {
     if (node) {
       page.append(node);
 
-      const media = resolveMedia(item.url,item.type);
+      const media = resolveMedia(
+        item.url,item.type
+      );
 
-      if (media && media.kind === "embed" && media.original) {
+      if (
+        media &&
+        media.kind === "embed" &&
+        media.original
+      ) {
         const link = document.createElement("a");
+
         link.href = media.original;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
         link.textContent = "Open at source";
+
         page.append(link);
       }
     } else {
@@ -564,7 +1015,9 @@ function renderGallery() {
     const prev = document.createElement("button");
     prev.type = "button";
     prev.textContent = "❮";
-    prev.setAttribute("aria-label","Previous media");
+    prev.setAttribute(
+      "aria-label","Previous media"
+    );
 
     const counter = document.createElement("span");
     counter.className = "galleryCounter";
@@ -573,15 +1026,58 @@ function renderGallery() {
     const next = document.createElement("button");
     next.type = "button";
     next.textContent = "❯";
-    next.setAttribute("aria-label","Next media");
+    next.setAttribute(
+      "aria-label","Next media"
+    );
 
     let index = 0;
+    let popupTriggered = false;
+
+    function updateIndex(nextIndex) {
+      const oldIndex = index;
+
+      index = Math.max(
+        0,
+        Math.min(items.length-1,nextIndex)
+      );
+
+      counter.textContent =
+        (index+1)+" / "+items.length;
+
+      /*
+       * Trigger once when the player first
+       * moves from Media 1 to Media 2.
+       */
+      if (
+        oldIndex === 0 &&
+        index === 1 &&
+        !popupTriggered
+      ) {
+        popupTriggered = true;
+        showSwipePopup();
+      }
+    }
 
     function goTo(i) {
-      index = Math.max(
+      const target = Math.max(
         0,
         Math.min(items.length-1,i)
       );
+
+      /*
+       * Trigger before the smooth scroll so
+       * the popup doesn't interrupt the swipe.
+       */
+      if (
+        index === 0 &&
+        target === 1 &&
+        !popupTriggered
+      ) {
+        popupTriggered = true;
+        showSwipePopup();
+      }
+
+      index = target;
 
       track.scrollTo({
         left:track.clientWidth*index,
@@ -598,16 +1094,11 @@ function renderGallery() {
     track.addEventListener("scroll",() => {
       if (!track.clientWidth) return;
 
-      index = Math.max(
-        0,
-        Math.min(
-          items.length-1,
-          Math.round(track.scrollLeft/track.clientWidth)
-        )
+      const nextIndex = Math.round(
+        track.scrollLeft/track.clientWidth
       );
 
-      counter.textContent =
-        (index+1)+" / "+items.length;
+      updateIndex(nextIndex);
     },{passive:true});
 
     nav.append(prev,counter,next);
@@ -615,7 +1106,8 @@ function renderGallery() {
 
     const hint = document.createElement("p");
     hint.className = "galleryHint";
-    hint.textContent = "Swipe left or right to view more";
+    hint.textContent = "swipe left if you dare";
+
     gallery.append(hint);
   }
 
@@ -656,9 +1148,9 @@ function buttons() {
   const box = el("slideButtons");
   box.replaceChildren();
 
-  cfg.slides.sort((a,b) => a.id-b.id);
+  cfg.slides.sort((a,b)=>a.id-b.id);
 
-  cfg.slides.forEach(s => {
+  cfg.slides.forEach(s=>{
     const button = document.createElement("button");
 
     button.type = "button";
@@ -667,6 +1159,7 @@ function buttons() {
       s.id === selected ? "active" : "";
 
     button.onclick = () => {
+      closeSwipePopup();
       commit();
       selected = s.id;
       buttons();
@@ -679,7 +1172,7 @@ function buttons() {
   const destination = el("destination");
   destination.replaceChildren();
 
-  cfg.slides.forEach(s => {
+  cfg.slides.forEach(s=>{
     const option = document.createElement("option");
 
     option.value = s.id;
@@ -689,7 +1182,7 @@ function buttons() {
   });
 }
 
-/* LOAD SELECTED SLIDE INTO EDITOR */
+/* LOAD SLIDE INTO EDITOR */
 
 function edit() {
   const s = slide();
@@ -703,8 +1196,15 @@ function edit() {
   el("url").value = s.url || "";
   el("media2").value = s.media2 || "";
 
-  el("consequence").checked = !!s.consequence;
-  el("destination").value = s.destination || 1;
+  el("swipeMessage").value =
+    s.swipeMessage || "";
+
+  el("consequence").checked =
+    !!s.consequence;
+
+  el("destination").value =
+    s.destination || 1;
+
   el("rerollLockSeconds").value =
     s.rerollLockSeconds || 0;
 
@@ -740,7 +1240,7 @@ function fill() {
     "homeImageUrl",
     "supabaseUrl",
     "supabaseKey"
-  ].forEach(key => {
+  ].forEach(key=>{
     el(key).value = cfg[key] || "";
   });
 
@@ -755,7 +1255,7 @@ function fill() {
   );
 }
 
-/* SAVE EDITOR FIELDS INTO CONFIG */
+/* SAVE EDITOR FIELDS */
 
 function commit() {
   const s = slide();
@@ -769,6 +1269,9 @@ function commit() {
     s.type = el("type").value;
     s.url = el("url").value.trim();
     s.media2 = el("media2").value.trim();
+
+    s.swipeMessage =
+      el("swipeMessage").value;
 
     s.consequence =
       el("consequence").checked;
@@ -794,7 +1297,7 @@ function commit() {
     "homeImageUrl",
     "supabaseUrl",
     "supabaseKey"
-  ].forEach(key => {
+  ].forEach(key=>{
     cfg[key] = el(key).value;
   });
 }
@@ -842,7 +1345,9 @@ function validate() {
 
     if (
       s.redditUser &&
-      !/^u\/[A-Za-z0-9_-]{3,20}$/.test(s.redditUser)
+      !/^u\/[A-Za-z0-9_-]{3,20}$/.test(
+        s.redditUser
+      )
     ) {
       throw Error(
         "Slide "+s.id+
@@ -856,7 +1361,8 @@ function validate() {
       s.rerollLockSeconds > 86400
     ) {
       throw Error(
-        "Slide "+s.id+": invalid reroll lockout."
+        "Slide "+s.id+
+        ": invalid reroll lockout."
       );
     }
 
@@ -865,7 +1371,18 @@ function validate() {
       typeof s.media2 !== "string"
     ) {
       throw Error(
-        "Slide "+s.id+": second media must be a URL string."
+        "Slide "+s.id+
+        ": second media must be a URL string."
+      );
+    }
+
+    if (
+      s.swipeMessage != null &&
+      typeof s.swipeMessage !== "string"
+    ) {
+      throw Error(
+        "Slide "+s.id+
+        ": swipe message must be text."
       );
     }
   }
@@ -936,7 +1453,8 @@ el("copy").onclick = async () => {
         "Configuration copied! Paste into game-config.json on GitHub."
       );
     } else {
-      const textarea = document.createElement("textarea");
+      const textarea =
+        document.createElement("textarea");
 
       textarea.value = json;
       document.body.append(textarea);
@@ -960,7 +1478,7 @@ el("add").onclick = () => {
   commit();
 
   const id =
-    Math.max(...cfg.slides.map(s => s.id)) + 1;
+    Math.max(...cfg.slides.map(s=>s.id))+1;
 
   if (id > 99) {
     message("Maximum slide number is 99.");
@@ -974,6 +1492,7 @@ el("add").onclick = () => {
     type:"placeholder",
     url:"",
     media2:"",
+    swipeMessage:"",
     redditUser:"",
     consequence:false,
     destination:1,
@@ -995,10 +1514,10 @@ el("remove").onclick = () => {
   const removedId = selected;
 
   cfg.slides = cfg.slides.filter(
-    s => s.id !== removedId
+    s=>s.id !== removedId
   );
 
-  cfg.slides.forEach(s => {
+  cfg.slides.forEach(s=>{
     if (s.destination === removedId) {
       s.destination = 1;
     }
@@ -1015,6 +1534,8 @@ el("reset").onclick = () => {
   if (
     !confirm("Reset all edits on this device?")
   ) return;
+
+  closeSwipePopup();
 
   cfg = clone(DEFAULT);
   selected = 1;
@@ -1065,10 +1586,12 @@ async function upload(file,kind) {
     throw Error("Choose an image or video.");
   }
 
-  return new Promise((resolve,reject) => {
+  return new Promise((resolve,reject)=>{
     const reader = new FileReader();
 
-    reader.onload = () => resolve(reader.result);
+    reader.onload = () =>
+      resolve(reader.result);
+
     reader.onerror = () =>
       reject(Error("Could not read file."));
 
@@ -1088,7 +1611,9 @@ el("homeFile").onchange = async () => {
     el("homeImageUrl").value = url;
     cfg.homeImageUrl = url;
 
-    preview("homePreview","image",url);
+    preview(
+      "homePreview","image",url
+    );
 
     message(
       "Home photo loaded. Publish to GitHub when ready."
@@ -1108,7 +1633,7 @@ el("slideFile").onchange = async () => {
     if (!url) return;
 
     const s = cfg.slides.find(
-      item => item.id === targetSlide
+      item=>item.id===targetSlide
     );
 
     if (!s) return;
@@ -1120,7 +1645,7 @@ el("slideFile").onchange = async () => {
 
     s.url = url;
 
-    if (selected === targetSlide) {
+    if (selected===targetSlide) {
       el("type").value = s.type;
       el("url").value = url;
       commit();
@@ -1147,14 +1672,14 @@ el("media2File").onchange = async () => {
     if (!url) return;
 
     const s = cfg.slides.find(
-      item => item.id === targetSlide
+      item=>item.id===targetSlide
     );
 
     if (!s) return;
 
     s.media2 = url;
 
-    if (selected === targetSlide) {
+    if (selected===targetSlide) {
       el("media2").value = url;
       commit();
 
@@ -1195,8 +1720,8 @@ el("homeImageUrl").oninput = () => {
   "consequence",
   "destination",
   "rerollLockSeconds"
-].forEach(id => {
-  el(id).addEventListener("input",() => {
+].forEach(id=>{
+  el(id).addEventListener("input",()=>{
     commit();
 
     preview(
@@ -1216,6 +1741,24 @@ el("homeImageUrl").oninput = () => {
     updateGamePreview();
   });
 });
+
+/*
+ * Swipe message edits are saved into
+ * the selected slide immediately.
+ * We avoid rebuilding the gallery while
+ * typing in the message box.
+ */
+el("swipeMessage").addEventListener(
+  "input",
+  ()=>{
+    const s = slide();
+
+    if (s) {
+      s.swipeMessage =
+        el("swipeMessage").value;
+    }
+  }
+);
 
 /* SECURE LEADERBOARD RESET */
 
@@ -1275,11 +1818,13 @@ el("resetLeaderboards").onclick = async () => {
   }
 
   button.disabled = true;
-  notice.textContent = "Resetting leaderboards…";
+  notice.textContent =
+    "Resetting leaderboards…";
 
   try {
     const response = await fetch(
-      projectUrl+"/functions/v1/reset-leaderboards",
+      projectUrl+
+      "/functions/v1/reset-leaderboards",
       {
         method:"POST",
         headers:{
@@ -1308,7 +1853,8 @@ el("resetLeaderboards").onclick = async () => {
     if (!response.ok || !result.ok) {
       throw Error(
         result.error ||
-        "Reset failed (HTTP "+response.status+")"
+        "Reset failed (HTTP "+
+        response.status+")"
       );
     }
 
@@ -1353,34 +1899,27 @@ async function getGitHubConfig() {
     );
   }
 
-  const encoded = file.content.replace(/\s/g,"");
+  const encoded =
+    file.content.replace(/\s/g,"");
+
   const binary = atob(encoded);
 
   const bytes = Uint8Array.from(
     binary,
-    character => character.charCodeAt(0)
+    character=>character.charCodeAt(0)
   );
 
   const config = JSON.parse(
     new TextDecoder().decode(bytes)
   );
 
-  if (
-    !config ||
-    !Array.isArray(config.slides)
-  ) {
-    throw Error(
-      "GitHub configuration has no valid slides array."
-    );
-  }
-
   return {
-    config,
+    config:normalizeConfig(config),
     sha:file.sha
   };
 }
 
-/* LOAD FROM GITHUB BUTTON */
+/* LOAD FROM GITHUB */
 
 el("loadGitHub").onclick = async () => {
   const button = el("loadGitHub");
@@ -1415,6 +1954,7 @@ el("loadGitHub").onclick = async () => {
     githubExpectedSha = latest.sha;
     hasSavedDraft = true;
 
+    closeSwipePopup();
     fill();
 
     publishMessage(
@@ -1549,7 +2089,8 @@ el("publishGitHub").onclick = async () => {
     );
 
     const publishResponse = await fetch(
-      projectUrl+"/functions/v1/publish-game-config",
+      projectUrl+
+      "/functions/v1/publish-game-config",
       {
         method:"POST",
         headers:{
@@ -1609,7 +2150,7 @@ el("publishGitHub").onclick = async () => {
     el("publishPassword").value = "";
 
     publishMessage(
-      "Success! Your draft was saved and game-config.json published to GitHub. No reload was needed."
+      "Success! Your draft was saved and game-config.json published to GitHub. The new swipe popup messages are included."
     );
 
   } catch(error) {
@@ -1622,7 +2163,7 @@ el("publishGitHub").onclick = async () => {
   }
 };
 
-/* INITIALIZE ADMIN STUDIO */
+/* INITIALIZE */
 
 fill();
 
