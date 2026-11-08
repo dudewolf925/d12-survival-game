@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>D12 Survival Game</title>
+
 <style>
 :root{
   color-scheme:dark;
@@ -16,19 +17,43 @@
   --green:#16803c;
   --red:#b42335;
 }
+
 *{box-sizing:border-box}
+
 body{
   margin:0;
   background:var(--bg);
   color:var(--text);
   font:16px/1.5 system-ui,-apple-system,sans-serif;
 }
+
 body.popupOpen{overflow:hidden}
-main{max-width:760px;margin:auto;padding:18px 14px 50px}
+
+main{
+  max-width:760px;
+  margin:auto;
+  padding:18px 14px 50px;
+}
+
 h1,h2,h3{line-height:1.2}
-h1{text-align:center;font-size:clamp(28px,7vw,44px);margin:12px 0 4px}
-h2{font-size:23px;margin:0 0 12px}
-.sub{text-align:center;color:var(--muted);margin:0 0 18px}
+
+h1{
+  text-align:center;
+  font-size:clamp(28px,7vw,44px);
+  margin:12px 0 4px;
+}
+
+h2{
+  font-size:23px;
+  margin:0 0 12px;
+}
+
+.sub{
+  text-align:center;
+  color:var(--muted);
+  margin:0 0 18px;
+}
+
 .panel{
   background:var(--panel);
   border:1px solid var(--edge);
@@ -37,10 +62,12 @@ h2{font-size:23px;margin:0 0 12px}
   margin:15px 0;
   box-shadow:0 8px 26px #0008;
 }
+
 .hidden{display:none!important}
 .center{text-align:center}
 .muted,.hint,.notice{color:var(--muted)}
 .notice{font-size:13px}
+
 button{
   border:1px solid #aaa;
   background:#333;
@@ -51,7 +78,12 @@ button{
   cursor:pointer;
   min-height:46px;
 }
-button:disabled{opacity:.45;cursor:not-allowed}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
 input,textarea{
   width:100%;
   border:1px solid #888;
@@ -61,10 +93,16 @@ input,textarea{
   font:inherit;
   padding:12px;
 }
-textarea{min-height:135px;resize:vertical}
+
+textarea{
+  min-height:135px;
+  resize:vertical;
+}
+
 .label{font-weight:700}
 
 /* COMPACT GAME HEADER */
+
 .gameStats{
   display:flex;
   justify-content:space-between;
@@ -74,14 +112,21 @@ textarea{min-height:135px;resize:vertical}
   margin-bottom:16px;
   border-bottom:1px solid #555;
 }
+
 .timerBlock{flex:1;min-width:0}
+
 .timer{
   font-variant-numeric:tabular-nums;
   font-size:clamp(23px,6vw,31px);
   font-weight:800;
   line-height:1.2;
 }
-.timerLabel{color:var(--muted);font-size:12px}
+
+.timerLabel{
+  color:var(--muted);
+  font-size:12px;
+}
+
 .dieBlock{
   min-width:76px;
   text-align:center;
@@ -90,6 +135,7 @@ textarea{min-height:135px;resize:vertical}
   padding:6px 10px;
   background:#0d0d0d;
 }
+
 .die{
   font-size:38px;
   line-height:1.1;
@@ -98,6 +144,7 @@ textarea{min-height:135px;resize:vertical}
   color:#fff;
   margin:5px 0;
 }
+
 .dieLabel{
   text-align:center;
   font-size:11px;
@@ -107,14 +154,21 @@ textarea{min-height:135px;resize:vertical}
 }
 
 /* SLIDE LAYOUT */
+
 .slideTitle{
   text-align:center;
   font-size:clamp(22px,6vw,29px);
   margin:5px 0 16px;
   overflow-wrap:anywhere;
 }
-.slideMedia{width:100%;margin:0 0 16px}
+
+.slideMedia{
+  width:100%;
+  margin:0 0 16px;
+}
+
 .mediaBox{width:100%}
+
 .media{
   display:block;
   width:100%;
@@ -123,6 +177,7 @@ textarea{min-height:135px;resize:vertical}
   border-radius:12px;
   background:#080808;
 }
+
 .mediaEmbed{
   display:block;
   width:100%;
@@ -132,6 +187,7 @@ textarea{min-height:135px;resize:vertical}
   border-radius:12px;
   background:#080808;
 }
+
 .mediaFallback{
   display:block;
   color:#ddd;
@@ -139,6 +195,7 @@ textarea{min-height:135px;resize:vertical}
   font-size:13px;
   margin:8px 0;
 }
+
 .slideDescription{
   font-size:17px;
   line-height:1.65;
@@ -146,16 +203,29 @@ textarea{min-height:135px;resize:vertical}
   overflow-wrap:anywhere;
   margin:4px 0 14px;
 }
-.slideHunter{color:#ccc;font-size:13px;text-align:center;margin:12px 0}
-.consequenceText{text-align:center;color:#eee;margin:10px 0}
+
+.slideHunter{
+  color:#ccc;
+  font-size:13px;
+  text-align:center;
+  margin:12px 0;
+}
+
+.consequenceText{
+  text-align:center;
+  color:#eee;
+  margin:10px 0;
+}
 
 /* TWO-MEDIA SWIPE GALLERY */
+
 .d12Gallery{
   width:100%;
   overflow:hidden;
   border-radius:12px;
   background:#080808;
 }
+
 .d12GalleryTrack{
   display:flex;
   width:100%;
@@ -166,7 +236,11 @@ textarea{min-height:135px;resize:vertical}
   -webkit-overflow-scrolling:touch;
   overscroll-behavior-x:contain;
 }
-.d12GalleryTrack::-webkit-scrollbar{display:none}
+
+.d12GalleryTrack::-webkit-scrollbar{
+  display:none;
+}
+
 .d12GalleryPage{
   flex:0 0 100%;
   width:100%;
@@ -178,9 +252,21 @@ textarea{min-height:135px;resize:vertical}
   align-items:center;
   justify-content:center;
 }
-.d12GalleryPage .mediaBox{width:100%}
-.d12GalleryPage .media{width:100%;max-height:520px}
-.d12GalleryPage .mediaEmbed{width:100%;max-height:650px}
+
+.d12GalleryPage .mediaBox{
+  width:100%;
+}
+
+.d12GalleryPage .media{
+  width:100%;
+  max-height:520px;
+}
+
+.d12GalleryPage .mediaEmbed{
+  width:100%;
+  max-height:650px;
+}
+
 .d12GalleryNav{
   display:flex;
   align-items:center;
@@ -188,6 +274,7 @@ textarea{min-height:135px;resize:vertical}
   gap:20px;
   margin:12px 0 4px;
 }
+
 .d12GalleryNav button{
   min-width:48px;
   min-height:42px;
@@ -195,20 +282,25 @@ textarea{min-height:135px;resize:vertical}
   background:#333;
   border:1px solid #888;
 }
+
 .d12GalleryCounter{
   font-size:14px;
   font-weight:700;
   color:#eee;
   font-variant-numeric:tabular-nums;
 }
+
 .d12GalleryHint{
   text-align:center;
-  font-size:12px;
-  color:#aaa;
-  margin:4px 0 10px;
+  font-size:13px;
+  font-weight:800;
+  color:#ff6174;
+  margin:8px 0 12px;
+  letter-spacing:.2px;
 }
 
 /* GAME BUTTONS */
+
 .gameControls{
   display:flex;
   flex-direction:column;
@@ -217,30 +309,66 @@ textarea{min-height:135px;resize:vertical}
   padding-top:16px;
   border-top:1px solid #555;
 }
+
 .gameControls button{
   width:100%;
   margin:0;
   font-size:17px;
   padding:15px 12px;
 }
-.rollButton{background:var(--green);border-color:#5ad783;color:white}
-.cameButton{background:var(--red);border-color:#ff6174;color:white}
-.tapButton{background:#000;border:2px solid #eee;color:white}
-.rollHint{text-align:center;color:var(--muted);font-size:13px;margin:10px 0 0}
-.status{text-align:center;margin:15px 0 0;overflow-wrap:anywhere}
+
+.rollButton{
+  background:var(--green);
+  border-color:#5ad783;
+  color:white;
+}
+
+.cameButton{
+  background:var(--red);
+  border-color:#ff6174;
+  color:white;
+}
+
+.tapButton{
+  background:#000;
+  border:2px solid #eee;
+  color:white;
+}
+
+.rollHint{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin:10px 0 0;
+}
+
+.status{
+  text-align:center;
+  margin:15px 0 0;
+  overflow-wrap:anywhere;
+}
 
 /* LEADERBOARDS */
+
 .scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:13px}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+  font-size:13px;
+}
+
 th,td{
   padding:9px 6px;
   text-align:left;
   border-bottom:1px solid #555;
   overflow-wrap:anywhere;
 }
+
 th{color:white}
 
-/* POPUPS */
+/* SHARED POPUPS */
+
 .overlay{
   position:fixed;
   inset:0;
@@ -253,6 +381,7 @@ th{color:white}
   padding-top:max(12px,env(safe-area-inset-top));
   padding-bottom:max(12px,env(safe-area-inset-bottom));
 }
+
 .popup{
   width:100%;
   max-width:540px;
@@ -264,10 +393,27 @@ th{color:white}
   padding:16px;
   box-shadow:0 0 40px #7775;
 }
+
 .popup h2{text-align:center}
-.popup label{display:block;color:#fff;font-weight:700;margin:12px 0 6px}
-.popup button{width:100%;margin:5px 0}
-.popupSmall{font-size:12px;text-align:center;color:var(--muted)}
+
+.popup label{
+  display:block;
+  color:#fff;
+  font-weight:700;
+  margin:12px 0 6px;
+}
+
+.popup button{
+  width:100%;
+  margin:5px 0;
+}
+
+.popupSmall{
+  font-size:12px;
+  text-align:center;
+  color:var(--muted);
+}
+
 .popupGif{
   display:block;
   width:100%;
@@ -276,6 +422,7 @@ th{color:white}
   border-radius:12px 12px 0 0;
   background:#090909;
 }
+
 .popupBanner{
   background:linear-gradient(120deg,#444,#8b2b42);
   border-radius:0 0 12px 12px;
@@ -285,25 +432,49 @@ th{color:white}
   font-weight:900;
   overflow-wrap:anywhere;
 }
-.popupTime{text-align:center;font-size:17px;margin:14px 0}
-.shareButton{background:#ff4500;border-color:#ff7949}
-.secondary{background:#333;border-color:#999}
+
+.popupTime{
+  text-align:center;
+  font-size:17px;
+  margin:14px 0;
+}
+
+.shareButton{
+  background:#ff4500;
+  border-color:#ff7949;
+}
+
+.secondary{
+  background:#333;
+  border-color:#999;
+}
 
 /* DOUBLES */
+
 .doublesPopup{
   border:3px solid #ffcf56;
   background:linear-gradient(145deg,#333,#111 55%,#333);
   box-shadow:0 0 35px #e5a83d66;
   text-align:center;
 }
-.doublesIcon{font-size:58px;margin:5px 0}
+
+.doublesIcon{
+  font-size:58px;
+  margin:5px 0;
+}
+
 .doublesPopup h2{
   color:#ffdf78;
   font-size:clamp(36px,10vw,54px);
   letter-spacing:2px;
   text-shadow:0 0 20px #ffb74377;
 }
-.doublesDescription{color:#eee;font-size:17px}
+
+.doublesDescription{
+  color:#eee;
+  font-size:17px;
+}
+
 .doublesNumbers{
   display:flex;
   align-items:center;
@@ -311,6 +482,7 @@ th{color:white}
   gap:12px;
   margin:20px 0;
 }
+
 .doublesNumberBox{
   flex:1;
   min-width:0;
@@ -319,12 +491,39 @@ th{color:white}
   padding:15px 5px;
   background:#101010;
 }
-.doublesNumber{font-size:clamp(38px,11vw,60px);font-weight:900;color:#fff}
-.doublesNumber.final{color:#ffdf78}
-.doublesNumberLabel{font-size:11px;color:#ccc}
-.doublesArrow{font-size:28px;color:#ffdf78}
-.doublesDestination{font-size:18px;color:#ffdf78;font-weight:800}
-.doublesCountdown{font-size:15px;color:#fff;margin-top:15px}
+
+.doublesNumber{
+  font-size:clamp(38px,11vw,60px);
+  font-weight:900;
+  color:#fff;
+}
+
+.doublesNumber.final{
+  color:#ffdf78;
+}
+
+.doublesNumberLabel{
+  font-size:11px;
+  color:#ccc;
+}
+
+.doublesArrow{
+  font-size:28px;
+  color:#ffdf78;
+}
+
+.doublesDestination{
+  font-size:18px;
+  color:#ffdf78;
+  font-weight:800;
+}
+
+.doublesCountdown{
+  font-size:15px;
+  color:#fff;
+  margin-top:15px;
+}
+
 .countdownTrack{
   height:7px;
   border-radius:20px;
@@ -332,6 +531,7 @@ th{color:white}
   overflow:hidden;
   margin:12px 0;
 }
+
 .countdownFill{
   width:100%;
   height:100%;
@@ -340,27 +540,42 @@ th{color:white}
 }
 
 /* WINNER */
+
 .winnerPopup{
   border-color:#ffd76b;
   background:linear-gradient(160deg,#282828,#111 65%,#353535);
   text-align:center;
 }
+
 .winnerTrophy{font-size:85px}
-.winnerPopup h2{color:#ffd76b;font-size:30px}
+
+.winnerPopup h2{
+  color:#ffd76b;
+  font-size:30px;
+}
+
 .winnerTime{
   font-size:36px;
   font-weight:900;
   color:#ffd76b;
   font-variant-numeric:tabular-nums;
 }
-.winnerPopup label{text-align:left}
+
+.winnerPopup label{
+  text-align:left;
+}
 
 /* TAP OUT */
+
 .tapPopup{
   border-color:#bbb;
   background:linear-gradient(160deg,#222,#111 65%,#333);
 }
-.tapBanner{background:linear-gradient(120deg,#444,#222)}
+
+.tapBanner{
+  background:linear-gradient(120deg,#444,#222);
+}
+
 .tapGifLink{
   display:block;
   text-align:center;
@@ -368,84 +583,562 @@ th{color:white}
   font-size:13px;
   padding:6px;
 }
-@media(max-width:420px){
-  main{padding:12px 10px 35px}
-  .panel{padding:13px}
-  .gameControls button{font-size:16px}
+
+/* SWIPE IF YOU DARE POPUP */
+
+.d12DareOverlay{
+  position:fixed;
+  inset:0;
+  z-index:11000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  padding-top:max(20px,env(safe-area-inset-top));
+  padding-bottom:max(20px,env(safe-area-inset-bottom));
+  background:rgba(0,0,0,.96);
 }
 
-<!-- D12 SWIPE IF YOU DARE UPDATE -->
-
-<style>
-.d12DareOverlay {
-  position: fixed;
-  inset: 0;
-  z-index: 11000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgba(0, 0, 0, .96);
-}
-
-.d12DarePopup {
-  width: 100%;
-  max-width: 500px;
-  padding: 35px 22px;
-  text-align: center;
-  border: 3px solid #b42335;
-  border-radius: 22px;
-  background: linear-gradient(
+.d12DarePopup{
+  width:100%;
+  max-width:500px;
+  max-height:90dvh;
+  overflow-y:auto;
+  padding:35px 22px;
+  text-align:center;
+  border:3px solid #b42335;
+  border-radius:22px;
+  background:linear-gradient(
     145deg,
     #351018,
     #101010 65%,
     #291018
   );
-  box-shadow: 0 0 45px #b4233580;
+  box-shadow:0 0 45px #b4233580;
 }
 
-.d12DareIcon {
-  font-size: 65px;
-  margin-bottom: 12px;
+.d12DareIcon{
+  font-size:65px;
+  margin-bottom:12px;
 }
 
-.d12DareTitle {
-  font-size: clamp(27px, 8vw, 42px);
-  font-weight: 900;
-  color: #ff6174;
-  margin-bottom: 15px;
+.d12DareTitle{
+  font-size:clamp(27px,8vw,42px);
+  font-weight:900;
+  color:#ff6174;
+  margin-bottom:15px;
 }
 
-.d12DareMessage {
-  font-size: clamp(18px, 5vw, 24px);
-  line-height: 1.5;
-  font-weight: 700;
-  color: white;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
+.d12DareMessage{
+  font-size:clamp(18px,5vw,24px);
+  line-height:1.5;
+  font-weight:700;
+  color:white;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
 
-.d12DareCountdown {
-  margin-top: 24px;
-  font-size: 14px;
-  color: #ccc;
+.d12DareCountdown{
+  margin-top:24px;
+  font-size:14px;
+  color:#ccc;
 }
 
-.d12DareProgress {
-  height: 7px;
-  margin-top: 12px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #555;
+.d12DareProgress{
+  height:7px;
+  margin-top:12px;
+  border-radius:20px;
+  overflow:hidden;
+  background:#555;
 }
 
-.d12DareProgressFill {
-  height: 100%;
-  width: 100%;
-  background: #ff6174;
-  transition: width .1s linear;
+.d12DareProgressFill{
+  height:100%;
+  width:100%;
+  background:#ff6174;
+  transition:width .1s linear;
+}
+
+@media(max-width:420px){
+  main{padding:12px 10px 35px}
+  .panel{padding:13px}
+  .gameControls button{font-size:16px}
 }
 </style>
+</head>
+
+<body>
+
+<main>
+<h1 id="gameTitle">D12 Survival Game</h1>
+<p class="sub" id="subtitle">
+  Roll the D12. Survive as long as you can.
+</p>
+
+<!-- HOME -->
+
+<section class="panel center" id="home">
+  <div id="homeMedia"></div>
+
+  <p id="intro">
+    Risk it all. Your Survival Time begins the moment you enter the game.
+  </p>
+
+  <label
+    for="playerName"
+    class="label"
+    style="display:block;text-align:left;margin:12px 0 6px"
+  >
+    Your username
+  </label>
+
+  <input
+    id="playerName"
+    maxlength="32"
+    placeholder="u/YourName"
+    autocomplete="nickname"
+  >
+
+  <p class="hint" id="nameHint">
+    Enter your username before starting.
+  </p>
+
+  <button id="start" type="button">
+    I agree to risk it all
+  </button>
+</section>
+
+<!-- GAME -->
+
+<section class="panel hidden" id="game">
+  <p class="center muted" id="soldierName"></p>
+
+  <div class="gameStats">
+    <div class="timerBlock">
+      <div class="timer" id="timer">00:00:00</div>
+      <div class="timerLabel">Survival Time</div>
+    </div>
+
+    <div class="dieBlock">
+      <div class="die" id="die">—</div>
+      <div class="dieLabel">D12 Roll</div>
+    </div>
+  </div>
+
+  <div id="slideArea" class="hidden">
+    <h2 id="slideTitle" class="slideTitle"></h2>
+    <div id="slideMedia" class="slideMedia"></div>
+    <p id="slideDescription" class="slideDescription"></p>
+    <p id="hunter" class="slideHunter"></p>
+    <p id="consequence" class="consequenceText"></p>
+  </div>
+
+  <div class="gameControls">
+    <button
+      id="roll"
+      type="button"
+      class="rollButton"
+    >
+      🎲 Roll Again
+    </button>
+
+    <button
+      id="accept"
+      type="button"
+      class="rollButton hidden"
+    >
+      ⚡ Show Me My Consequences
+    </button>
+
+    <button
+      id="finish"
+      type="button"
+      class="cameButton"
+    >
+      💦 I Came 💦
+    </button>
+
+    <button
+      id="tapOut"
+      type="button"
+      class="tapButton"
+    >
+      🏳️ I'm Tapping Out 🏳️
+    </button>
+  </div>
+
+  <p id="rollHint" class="rollHint"></p>
+  <p
+    id="status"
+    class="status"
+    aria-live="polite"
+  ></p>
+
+  <button
+    id="retrySave"
+    type="button"
+    class="secondary hidden"
+    style="width:100%;margin-top:12px"
+  >
+    Retry Saving Score
+  </button>
+</section>
+
+<!-- SOLDIER LEADERBOARD -->
+
+<section class="panel">
+  <h2>Soldier Leaderboard</h2>
+
+  <p class="notice" id="boardMode">
+    Loading scores…
+  </p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Soldier</th>
+          <th>Survival Time</th>
+          <th>Result</th>
+          <th>Ending Slide</th>
+        </tr>
+      </thead>
+
+      <tbody id="soldierRows">
+        <tr>
+          <td colspan="4">Loading…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- HUNTER SCOREBOARD -->
+
+<section class="panel">
+  <h2>Hunter Scoreboard</h2>
+
+  <p class="notice">
+    Soldiers Claimed by each Reddit hunter
+  </p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Hunter</th>
+          <th>Soldiers Claimed</th>
+        </tr>
+      </thead>
+
+      <tbody id="hunterRows">
+        <tr>
+          <td colspan="2">Loading…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- DONATIONS -->
+
+<section class="panel center" id="donations">
+  <h2>☕ Enjoyed the Game?</h2>
+
+  <p>
+    If you had fun rolling the D12, consider buying
+    me a cup of coffee! Every tip is appreciated
+    and helps support the game. 💜
+  </p>
+
+  <a
+    href="https://cash.app/$dudewolfgame"
+    target="_blank"
+    rel="noopener noreferrer"
+    style="display:block;background:#00D632;color:#111;padding:15px;border-radius:12px;font-size:18px;font-weight:800;text-decoration:none;text-align:center;margin:16px 0"
+  >
+    ☕ Buy Me a Coffee — Cash App
+  </a>
+
+  <p class="notice">
+    💜 Donations are completely optional. Thanks for playing!
+  </p>
+</section>
+
+<p
+  class="center notice"
+  id="configStatus"
+></p>
+</main>
+
+<!-- DOUBLES POPUP -->
+
+<div
+  id="doublesOverlay"
+  class="overlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="doublesHeading"
+>
+  <div class="popup doublesPopup">
+    <div class="doublesIcon">🎲⚡🎲</div>
+
+    <h2 id="doublesHeading">DOUBLES!</h2>
+
+    <p class="doublesDescription">
+      Your roll has been doubled!
+    </p>
+
+    <div class="doublesNumbers">
+      <div class="doublesNumberBox">
+        <div
+          id="doublesOriginal"
+          class="doublesNumber"
+        >8</div>
+
+        <div class="doublesNumberLabel">
+          ORIGINAL ROLL
+        </div>
+      </div>
+
+      <div class="doublesArrow">➜</div>
+
+      <div class="doublesNumberBox">
+        <div
+          id="doublesResult"
+          class="doublesNumber final"
+        >16</div>
+
+        <div class="doublesNumberLabel">
+          DOUBLED ROLL
+        </div>
+      </div>
+    </div>
+
+    <p
+      id="doublesDestination"
+      class="doublesDestination"
+    >
+      Advancing to Slide 16!
+    </p>
+
+    <p
+      id="doublesCountdown"
+      class="doublesCountdown"
+    >
+      Automatically continuing in 5 seconds…
+    </p>
+
+    <div class="countdownTrack">
+      <div
+        id="doublesProgress"
+        class="countdownFill"
+      ></div>
+    </div>
+
+    <p class="popupSmall">
+      Your Survival Time keeps running!
+    </p>
+  </div>
+</div>
+
+<!-- HUNT SUCCESS POPUP -->
+
+<div
+  id="huntOverlay"
+  class="overlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="huntHeading"
+>
+  <div class="popup">
+    <h2 id="huntHeading">
+      🎯 HUNT SUCCESSFUL!
+    </h2>
+
+    <img
+      id="huntGif"
+      class="popupGif"
+      src="https://i.imgur.com/9CEEzCM.gif"
+      alt="Hunt success animation"
+    >
+
+    <div
+      id="huntBanner"
+      class="popupBanner"
+    >
+      Successfully hunted!
+    </div>
+
+    <p
+      id="huntTime"
+      class="popupTime"
+    ></p>
+
+    <label for="redditPost">
+      ✍️ Customize your Reddit post
+    </label>
+
+    <textarea
+      id="redditPost"
+      maxlength="10000"
+      placeholder="Tell the community what happened..."
+    ></textarea>
+
+    <button
+      id="shareReddit"
+      type="button"
+      class="shareButton"
+    >
+      🟠 Share to Reddit
+    </button>
+
+    <p class="popupSmall">
+      Opens Reddit with your post prefilled.
+      You can review it before submitting.
+    </p>
+
+    <button
+      id="closeHunt"
+      type="button"
+      class="secondary"
+    >
+      Close and View My Score
+    </button>
+  </div>
+</div>
+
+<!-- WINNER POPUP -->
+
+<div
+  id="winnerOverlay"
+  class="overlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="winnerHeading"
+>
+  <div class="popup winnerPopup">
+    <div class="winnerTrophy">🏆</div>
+
+    <h2 id="winnerHeading">
+      NNN SURVIVOR!
+    </h2>
+
+    <p>
+      You survived the D12 Challenge!
+    </p>
+
+    <div
+      id="winnerTime"
+      class="winnerTime"
+    >
+      00:00:00
+    </div>
+
+    <p class="muted">
+      Final Survival Time
+    </p>
+
+    <label for="winnerPost">
+      ✍️ Customize your victory post
+    </label>
+
+    <textarea
+      id="winnerPost"
+      maxlength="10000"
+      placeholder="Tell the community how you survived..."
+    ></textarea>
+
+    <button
+      id="shareVictory"
+      type="button"
+      class="shareButton"
+    >
+      🏆 Share Victory to Reddit
+    </button>
+
+    <button
+      id="closeWinner"
+      type="button"
+      class="secondary"
+    >
+      Close and View My Score
+    </button>
+  </div>
+</div>
+
+<!-- TAP OUT POPUP -->
+
+<div
+  id="tapOverlay"
+  class="overlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="tapHeading"
+>
+  <div class="popup tapPopup">
+    <h2 id="tapHeading">
+      🛡️ TAPPED OUT!
+    </h2>
+
+    <img
+      id="tapGif"
+      class="popupGif"
+      src="./tapout.GIF"
+      alt="Tap Out animation"
+    >
+
+    <div class="popupBanner tapBanner">
+      YOU HELD IT TOGETHER!
+    </div>
+
+    <a
+      class="tapGifLink"
+      href="./tapout.GIF"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ▶ View Tap Out animation
+    </a>
+
+    <p
+      id="tapTime"
+      class="popupTime"
+    ></p>
+
+    <p class="center">
+      You walked away before losing control.
+    </p>
+
+    <label for="tapPost">
+      ✍️ Customize your tap-out post
+    </label>
+
+    <textarea
+      id="tapPost"
+      maxlength="10000"
+      placeholder="Tell the community why you tapped out..."
+    ></textarea>
+
+    <button
+      id="shareTap"
+      type="button"
+      class="shareButton"
+    >
+      🟠 Share Tap Out to Reddit
+    </button>
+
+    <button
+      id="closeTap"
+      type="button"
+      class="secondary"
+    >
+      Close and View My Score
+    </button>
+  </div>
+</div>
+
+<!-- SWIPE IF YOU DARE POPUP -->
 
 <div
   id="d12DareOverlay"
@@ -486,441 +1179,31 @@ th{color:white}
 </div>
 
 <script>
-(function () {
-  'use strict';
-
-  const DARE_DURATION = 5000;
-
-  let dareTimer = null;
-  let dareInterval = null;
-  let dareShownForSlide = null;
-
-  const overlay =
-    document.getElementById('d12DareOverlay');
-
-  const messageElement =
-    document.getElementById('d12DareMessage');
-
-  const countdownElement =
-    document.getElementById('d12DareCountdown');
-
-  const progressElement =
-    document.getElementById('d12DareProgressFill');
-
-  function closeDarePopup() {
-    clearTimeout(dareTimer);
-    clearInterval(dareInterval);
-
-    dareTimer = null;
-    dareInterval = null;
-
-    overlay.classList.add('hidden');
-
-    if (
-      !document.querySelector(
-        '.overlay:not(.hidden)'
-      )
-    ) {
-      document.body.classList.remove('popupOpen');
-    }
-  }
-
-  function showDarePopup(slide) {
-    if (!slide || endingStarted || doublesPending) {
-      return;
-    }
-
-    const message =
-      slide.swipeMessage ||
-      slide.dareMessage ||
-      'You were warned... now face what comes next! 😈';
-
-    messageElement.textContent = message;
-
-    overlay.classList.remove('hidden');
-    document.body.classList.add('popupOpen');
-
-    const started = Date.now();
-
-    progressElement.style.width = '100%';
-
-    clearTimeout(dareTimer);
-    clearInterval(dareInterval);
-
-    dareInterval = setInterval(() => {
-      const remaining = Math.max(
-        0,
-        DARE_DURATION - (Date.now() - started)
-      );
-
-      const seconds = Math.ceil(remaining / 1000);
-
-      countdownElement.textContent =
-        'Continuing in ' + seconds +
-        ' second' + (seconds === 1 ? '…' : 's…');
-
-      progressElement.style.width =
-        (remaining / DARE_DURATION * 100) + '%';
-
-    }, 100);
-
-    dareTimer = setTimeout(
-      closeDarePopup,
-      DARE_DURATION
-    );
-  }
-
-  function installSwipeWatcher() {
-    const container =
-      document.getElementById('slideMedia');
-
-    if (!container) return;
-
-    const track =
-      container.querySelector('.d12GalleryTrack');
-
-    if (!track) return;
-
-    const hint =
-      container.querySelector('.d12GalleryHint');
-
-    if (hint) {
-      hint.textContent = 'Swipe left if you dare 😈';
-    }
-
-    let triggered = false;
-
-    function checkSwipe() {
-      if (triggered || !track.clientWidth) return;
-
-      const position =
-        track.scrollLeft / track.clientWidth;
-
-      if (position >= 0.8) {
-        triggered = true;
-
-        if (
-          current &&
-          dareShownForSlide !== current
-        ) {
-          dareShownForSlide = current;
-          showDarePopup(current);
-        }
-      }
-    }
-
-    track.addEventListener(
-      'scroll',
-      checkSwipe,
-      {passive: true}
-    );
-  }
-
-  /*
-    Watch for each new slide gallery.
-    This also works when a slide is reached
-    through doubles or consequences.
-  */
-
-  const slideMedia =
-    document.getElementById('slideMedia');
-
-  if (slideMedia) {
-    const observer = new MutationObserver(() => {
-      installSwipeWatcher();
-    });
-
-    observer.observe(slideMedia, {
-      childList: true,
-      subtree: false
-    });
-
-    installSwipeWatcher();
-  }
-
-  /*
-    Reset the popup if the game ends.
-  */
-
-  const originalFinishGame = finishGame;
-
-  finishGame = function (...args) {
-    closeDarePopup();
-    return originalFinishGame(...args);
-  };
-
-})();
-</script>
-
-</style>
-</head>
-<body>
-<main>
-<h1 id="gameTitle">D12 Survival Game</h1>
-<p class="sub" id="subtitle">Roll the D12. Survive as long as you can.</p>
-
-<!-- HOME -->
-<section class="panel center" id="home">
-  <div id="homeMedia"></div>
-  <p id="intro">
-    Risk it all. Your Survival Time begins the moment you enter the game.
-  </p>
-  <label for="playerName" class="label"
-    style="display:block;text-align:left;margin:12px 0 6px">
-    Your username
-  </label>
-  <input id="playerName" maxlength="32"
-    placeholder="u/YourName" autocomplete="nickname">
-  <p class="hint" id="nameHint">
-    Enter your username before starting.
-  </p>
-  <button id="start" type="button">I agree to risk it all</button>
-</section>
-
-<!-- GAME -->
-<section class="panel hidden" id="game">
-  <p class="center muted" id="soldierName"></p>
-
-  <div class="gameStats">
-    <div class="timerBlock">
-      <div class="timer" id="timer">00:00:00</div>
-      <div class="timerLabel">Survival Time</div>
-    </div>
-    <div class="dieBlock">
-      <div class="die" id="die">—</div>
-      <div class="dieLabel">D12 Roll</div>
-    </div>
-  </div>
-
-  <div id="slideArea" class="hidden">
-    <h2 id="slideTitle" class="slideTitle"></h2>
-    <div id="slideMedia" class="slideMedia"></div>
-    <p id="slideDescription" class="slideDescription"></p>
-    <p id="hunter" class="slideHunter"></p>
-    <p id="consequence" class="consequenceText"></p>
-  </div>
-
-  <div class="gameControls">
-    <button id="roll" type="button" class="rollButton">
-      🎲 Roll Again
-    </button>
-    <button id="accept" type="button" class="rollButton hidden">
-      ⚡ Show Me My Consequences
-    </button>
-    <button id="finish" type="button" class="cameButton">
-      💦 I Came 💦
-    </button>
-    <button id="tapOut" type="button" class="tapButton">
-      🏳️ I'm Tapping Out 🏳️
-    </button>
-  </div>
-
-  <p id="rollHint" class="rollHint"></p>
-  <p id="status" class="status" aria-live="polite"></p>
-  <button id="retrySave" type="button"
-    class="secondary hidden"
-    style="width:100%;margin-top:12px">
-    Retry Saving Score
-  </button>
-</section>
-
-<!-- SOLDIER LEADERBOARD -->
-<section class="panel">
-  <h2>Soldier Leaderboard</h2>
-  <p class="notice" id="boardMode">Loading scores…</p>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Soldier</th>
-          <th>Survival Time</th>
-          <th>Result</th>
-          <th>Ending Slide</th>
-        </tr>
-      </thead>
-      <tbody id="soldierRows">
-        <tr><td colspan="4">Loading…</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- HUNTER SCOREBOARD -->
-<section class="panel">
-  <h2>Hunter Scoreboard</h2>
-  <p class="notice">Soldiers Claimed by each Reddit hunter</p>
-  <div class="scroll">
-    <table>
-      <thead>
-        <tr>
-          <th>Hunter</th>
-          <th>Soldiers Claimed</th>
-        </tr>
-      </thead>
-      <tbody id="hunterRows">
-        <tr><td colspan="2">Loading…</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- DONATIONS -->
-<section class="panel center" id="donations">
-  <h2>☕ Enjoyed the Game?</h2>
-  <p>
-    If you had fun rolling the D12, consider buying
-    me a cup of coffee! Every tip is appreciated
-    and helps support the game. 💜
-  </p>
-  <a href="https://cash.app/$dudewolfgame"
-    target="_blank" rel="noopener noreferrer"
-    style="display:block;background:#00D632;color:#111;padding:15px;border-radius:12px;font-size:18px;font-weight:800;text-decoration:none;text-align:center;margin:16px 0">
-    ☕ Buy Me a Coffee — Cash App
-  </a>
-  <p class="notice">
-    💜 Donations are completely optional. Thanks for playing!
-  </p>
-</section>
-
-<p class="center notice" id="configStatus"></p>
-</main>
-
-<!-- DOUBLES POPUP -->
-<div id="doublesOverlay" class="overlay hidden"
-  role="dialog" aria-modal="true"
-  aria-labelledby="doublesHeading">
-  <div class="popup doublesPopup">
-    <div class="doublesIcon">🎲⚡🎲</div>
-    <h2 id="doublesHeading">DOUBLES!</h2>
-    <p class="doublesDescription">Your roll has been doubled!</p>
-
-    <div class="doublesNumbers">
-      <div class="doublesNumberBox">
-        <div id="doublesOriginal" class="doublesNumber">8</div>
-        <div class="doublesNumberLabel">ORIGINAL ROLL</div>
-      </div>
-      <div class="doublesArrow">➜</div>
-      <div class="doublesNumberBox">
-        <div id="doublesResult" class="doublesNumber final">16</div>
-        <div class="doublesNumberLabel">DOUBLED ROLL</div>
-      </div>
-    </div>
-
-    <p id="doublesDestination" class="doublesDestination">
-      Advancing to Slide 16!
-    </p>
-    <p id="doublesCountdown" class="doublesCountdown">
-      Automatically continuing in 5 seconds…
-    </p>
-    <div class="countdownTrack">
-      <div id="doublesProgress" class="countdownFill"></div>
-    </div>
-    <p class="popupSmall">Your Survival Time keeps running!</p>
-  </div>
-</div>
-
-<!-- HUNT SUCCESS POPUP -->
-<div id="huntOverlay" class="overlay hidden"
-  role="dialog" aria-modal="true"
-  aria-labelledby="huntHeading">
-  <div class="popup">
-    <h2 id="huntHeading">🎯 HUNT SUCCESSFUL!</h2>
-    <img id="huntGif" class="popupGif"
-      src="https://i.imgur.com/9CEEzCM.gif"
-      alt="Hunt success animation">
-    <div id="huntBanner" class="popupBanner">
-      Successfully hunted!
-    </div>
-    <p id="huntTime" class="popupTime"></p>
-    <label for="redditPost">✍️ Customize your Reddit post</label>
-    <textarea id="redditPost" maxlength="10000"
-      placeholder="Tell the community what happened..."></textarea>
-    <button id="shareReddit" type="button" class="shareButton">
-      🟠 Share to Reddit
-    </button>
-    <p class="popupSmall">
-      Opens Reddit with your post prefilled.
-      You can review it before submitting.
-    </p>
-    <button id="closeHunt" type="button" class="secondary">
-      Close and View My Score
-    </button>
-  </div>
-</div>
-
-<!-- WINNER POPUP -->
-<div id="winnerOverlay" class="overlay hidden"
-  role="dialog" aria-modal="true"
-  aria-labelledby="winnerHeading">
-  <div class="popup winnerPopup">
-    <div class="winnerTrophy">🏆</div>
-    <h2 id="winnerHeading">NNN SURVIVOR!</h2>
-    <p>You survived the D12 Challenge!</p>
-    <div id="winnerTime" class="winnerTime">00:00:00</div>
-    <p class="muted">Final Survival Time</p>
-    <label for="winnerPost">✍️ Customize your victory post</label>
-    <textarea id="winnerPost" maxlength="10000"
-      placeholder="Tell the community how you survived..."></textarea>
-    <button id="shareVictory" type="button" class="shareButton">
-      🏆 Share Victory to Reddit
-    </button>
-    <button id="closeWinner" type="button" class="secondary">
-      Close and View My Score
-    </button>
-  </div>
-</div>
-
-<!-- TAP OUT POPUP -->
-<div id="tapOverlay" class="overlay hidden"
-  role="dialog" aria-modal="true"
-  aria-labelledby="tapHeading">
-  <div class="popup tapPopup">
-    <h2 id="tapHeading">🛡️ TAPPED OUT!</h2>
-    <img id="tapGif" class="popupGif"
-      src="./tapout.GIF"
-      alt="Tap Out animation">
-    <div class="popupBanner tapBanner">
-      YOU HELD IT TOGETHER!
-    </div>
-    <a class="tapGifLink" href="./tapout.GIF"
-      target="_blank" rel="noopener noreferrer">
-      ▶ View Tap Out animation
-    </a>
-    <p id="tapTime" class="popupTime"></p>
-    <p class="center">
-      You walked away before losing control.
-    </p>
-    <label for="tapPost">✍️ Customize your tap-out post</label>
-    <textarea id="tapPost" maxlength="10000"
-      placeholder="Tell the community why you tapped out..."></textarea>
-    <button id="shareTap" type="button" class="shareButton">
-      🟠 Share Tap Out to Reddit
-    </button>
-    <button id="closeTap" type="button" class="secondary">
-      Close and View My Score
-    </button>
-  </div>
-</div>
-
-<script>
 'use strict';
 
 /* ELEMENT HELPERS */
+
 const $ = id => document.getElementById(id);
 
 function setText(id,value){
   const element = $(id);
-  if(element) element.textContent = String(value ?? '');
+
+  if(element){
+    element.textContent = String(value ?? '');
+  }
 }
 
 /* GAME CONSTANTS */
+
 const TAP_OUT_MARKER = '__TAPPED_OUT__';
 const HUNT_GIF = 'https://i.imgur.com/9CEEzCM.gif';
 const TAP_OUT_GIF = './tapout.GIF';
 const REDDIT_COMMUNITY = 'NoNutNovemberChalleng';
+
 const DOUBLES_CHANCE = 0.20;
 const DOUBLES_START_ROLL = 2;
 const DOUBLES_DISPLAY_MS = 5000;
+const DARE_DISPLAY_MS = 5000;
 
 const DEFAULT = {
   title:'D12 Survival Game',
@@ -930,6 +1213,7 @@ const DEFAULT = {
 };
 
 /* GAME STATE */
+
 let config = {...DEFAULT};
 let slides = new Map();
 let current = null;
@@ -950,9 +1234,17 @@ let doublesTarget = null;
 let doublesTimeout = null;
 let doublesInterval = null;
 
+/* DARE POPUP STATE */
+
+let darePending = false;
+let dareTimeout = null;
+let dareInterval = null;
+
 /* TIME */
+
 function fmt(ms){
   const seconds = Math.max(0,Math.floor(ms/1000));
+
   return [
     Math.floor(seconds/3600),
     Math.floor(seconds%3600/60),
@@ -970,10 +1262,15 @@ function readableTime(ms){
   if(hours){
     parts.push(hours+(hours===1?' hour':' hours'));
   }
+
   if(minutes){
     parts.push(minutes+(minutes===1?' minute':' minutes'));
   }
-  parts.push(seconds+(seconds===1?' second':' seconds'));
+
+  parts.push(
+    seconds+(seconds===1?' second':' seconds')
+  );
+
   return parts.join(', ');
 }
 
@@ -985,6 +1282,7 @@ function updateClock(){
 }
 
 /* SUPABASE */
+
 function online(){
   const url = String(config.supabaseUrl||'').trim();
   const key = String(config.supabaseKey||'').trim();
@@ -1000,10 +1298,14 @@ function online(){
 
 async function request(path,options={}){
   const base = String(config.supabaseUrl||'')
-    .trim().replace(/\/$/,'');
+    .trim()
+    .replace(/\/$/,'');
+
   const key = String(config.supabaseKey||'').trim();
 
-  if(!online()) throw Error('Supabase is not configured.');
+  if(!online()){
+    throw Error('Supabase is not configured.');
+  }
 
   const headers = {
     apikey:key,
@@ -1022,6 +1324,7 @@ async function request(path,options={}){
 
   if(!response.ok){
     const detail = await response.text().catch(()=>'');
+
     throw Error(
       'Supabase HTTP '+response.status+': '+
       detail.slice(0,220)
@@ -1029,11 +1332,14 @@ async function request(path,options={}){
   }
 
   if(response.status===204) return null;
+
   const body = await response.text();
+
   return body ? JSON.parse(body) : null;
 }
 
 /* NORMALIZE SLIDES */
+
 function normalizeSlide(s,index){
   if(!s || typeof s!=='object') return null;
 
@@ -1041,7 +1347,9 @@ function normalizeSlide(s,index){
     s.id ?? s.slide ?? s.number ?? index+1
   );
 
-  if(!Number.isInteger(id)||id<1) return null;
+  if(!Number.isInteger(id)||id<1){
+    return null;
+  }
 
   const destinationValue =
     s.destination ??
@@ -1053,11 +1361,24 @@ function normalizeSlide(s,index){
   return {
     ...s,
     id,
-    title:s.title||s.name||'Slide '+id,
+
+    title:
+      s.title||
+      s.name||
+      'Slide '+id,
+
     description:
-      s.description||s.text||s.body||'',
+      s.description||
+      s.text||
+      s.body||
+      '',
+
     redditUser:
-      s.redditUser||s.reddit_user||s.hunter||'',
+      s.redditUser||
+      s.reddit_user||
+      s.hunter||
+      '',
+
     media:
       s.media||
       s.mediaUrl||
@@ -1066,20 +1387,31 @@ function normalizeSlide(s,index){
       s.video||
       s.url||
       '',
+
     media2:
       s.media2||
       s.secondMedia||
       s.mediaUrl2||
       s.url2||
       '',
+
+    swipeMessage:
+      s.swipeMessage||
+      s.dareMessage||
+      '',
+
     consequence:
       s.consequence??s.consequences??false,
+
     destination:
-      destinationValue===''||destinationValue===null
+      destinationValue===''||
+      destinationValue===null
         ? null
         : Number(destinationValue),
+
     rerollLockSeconds:Math.max(
-      0,Number(s.rerollLockSeconds||0)||0
+      0,
+      Number(s.rerollLockSeconds||0)||0
     )
   };
 }
@@ -1087,7 +1419,11 @@ function normalizeSlide(s,index){
 function parseSlides(raw){
   let data = raw;
 
-  if(!Array.isArray(data)&&data&&typeof data==='object'){
+  if(
+    !Array.isArray(data) &&
+    data &&
+    typeof data==='object'
+  ){
     data = Object.entries(data).map(
       ([id,value])=>({
         ...value,
@@ -1096,11 +1432,15 @@ function parseSlides(raw){
     );
   }
 
-  if(!Array.isArray(data)) return [];
+  if(!Array.isArray(data)){
+    return [];
+  }
+
   return data.map(normalizeSlide).filter(Boolean);
 }
 
 /* MEDIA DETECTION */
+
 function resolveMedia(value){
   const source =
     typeof value==='string'
@@ -1113,6 +1453,7 @@ function resolveMedia(value){
         );
 
   const url = String(source||'').trim();
+
   if(!url) return null;
 
   const explicitType =
@@ -1127,7 +1468,10 @@ function resolveMedia(value){
     return {
       kind:
         /^data:video\//i.test(url) ||
-        (url.startsWith('blob:') && explicitType==='video')
+        (
+          url.startsWith('blob:') &&
+          explicitType==='video'
+        )
           ? 'video'
           : 'image',
       url
@@ -1135,13 +1479,18 @@ function resolveMedia(value){
   }
 
   let parsed;
+
   try{
     parsed = new URL(url);
   }catch(error){
     return null;
   }
 
-  if(!['https:','http:'].includes(parsed.protocol)){
+  if(
+    !['https:','http:'].includes(
+      parsed.protocol
+    )
+  ){
     return null;
   }
 
@@ -1149,12 +1498,19 @@ function resolveMedia(value){
     .toLowerCase()
     .replace(/^www\./,'');
 
-  const parts = parsed.pathname.split('/').filter(Boolean);
+  const parts = parsed.pathname
+    .split('/')
+    .filter(Boolean);
 
   /* REDGIFS */
-  if(host==='redgifs.com'||host==='v3.redgifs.com'){
+
+  if(
+    host==='redgifs.com' ||
+    host==='v3.redgifs.com'
+  ){
     const id =
-      parts[0]==='watch'||parts[0]==='ifr'
+      parts[0]==='watch' ||
+      parts[0]==='ifr'
         ? parts[1]
         : null;
 
@@ -1168,8 +1524,15 @@ function resolveMedia(value){
   }
 
   /* IMGUR POSTS / ALBUMS */
-  if(host==='imgur.com'||host==='m.imgur.com'){
-    if(parts[0]==='a'||parts[0]==='gallery'){
+
+  if(
+    host==='imgur.com' ||
+    host==='m.imgur.com'
+  ){
+    if(
+      parts[0]==='a' ||
+      parts[0]==='gallery'
+    ){
       const id = parts[1];
 
       if(id&&/^[a-z0-9]+$/i.test(id)){
@@ -1177,14 +1540,20 @@ function resolveMedia(value){
           kind:'embed',
           url:
             'https://imgur.com/'+
-            (parts[0]==='a'?'a/':'gallery/')+
-            id+'/embed',
+            (
+              parts[0]==='a'
+                ? 'a/'
+                : 'gallery/'
+            )+
+            id+
+            '/embed',
           original:url
         };
       }
     }
 
     const id = parts[0];
+
     if(id&&/^[a-z0-9]+$/i.test(id)){
       return {
         kind:'embed',
@@ -1195,6 +1564,7 @@ function resolveMedia(value){
   }
 
   /* IMGUR GIFV */
+
   if(
     host==='i.imgur.com' &&
     /\.gifv$/i.test(parsed.pathname)
@@ -1210,6 +1580,7 @@ function resolveMedia(value){
   }
 
   /* DIRECT MEDIA */
+
   const video =
     explicitType==='video' ||
     /\.(mp4|webm|mov)(?:$|[?#])/i.test(url);
@@ -1221,8 +1592,10 @@ function resolveMedia(value){
 }
 
 /* BUILD MEDIA ELEMENT */
+
 function mediaNode(value){
   const media = resolveMedia(value);
+
   if(!media) return null;
 
   const node = document.createElement(
@@ -1234,19 +1607,24 @@ function mediaNode(value){
   );
 
   node.className =
-    media.kind==='embed'?'mediaEmbed':'media';
+    media.kind==='embed'
+      ? 'mediaEmbed'
+      : 'media';
 
   node.src = media.url;
 
   if(media.kind==='embed'){
     node.title = 'Embedded slide media';
     node.loading = 'lazy';
+
     node.referrerPolicy =
       'strict-origin-when-cross-origin';
+
     node.setAttribute(
       'allow',
       'autoplay; fullscreen; picture-in-picture'
     );
+
     node.setAttribute('allowfullscreen','');
   }
 
@@ -1265,8 +1643,10 @@ function mediaNode(value){
 }
 
 /* BUILD ONE MEDIA PAGE */
+
 function mediaPage(value){
   const media = resolveMedia(value);
+
   if(!media) return null;
 
   const page = document.createElement('div');
@@ -1276,16 +1656,22 @@ function mediaPage(value){
   wrapper.className = 'mediaBox';
 
   const node = mediaNode(value);
+
   if(!node) return null;
 
   wrapper.append(node);
 
-  if(media.kind==='embed' && media.original){
+  if(
+    media.kind==='embed' &&
+    media.original
+  ){
     const link = document.createElement('a');
+
     link.className = 'mediaFallback';
     link.href = media.original;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
+
     link.textContent =
       'Media not playing? Open on '+
       (
@@ -1298,12 +1684,99 @@ function mediaPage(value){
   }
 
   page.append(wrapper);
+
   return page;
 }
 
+/* DARE POPUP */
+
+function closeDarePopup(){
+  clearTimeout(dareTimeout);
+  clearInterval(dareInterval);
+
+  dareTimeout = null;
+  dareInterval = null;
+  darePending = false;
+
+  $('d12DareOverlay').classList.add('hidden');
+
+  if(
+    !document.querySelector(
+      '.overlay:not(.hidden)'
+    )
+  ){
+    document.body.classList.remove('popupOpen');
+  }
+}
+
+function showDarePopup(slide){
+  if(
+    !slide ||
+    darePending ||
+    endingStarted ||
+    finished ||
+    doublesPending
+  ){
+    return;
+  }
+
+  darePending = true;
+
+  const message =
+    String(
+      slide.swipeMessage ||
+      slide.dareMessage ||
+      'You were warned... now face what comes next! 😈'
+    );
+
+  setText('d12DareMessage',message);
+
+  setText(
+    'd12DareCountdown',
+    'Continuing in 5 seconds…'
+  );
+
+  $('d12DareProgressFill').style.width = '100%';
+
+  $('d12DareOverlay').classList.remove('hidden');
+
+  document.body.classList.add('popupOpen');
+
+  const start = Date.now();
+
+  dareInterval = setInterval(()=>{
+    const remaining = Math.max(
+      0,
+      DARE_DISPLAY_MS-(Date.now()-start)
+    );
+
+    const seconds = Math.ceil(remaining/1000);
+
+    setText(
+      'd12DareCountdown',
+      remaining>0
+        ? 'Continuing in '+
+          seconds+
+          ' second'+
+          (seconds===1?'…':'s…')
+        : 'Continuing…'
+    );
+
+    $('d12DareProgressFill').style.width =
+      (remaining/DARE_DISPLAY_MS*100)+'%';
+  },100);
+
+  dareTimeout = setTimeout(
+    closeDarePopup,
+    DARE_DISPLAY_MS
+  );
+}
+
 /* SINGLE MEDIA OR SWIPE GALLERY */
+
 function showMedia(id,value){
   const container = $(id);
+
   if(!container) return;
 
   container.replaceChildren();
@@ -1316,20 +1789,28 @@ function showMedia(id,value){
 
     if(first) items.push(first);
     if(second) items.push(second);
+
   }else if(value){
     items.push(value);
   }
 
-  items = items.filter(item=>resolveMedia(item));
+  items = items.filter(
+    item=>resolveMedia(item)
+  );
 
   if(!items.length) return;
 
   if(items.length===1){
     const page = mediaPage(items[0]);
+
     if(page){
       const wrapper = page.firstElementChild;
-      if(wrapper) container.append(wrapper);
+
+      if(wrapper){
+        container.append(wrapper);
+      }
     }
+
     return;
   }
 
@@ -1338,14 +1819,22 @@ function showMedia(id,value){
 
   const track = document.createElement('div');
   track.className = 'd12GalleryTrack';
-  track.setAttribute('aria-label','Slide media gallery');
+
+  track.setAttribute(
+    'aria-label',
+    'Slide media gallery'
+  );
 
   for(const item of items){
     const page = mediaPage(item);
-    if(page) track.append(page);
+
+    if(page){
+      track.append(page);
+    }
   }
 
   const count = track.children.length;
+
   if(!count) return;
 
   gallery.append(track);
@@ -1359,7 +1848,11 @@ function showMedia(id,value){
   const previous = document.createElement('button');
   previous.type = 'button';
   previous.textContent = '❮';
-  previous.setAttribute('aria-label','Previous media');
+
+  previous.setAttribute(
+    'aria-label',
+    'Previous media'
+  );
 
   const counter = document.createElement('span');
   counter.className = 'd12GalleryCounter';
@@ -1368,48 +1861,106 @@ function showMedia(id,value){
   const next = document.createElement('button');
   next.type = 'button';
   next.textContent = '❯';
-  next.setAttribute('aria-label','Next media');
+
+  next.setAttribute(
+    'aria-label',
+    'Next media'
+  );
 
   let index = 0;
+  let dareTriggered = false;
+
+  const gallerySlide =
+    id==='slideMedia' ? current : null;
+
+  function triggerDareIfNeeded(){
+    if(
+      dareTriggered ||
+      !gallerySlide ||
+      !track.clientWidth
+    ){
+      return;
+    }
+
+    const position =
+      track.scrollLeft/track.clientWidth;
+
+    if(position>=0.8){
+      dareTriggered = true;
+      showDarePopup(gallerySlide);
+    }
+  }
 
   function moveTo(nextIndex){
-    index = Math.max(0,Math.min(count-1,nextIndex));
+    index = Math.max(
+      0,
+      Math.min(count-1,nextIndex)
+    );
 
     track.scrollTo({
       left:track.clientWidth*index,
       behavior:'smooth'
     });
 
-    counter.textContent = (index+1)+' / '+count;
+    counter.textContent =
+      (index+1)+' / '+count;
+
+    if(index>=1 && !dareTriggered){
+      dareTriggered = true;
+      showDarePopup(gallerySlide);
+    }
   }
 
-  previous.onclick = ()=>moveTo(index-1);
-  next.onclick = ()=>moveTo(index+1);
+  previous.onclick = ()=>{
+    moveTo(index-1);
+  };
 
-  track.addEventListener('scroll',()=>{
-    if(!track.clientWidth) return;
+  next.onclick = ()=>{
+    moveTo(index+1);
+  };
 
-    index = Math.max(
-      0,
-      Math.min(
-        count-1,
-        Math.round(track.scrollLeft/track.clientWidth)
-      )
-    );
+  track.addEventListener(
+    'scroll',
+    ()=>{
+      if(!track.clientWidth) return;
 
-    counter.textContent = (index+1)+' / '+count;
-  },{passive:true});
+      index = Math.max(
+        0,
+        Math.min(
+          count-1,
+          Math.round(
+            track.scrollLeft/track.clientWidth
+          )
+        )
+      );
 
-  navigation.append(previous,counter,next);
+      counter.textContent =
+        (index+1)+' / '+count;
+
+      triggerDareIfNeeded();
+    },
+    {passive:true}
+  );
+
+  navigation.append(
+    previous,
+    counter,
+    next
+  );
+
   container.append(navigation);
 
   const hint = document.createElement('p');
   hint.className = 'd12GalleryHint';
-  hint.textContent = 'Swipe left or right to view more';
+
+  hint.textContent =
+    'Swipe left if you dare 😈';
+
   container.append(hint);
 }
 
 /* LOAD CONFIGURATION */
+
 async function loadPublished(){
   try{
     const response = await fetch(
@@ -1424,6 +1975,7 @@ async function loadPublished(){
     }
 
     const published = await response.json();
+
     config = {...DEFAULT,...published};
 
     setText(
@@ -1479,36 +2031,55 @@ async function loadPublished(){
   }catch(error){
     setText(
       'configStatus',
-      'Could not load game-config.json: '+error.message
+      'Could not load game-config.json: '+
+      error.message
     );
   }
 
   try{
     await board();
   }catch(error){
-    console.warn('Leaderboard refresh:',error);
+    console.warn(
+      'Leaderboard refresh:',
+      error
+    );
   }
 }
 
 /* START GAME */
+
 function begin(){
   const input = $('playerName');
   const name = input.value.trim();
 
   if(!name){
-    setText('nameHint','Please enter your username first.');
+    setText(
+      'nameHint',
+      'Please enter your username first.'
+    );
+
     input.focus();
     return;
   }
 
-  if(playerName||finished||endingStarted) return;
+  if(
+    playerName ||
+    finished ||
+    endingStarted
+  ){
+    return;
+  }
 
   playerName = name;
 
   $('home').classList.add('hidden');
   $('game').classList.remove('hidden');
 
-  setText('soldierName','Soldier: '+playerName);
+  setText(
+    'soldierName',
+    'Soldier: '+playerName
+  );
+
   setText('status','');
 
   roll();
@@ -1519,6 +2090,7 @@ function getSlide(id){
 }
 
 /* REROLL LOCK */
+
 function clearRerollTimer(){
   if(rerollUnlockTimer!==null){
     clearTimeout(rerollUnlockTimer);
@@ -1549,22 +2121,36 @@ function validDestination(slide){
 }
 
 /* ACTION BUTTON */
+
 function setAction(mode){
-  const consequences = mode==='consequence';
+  const consequences =
+    mode==='consequence';
 
-  $('roll').classList.toggle('hidden',consequences);
-  $('accept').classList.toggle('hidden',!consequences);
+  $('roll').classList.toggle(
+    'hidden',
+    consequences
+  );
 
-  $('roll').textContent = '🎲 Roll Again';
+  $('accept').classList.toggle(
+    'hidden',
+    !consequences
+  );
+
+  $('roll').textContent =
+    '🎲 Roll Again';
+
   $('accept').textContent =
     '⚡ Show Me My Consequences';
 }
 
 /* DISPLAY SLIDE */
+
 function showSlide(slide){
   if(endingStarted) return;
 
+  closeDarePopup();
   clearRerollTimer();
+
   current = slide;
 
   $('slideArea').classList.remove('hidden');
@@ -1575,12 +2161,19 @@ function showSlide(slide){
   );
 
   /* TITLE -> GALLERY -> DESCRIPTION */
+
   const firstMedia =
     typeof slide.media==='string'
-      ? {url:slide.media,type:slide.type||''}
+      ? {
+          url:slide.media,
+          type:slide.type||''
+        }
       : slide.media;
 
-  showMedia('slideMedia',firstMedia);
+  showMedia(
+    'slideMedia',
+    firstMedia
+  );
 
   setText(
     'slideDescription',
@@ -1595,8 +2188,10 @@ function showSlide(slide){
   );
 
   /* WINNER SLIDE */
+
   if(slide.id===16){
     setAction('roll');
+
     rollLocked = true;
     $('roll').disabled = true;
 
@@ -1606,6 +2201,7 @@ function showSlide(slide){
     );
 
     setText('rollHint','');
+
     finishGame(true,false);
     return;
   }
@@ -1613,7 +2209,10 @@ function showSlide(slide){
   const target = validDestination(slide);
   const required = isRequiredConsequence(slide);
 
-  setAction(required?'consequence':'roll');
+  setAction(
+    required?'consequence':'roll'
+  );
+
   $('accept').disabled = !target;
 
   if(required){
@@ -1647,7 +2246,8 @@ function showSlide(slide){
   );
 
   const lockSeconds = Math.max(
-    0,Number(slide.rerollLockSeconds)||0
+    0,
+    Number(slide.rerollLockSeconds)||0
   );
 
   if(lockSeconds>0){
@@ -1656,17 +2256,26 @@ function showSlide(slide){
 
     setText(
       'rollHint',
-      'Reroll locked for '+lockSeconds+' seconds.'
+      'Reroll locked for '+
+      lockSeconds+
+      ' seconds.'
     );
 
     rerollUnlockTimer = setTimeout(()=>{
       rerollUnlockTimer = null;
 
-      if(finished||endingStarted||doublesPending) return;
+      if(
+        finished ||
+        endingStarted ||
+        doublesPending
+      ){
+        return;
+      }
 
       rollLocked = false;
       $('roll').disabled = false;
       setText('rollHint','');
+
     },lockSeconds*1000);
 
   }else{
@@ -1677,8 +2286,16 @@ function showSlide(slide){
 }
 
 /* DOUBLES POPUP */
+
 function showDoubles(originalRoll,target){
-  if(doublesPending||endingStarted) return;
+  if(
+    doublesPending ||
+    endingStarted
+  ){
+    return;
+  }
+
+  closeDarePopup();
 
   doublesPending = true;
   doublesTarget = target;
@@ -1688,8 +2305,15 @@ function showDoubles(originalRoll,target){
   $('finish').disabled = true;
   $('tapOut').disabled = true;
 
-  setText('doublesOriginal',originalRoll);
-  setText('doublesResult',target.id);
+  setText(
+    'doublesOriginal',
+    originalRoll
+  );
+
+  setText(
+    'doublesResult',
+    target.id
+  );
 
   setText(
     'doublesDestination',
@@ -1699,6 +2323,7 @@ function showDoubles(originalRoll,target){
   );
 
   $('doublesOverlay').classList.remove('hidden');
+
   document.body.classList.add('popupOpen');
 
   const start = Date.now();
@@ -1730,6 +2355,7 @@ function showDoubles(originalRoll,target){
 
     $('doublesProgress').style.width =
       (remaining/DOUBLES_DISPLAY_MS*100)+'%';
+
   },100);
 
   doublesTimeout = setTimeout(
@@ -1739,7 +2365,12 @@ function showDoubles(originalRoll,target){
 }
 
 function continueDoubles(){
-  if(!doublesPending||!doublesTarget) return;
+  if(
+    !doublesPending ||
+    !doublesTarget
+  ){
+    return;
+  }
 
   const target = doublesTarget;
 
@@ -1752,6 +2383,7 @@ function continueDoubles(){
   doublesTarget = null;
 
   $('doublesOverlay').classList.add('hidden');
+
   document.body.classList.remove('popupOpen');
 
   $('finish').disabled = false;
@@ -1762,25 +2394,36 @@ function continueDoubles(){
 }
 
 /* ROLL D12 */
+
 function roll(){
   if(
-    finished||
-    endingStarted||
-    rollLocked||
-    doublesPending
-  ) return;
+    finished ||
+    endingStarted ||
+    rollLocked ||
+    doublesPending ||
+    darePending
+  ){
+    return;
+  }
 
   if(!startedAt){
     startedAt = Date.now();
-    tick = setInterval(updateClock,250);
+
+    tick = setInterval(
+      updateClock,
+      250
+    );
   }
 
-  const number = Math.floor(Math.random()*12)+1;
+  const number =
+    Math.floor(Math.random()*12)+1;
+
   rollCount++;
 
   setText('die',number);
 
-  const doubledSlide = getSlide(number*2);
+  const doubledSlide =
+    getSlide(number*2);
 
   const canDouble =
     rollCount>=DOUBLES_START_ROLL &&
@@ -1790,7 +2433,11 @@ function roll(){
     canDouble &&
     Math.random()<DOUBLES_CHANCE
   ){
-    showDoubles(number,doubledSlide);
+    showDoubles(
+      number,
+      doubledSlide
+    );
+
     updateClock();
     return;
   }
@@ -1799,11 +2446,16 @@ function roll(){
 
   if(slide){
     showSlide(slide);
+
   }else{
+    closeDarePopup();
+
     current = null;
+
     $('slideArea').classList.add('hidden');
 
     setAction('roll');
+
     rollLocked = false;
     $('roll').disabled = false;
 
@@ -1817,14 +2469,18 @@ function roll(){
 }
 
 /* CONSEQUENCES */
+
 function accept(){
   if(
-    !current||
-    finished||
-    endingStarted||
-    doublesPending||
+    !current ||
+    finished ||
+    endingStarted ||
+    doublesPending ||
+    darePending ||
     !isRequiredConsequence(current)
-  ) return;
+  ){
+    return;
+  }
 
   const target = validDestination(current);
 
@@ -1833,6 +2489,7 @@ function accept(){
       'rollHint',
       'No valid consequence destination configured.'
     );
+
     return;
   }
 
@@ -1840,17 +2497,28 @@ function accept(){
 }
 
 /* POPUP HELPERS */
+
 function openPopup(id){
   $(id).classList.remove('hidden');
+
   document.body.classList.add('popupOpen');
 }
 
 function closePopup(id){
   $(id).classList.add('hidden');
-  document.body.classList.remove('popupOpen');
+
+  if(
+    !document.querySelector(
+      '.overlay:not(.hidden)'
+    ) &&
+    $('d12DareOverlay').classList.contains('hidden')
+  ){
+    document.body.classList.remove('popupOpen');
+  }
 }
 
 /* HUNT SUCCESS */
+
 function showHuntSuccess(){
   if(!current) return;
 
@@ -1884,11 +2552,15 @@ function showHuntSuccess(){
 }
 
 /* REDDIT SHARING */
+
 function shareToReddit(textId,title){
   const post = $(textId).value.trim();
 
   if(!post){
-    alert('Please enter a message to share.');
+    alert(
+      'Please enter a message to share.'
+    );
+
     $(textId).focus();
     return;
   }
@@ -1905,8 +2577,12 @@ function shareToReddit(textId,title){
 }
 
 /* WINNER */
+
 function showWinnerCelebration(){
-  setText('winnerTime',fmt(elapsed));
+  setText(
+    'winnerTime',
+    fmt(elapsed)
+  );
 
   $('winnerPost').value =
     '🏆 I survived the NNN Challenge!\n\n'+
@@ -1920,6 +2596,7 @@ function showWinnerCelebration(){
 }
 
 /* TAP OUT */
+
 function showTapOutCelebration(){
   setText(
     'tapTime',
@@ -1942,27 +2619,39 @@ function showTapOutCelebration(){
 }
 
 /* FINISH GAME */
+
 function finishGame(won=false,tappedOut=false){
   if(
-    finished||
-    endingStarted||
-    saving||
-    scoreSaved||
-    doublesPending
-  ) return;
+    finished ||
+    endingStarted ||
+    saving ||
+    scoreSaved ||
+    doublesPending ||
+    darePending
+  ){
+    return;
+  }
 
-  if(!current&&!tappedOut) return;
+  if(
+    !current &&
+    !tappedOut
+  ){
+    return;
+  }
 
   finishKind = tappedOut
     ? 'tapped_out'
     : (
-        won||current.id===16
+        won || current.id===16
           ? 'winner'
           : 'ruined'
       );
 
   updateClock();
+
   endingStarted = true;
+
+  closeDarePopup();
 
   clearInterval(tick);
   clearRerollTimer();
@@ -1972,12 +2661,17 @@ function finishGame(won=false,tappedOut=false){
   $('finish').disabled = true;
   $('tapOut').disabled = true;
 
-  setText('status','Saving your Survival Time…');
+  setText(
+    'status',
+    'Saving your Survival Time…'
+  );
 
   if(finishKind==='ruined'){
     showHuntSuccess();
+
   }else if(finishKind==='winner'){
     showWinnerCelebration();
+
   }else{
     showTapOutCelebration();
   }
@@ -1986,12 +2680,17 @@ function finishGame(won=false,tappedOut=false){
 }
 
 /* LOCAL SCORES */
+
 function localScores(){
   try{
     const rows = JSON.parse(
       localStorage.getItem('d12_scores_v5')||'[]'
     );
-    return Array.isArray(rows)?rows:[];
+
+    return Array.isArray(rows)
+      ? rows
+      : [];
+
   }catch(error){
     return [];
   }
@@ -1999,15 +2698,21 @@ function localScores(){
 
 function safeCell(row,value){
   const cell = document.createElement('td');
+
   cell.textContent = String(value??'');
+
   row.append(cell);
 }
 
 function isTappedOut(record){
-  return record.featured_reddit_user===TAP_OUT_MARKER;
+  return (
+    record.featured_reddit_user===
+    TAP_OUT_MARKER
+  );
 }
 
 /* LEADERBOARDS */
+
 function renderBoards(rows){
   const soldier = $('soldierRows');
   const hunter = $('hunterRows');
@@ -2026,8 +2731,10 @@ function renderBoards(rows){
   if(!sorted.length){
     const row = document.createElement('tr');
     const cell = document.createElement('td');
+
     cell.colSpan = 4;
     cell.textContent = 'No scores yet.';
+
     row.append(cell);
     soldier.append(row);
   }
@@ -2035,15 +2742,25 @@ function renderBoards(rows){
   for(const record of sorted){
     const row = document.createElement('tr');
 
-    safeCell(row,record.name||'Anonymous');
-    safeCell(row,fmt(record.duration_ms||0));
+    safeCell(
+      row,
+      record.name||'Anonymous'
+    );
+
+    safeCell(
+      row,
+      fmt(record.duration_ms||0)
+    );
 
     const result = isTappedOut(record)
       ? 'Tapped Out'
       : record.result==='winner'
         ? 'Winner'
         : 'Finished by '+
-          (record.featured_reddit_user||'Unassigned');
+          (
+            record.featured_reddit_user||
+            'Unassigned'
+          );
 
     safeCell(row,result);
 
@@ -2051,7 +2768,9 @@ function renderBoards(rows){
       row,
       isTappedOut(record)
         ? '—'
-        : (record.ending_slide??'—')
+        : (
+            record.ending_slide??'—'
+          )
     );
 
     soldier.append(row);
@@ -2061,40 +2780,52 @@ function renderBoards(rows){
 
   for(const record of rows){
     if(
-      record.result==='winner'||
-      isTappedOut(record)||
+      record.result==='winner' ||
+      isTappedOut(record) ||
       !record.featured_reddit_user
-    ) continue;
+    ){
+      continue;
+    }
 
     const name = String(
       record.featured_reddit_user
     ).trim();
 
-    counts.set(name,(counts.get(name)||0)+1);
+    counts.set(
+      name,
+      (counts.get(name)||0)+1
+    );
   }
 
   const ranked = [...counts].sort(
-    (a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])
+    (a,b)=>
+      b[1]-a[1] ||
+      a[0].localeCompare(b[0])
   );
 
   if(!ranked.length){
     const row = document.createElement('tr');
     const cell = document.createElement('td');
+
     cell.colSpan = 2;
     cell.textContent = 'No hunter claims yet.';
+
     row.append(cell);
     hunter.append(row);
   }
 
   for(const [name,count] of ranked){
     const row = document.createElement('tr');
+
     safeCell(row,name);
     safeCell(row,count);
+
     hunter.append(row);
   }
 }
 
 /* REFRESH LEADERBOARDS */
+
 async function board(){
   try{
     let rows;
@@ -2111,6 +2842,7 @@ async function board(){
         'boardMode',
         'Public leaderboard · online'
       );
+
     }else{
       rows = localScores();
 
@@ -2120,25 +2852,38 @@ async function board(){
       );
     }
 
-    renderBoards(Array.isArray(rows)?rows:[]);
+    renderBoards(
+      Array.isArray(rows)?rows:[]
+    );
 
   }catch(error){
     setText(
       'boardMode',
-      'Leaderboard unavailable: '+error.message
+      'Leaderboard unavailable: '+
+      error.message
     );
+
     throw error;
   }
 }
 
 /* SAVE SCORE */
+
 async function saveScore(){
-  if(saving||scoreSaved||!endingStarted) return;
+  if(
+    saving ||
+    scoreSaved ||
+    !endingStarted
+  ){
+    return;
+  }
 
   saving = true;
+
   $('retrySave').classList.add('hidden');
 
-  const tappedOut = finishKind==='tapped_out';
+  const tappedOut =
+    finishKind==='tapped_out';
 
   const endingSlide = tappedOut
     ? (current?current.id:1)
@@ -2146,25 +2891,43 @@ async function saveScore(){
 
   const record = {
     name:playerName,
-    duration_ms:Math.max(100,Math.round(elapsed)),
-    result:tappedOut?'ruined':finishKind,
+
+    duration_ms:Math.max(
+      100,
+      Math.round(elapsed)
+    ),
+
+    result:
+      tappedOut
+        ? 'ruined'
+        : finishKind,
+
     ending_slide:endingSlide,
-    featured_reddit_user:tappedOut
-      ? TAP_OUT_MARKER
-      : finishKind==='winner'
-        ? null
-        : (current.redditUser||null)
+
+    featured_reddit_user:
+      tappedOut
+        ? TAP_OUT_MARKER
+        : finishKind==='winner'
+          ? null
+          : (current.redditUser||null)
   };
 
   try{
     if(online()){
-      await request('d12_scores',{
-        method:'POST',
-        headers:{Prefer:'return=minimal'},
-        body:JSON.stringify(record)
-      });
+      await request(
+        'd12_scores',
+        {
+          method:'POST',
+          headers:{
+            Prefer:'return=minimal'
+          },
+          body:JSON.stringify(record)
+        }
+      );
+
     }else{
       const rows = localScores();
+
       rows.push(record);
 
       localStorage.setItem(
@@ -2178,10 +2941,12 @@ async function saveScore(){
 
     setText(
       'status',
-      'Score could not be saved: '+error.message
+      'Score could not be saved: '+
+      error.message
     );
 
     $('retrySave').classList.remove('hidden');
+
     return;
   }
 
@@ -2194,7 +2959,10 @@ async function saveScore(){
     : finishKind==='winner'
       ? 'Winner!'
       : 'Finished by '+
-        (current.redditUser||'Unassigned');
+        (
+          current.redditUser||
+          'Unassigned'
+        );
 
   setText(
     'status',
@@ -2207,25 +2975,47 @@ async function saveScore(){
   try{
     await board();
   }catch(error){
-    console.warn('Leaderboard refresh failed:',error);
+    console.warn(
+      'Leaderboard refresh failed:',
+      error
+    );
   }
 }
 
 /* BUTTON EVENTS */
-$('start').addEventListener('click',begin);
-$('roll').addEventListener('click',roll);
-$('accept').addEventListener('click',accept);
+
+$('start').addEventListener(
+  'click',
+  begin
+);
+
+$('roll').addEventListener(
+  'click',
+  roll
+);
+
+$('accept').addEventListener(
+  'click',
+  accept
+);
+
 $('finish').addEventListener(
   'click',
   ()=>finishGame(false,false)
 );
+
 $('tapOut').addEventListener(
   'click',
   ()=>finishGame(false,true)
 );
-$('retrySave').addEventListener('click',saveScore);
+
+$('retrySave').addEventListener(
+  'click',
+  saveScore
+);
 
 /* REDDIT BUTTONS */
+
 $('shareReddit').addEventListener(
   'click',
   ()=>shareToReddit(
@@ -2233,6 +3023,7 @@ $('shareReddit').addEventListener(
     'D12 NNN Challenge - Successfully Hunted'
   )
 );
+
 $('shareVictory').addEventListener(
   'click',
   ()=>shareToReddit(
@@ -2240,6 +3031,7 @@ $('shareVictory').addEventListener(
     '🏆 I Survived the D12 NNN Challenge!'
   )
 );
+
 $('shareTap').addEventListener(
   'click',
   ()=>shareToReddit(
@@ -2249,28 +3041,35 @@ $('shareTap').addEventListener(
 );
 
 /* CLOSE POPUPS */
+
 $('closeHunt').addEventListener(
   'click',
   ()=>closePopup('huntOverlay')
 );
+
 $('closeWinner').addEventListener(
   'click',
   ()=>closePopup('winnerOverlay')
 );
+
 $('closeTap').addEventListener(
   'click',
   ()=>closePopup('tapOverlay')
 );
 
 /* USERNAME ENTER KEY */
+
 $('playerName').addEventListener(
   'keydown',
   event=>{
-    if(event.key==='Enter') begin();
+    if(event.key==='Enter'){
+      begin();
+    }
   }
 );
 
 /* INITIALIZE */
+
 loadPublished();
 
 </script>
