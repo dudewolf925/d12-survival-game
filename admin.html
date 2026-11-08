@@ -3,768 +3,203 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>D12 Admin Studio — Black Edition</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>D12 Admin Studio</title>
 <style>
 *{box-sizing:border-box}
-
-:root{
-  font-family:system-ui,-apple-system,sans-serif;
-  color-scheme:dark;
-  --bg:#000000;
-  --panel:#171717;
-  --edge:#666666;
-  --text:#f8f8f8;
-  --muted:#c5c5c5;
-  --green:#16803c;
-  --red:#b42335;
-}
-
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-}
-
-main{
-  max-width:850px;
-  margin:auto;
-  padding:16px 14px 50px;
-}
-
-h1{
-  font-size:clamp(27px,7vw,36px);
-  text-align:center;
-  margin:15px 0 6px;
-}
-
-h2{
-  font-size:21px;
-  margin-top:0;
-}
-
-p,small{
-  color:var(--muted);
-  line-height:1.5;
-}
-
-.subtitle{
-  text-align:center;
-  margin-bottom:25px;
-}
-
-section{
-  background:var(--panel);
-  border:1px solid var(--edge);
-  border-radius:18px;
-  padding:17px;
-  margin:15px 0;
-  box-shadow:0 8px 25px #0008;
-}
-
-label{
-  display:block;
-  margin:14px 0;
-  font-size:14px;
-  color:#eeeeee;
-  font-weight:600;
-}
-
-input,textarea,select{
-  display:block;
-  width:100%;
-  margin-top:6px;
-  padding:12px;
-  background:#101010;
-  border:1px solid #888888;
-  border-radius:10px;
-  color:white;
-  font:inherit;
-}
-
-input:focus,textarea:focus,select:focus{
-  outline:2px solid #74d99a;
-  outline-offset:1px;
-}
-
-input[type=checkbox]{
-  display:inline-block;
-  width:21px;
-  height:21px;
-  margin:0 8px 0 0;
-  vertical-align:middle;
-  accent-color:#16803c;
-}
-
-.checkboxLabel{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:12px;
-  background:#101010;
-  border:1px solid #666666;
-  border-radius:10px;
-}
-
-.checkboxLabel input{
-  flex:0 0 auto;
-  margin:0;
-}
-
-textarea{
-  min-height:90px;
-  resize:vertical;
-}
-
-button{
-  background:#333333;
-  border:1px solid #999999;
-  border-radius:10px;
-  color:white;
-  padding:12px;
-  font:600 15px system-ui;
-  cursor:pointer;
-  min-height:46px;
-}
-
-button.primary{
-  background:var(--green);
-  border-color:#5ad783;
-  color:#ffffff;
-  font-weight:800;
-}
-
-button.active{
-  background:#eeeeee;
-  color:#111111;
-  border-color:#ffffff;
-  font-weight:900;
-}
-
-button.danger{
-  background:var(--red);
-  border-color:#ed6575;
-  color:white;
-  font-weight:800;
-}
-
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
-
-.actions button{
-  flex:1;
-  min-width:130px;
-}
-
-.slides{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:7px;
-}
-
-.slides button{
-  padding:10px 3px;
-}
-
-.preview{
-  height:260px;
-  background:#080808;
-  border:1px solid #666666;
-  border-radius:15px;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-  color:#aaaaaa;
-  text-align:center;
-}
-
-.preview img,.preview video{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.notice{
-  white-space:pre-wrap;
-  color:#eeeeee;
-  overflow-wrap:anywhere;
-}
-
-.warning{
-  color:#ffb8c3;
-}
-
-.success{
-  color:#a8f0bc;
-}
-
-.sectionHint{
-  font-size:13px;
-  color:#bbbbbb;
-}
-
-.editorHeading{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin:18px 0 5px;
-}
-
-.slideBadge{
-  border:1px solid #999999;
-  border-radius:20px;
-  padding:5px 12px;
-  font-size:13px;
-  font-weight:800;
-  color:white;
-  background:#333333;
-}
-
-.consequencePanel{
-  margin:18px 0;
-  padding:14px;
-  border:1px solid #777777;
-  border-radius:14px;
-  background:#101010;
-}
-
-.consequencePanel h3{
-  margin:0 0 8px;
-  font-size:18px;
-}
-
-.buttonPreview{
-  background:#080808;
-  border:1px solid #777777;
-  border-radius:16px;
-  padding:15px;
-  margin-top:15px;
-}
-
-.buttonPreview h3{
-  margin:0 0 8px;
-  font-size:18px;
-}
-
-.previewButton{
-  display:block;
-  width:100%;
-  text-align:center;
-  border-radius:12px;
-  padding:14px 10px;
-  font-size:17px;
-  font-weight:800;
-  margin:10px 0;
-  color:white;
-}
-
-.previewGreen{
-  background:#16803c;
-  border:1px solid #5ad783;
-}
-
-.previewRed{
-  background:#b42335;
-  border:1px solid #ff6174;
-}
-
-.previewBlack{
-  background:#000000;
-  border:2px solid #ffffff;
-}
-
-.previewCaption{
-  font-size:12px;
-  color:#bbbbbb;
-  text-align:center;
-  margin:4px 0 12px;
-}
-
-.statusLine{
-  color:#cccccc;
-  font-size:13px;
-}
-
-.divider{
-  height:1px;
-  background:#555555;
-  margin:16px 0;
-}
-
-.cashAppPreview{
-  display:block;
-  background:#00D632;
-  color:#111111;
-  padding:15px;
-  border-radius:12px;
-  font-size:17px;
-  font-weight:800;
-  text-align:center;
-  text-decoration:none;
-}
-
+:root{font-family:system-ui,-apple-system,sans-serif;color-scheme:dark}
+body{margin:0;background:#000;color:#f8f8f8}
+main{max-width:850px;margin:auto;padding:16px}
+h1{font-size:28px;margin-bottom:4px}
+h2{font-size:20px;margin-top:0}
+p,small{color:#c5c5c5;line-height:1.5}
+section{background:#171717;border:1px solid #666;border-radius:17px;padding:17px;margin:15px 0}
+label{display:block;margin:14px 0;font-size:14px;color:#eee}
+input,textarea,select{display:block;width:100%;margin-top:6px;padding:12px;background:#101010;border:1px solid #888;border-radius:10px;color:white;font:inherit}
+input[type=checkbox]{display:inline;width:auto}
+textarea{min-height:90px}
+button{background:#333;border:1px solid #999;border-radius:12px;color:white;padding:12px;font:inherit;cursor:pointer}
+button.primary,button.active{background:#16803c;border-color:#5ad783;color:white;font-weight:bold}
+button.danger{background:#b42335;border-color:#ff6174;color:white;font-weight:bold}
+button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.slides{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.preview{height:260px;background:#080808;border:1px solid #666;border-radius:12px;display:grid;place-items:center;overflow:hidden}
+.preview img,.preview video{width:100%;height:100%;object-fit:contain}
+.preview iframe{width:100%;height:100%;border:0}
+.mediaHelp{color:#c5c5c5;font-size:13px;line-height:1.5}
+.notice{white-space:pre-wrap;color:#eee}
+.warning{color:#ffb8c3}
+.success{color:#a8f0bc}
+.gameMock{border:1px solid #666;border-radius:17px;padding:15px;background:#171717;max-width:520px;margin:auto}
+.mockStats{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #555;padding-bottom:13px;margin-bottom:15px}
+.mockTimer{font-size:27px;font-weight:800;font-variant-numeric:tabular-nums}
+.mockCaption{font-size:11px;color:#c5c5c5}
+.mockDie{background:#0d0d0d;border:1px solid #666;border-radius:12px;padding:5px 16px;text-align:center}
+.mockDieNumber{font-size:38px;line-height:1.1;font-weight:900}
+.mockTitle{text-align:center;font-size:25px;margin:8px 0 15px;overflow-wrap:anywhere}
+.mockMedia{width:100%;min-height:160px;background:#080808;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa}
+.mockMedia img,.mockMedia video{display:block;width:100%;max-height:390px;object-fit:contain}
+.mockMedia iframe{width:100%;height:350px;border:0}
+.mockDescription{white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.65;margin:15px 0}
+.mockHunter{color:#ccc;text-align:center;font-size:13px}
+.mockControls{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid #555}
+.mockControls button{width:100%;font-weight:700;font-size:17px;padding:15px 12px;pointer-events:none}
+.mockRoll{background:#16803c;border-color:#5ad783}
+.mockCame{background:#b42335;border-color:#ff6174}
+.mockTap{background:#000;border:2px solid #eee}
 @media(max-width:500px){
-  .slides{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
-
-  section{
-    padding:14px;
-  }
+.slides{grid-template-columns:repeat(4,1fr)}
+main{padding:12px}
+.gameMock{padding:12px}
 }
 </style>
 </head>
-
 <body>
 <main>
-
-<h1>🎲 D12 ADMIN STUDIO</h1>
-
-<p class="subtitle">
-  🖤 Black Edition · Slide Editor & Publishing
-</p>
-
-<p class="subtitle">
-  Edit your game on your iPhone and publish changes
-  directly to GitHub using your secure Supabase connection.
-  Saved drafts are preserved when checking GitHub.
-</p>
-
-<!-- GAME SETTINGS -->
+<h1>🎲 D12 Admin Studio</h1>
+<p>Edit your game on your iPhone and publish changes directly to GitHub using your secure Supabase connection. Saved drafts are preserved when checking GitHub.</p>
 
 <section>
-  <h2>⚙️ Game Settings</h2>
-
-  <label>
-    Game title
-    <input id="title">
-  </label>
-
-  <label>
-    Home heading
-    <input id="introTitle">
-  </label>
-
-  <label>
-    Home message
-    <textarea id="introText"></textarea>
-  </label>
-
-  <label>
-    Home image URL
-    <input id="homeImageUrl" placeholder="https://...">
-  </label>
-
-  <label>
-    Choose home photo
-    <input id="homeFile" type="file" accept="image/*">
-  </label>
-
-  <div class="preview" id="homePreview"></div>
-
-  <p class="sectionHint">
-    Hosted image URLs are recommended. Embedded media
-    can make your configuration too large to publish.
-  </p>
+<h2>Game settings</h2>
+<label>Game title<input id="title"></label>
+<label>Home heading<input id="introTitle"></label>
+<label>Home message<textarea id="introText"></textarea></label>
+<label>Home image URL<input id="homeImageUrl" placeholder="https://..."></label>
+<label>Choose home photo<input id="homeFile" type="file" accept="image/*"></label>
+<div class="preview" id="homePreview"></div>
+<small>Hosted image URLs are recommended. Embedded media can make your configuration too large to publish.</small>
 </section>
 
-<!-- SLIDES -->
-
 <section>
-  <h2>🎲 Slide Editor</h2>
+<h2>Slides</h2>
+<p>D12 rolls select slides 1–12. Consequence branches can lead to slides 13–24. Slide 16 is the winning slide.</p>
+<div class="slides" id="slideButtons"></div>
+<label>Slide title<input id="slideTitle"></label>
+<label>Description<textarea id="description"></textarea></label>
+<label>Featured Reddit Hunter<input id="redditUser" placeholder="u/username"></label>
+<label>Media type
+<select id="type">
+<option value="placeholder">Placeholder</option>
+<option value="image">Image</option>
+<option value="video">Video</option>
+</select>
+</label>
+<label>Media URL (RedGIFs, Imgur, direct image or video)
+<input id="url" placeholder="https://www.redgifs.com/watch/... or https://imgur.com/...">
+</label>
+<p class="mediaHelp">Paste a RedGIFs watch link, an Imgur post/album link, or a direct image/video URL. The game detects the media automatically. Embedded players depend on the provider allowing playback.</p>
+<label>Choose slide photo or video
+<input id="slideFile" type="file" accept="image/*,video/*">
+</label>
+<div class="preview" id="preview"></div>
 
-  <p>
-    D12 rolls select slides 1–12.
-    Consequence branches can lead to slides 13–24.
-    Slide 16 is the winning slide.
-  </p>
+<h3>Live Game Layout Preview</h3>
+<p class="mediaHelp">Updates as you edit this slide. The buttons show the actual game layout; they do not play the game here.</p>
 
-  <div class="slides" id="slideButtons"></div>
-
-  <div class="editorHeading">
-    <h2 style="margin:0">Edit Selected Slide</h2>
-    <span class="slideBadge" id="selectedSlideBadge">
-      Slide 1
-    </span>
-  </div>
-
-  <label>
-    Slide title
-    <input id="slideTitle">
-  </label>
-
-  <label>
-    Description
-    <textarea id="description"></textarea>
-  </label>
-
-  <label>
-    Featured Reddit Hunter
-    <input id="redditUser" placeholder="u/username">
-  </label>
-
-  <label>
-    Media type
-    <select id="type">
-      <option value="placeholder">Placeholder</option>
-      <option value="image">Image</option>
-      <option value="video">Video</option>
-    </select>
-  </label>
-
-  <label>
-    Image or video URL
-    <input id="url" placeholder="https://...">
-  </label>
-
-  <label>
-    Choose slide photo or video
-    <input
-      id="slideFile"
-      type="file"
-      accept="image/*,video/*"
-    >
-  </label>
-
-  <div class="preview" id="preview"></div>
-
-  <!-- CONSEQUENCE CONTROLS -->
-
-  <div class="consequencePanel">
-
-    <h3>⚡ Consequence Settings</h3>
-
-    <p class="sectionHint">
-      Control whether the player rolls again or
-      must advance to another slide.
-    </p>
-
-    <label class="checkboxLabel">
-      <input type="checkbox" id="consequence">
-      <span>Require Consequences</span>
-    </label>
-
-    <p class="sectionHint" id="consequenceHelp">
-      When enabled, the green button changes to
-      Show Me My Consequences.
-    </p>
-
-    <label>
-      Consequence destination
-      <select id="destination"></select>
-    </label>
-
-    <label>
-      Reroll lockout in seconds
-      <input
-        id="rerollLockSeconds"
-        type="number"
-        min="0"
-        max="86400"
-      >
-    </label>
-
-    <p class="sectionHint">
-      The reroll lockout applies to normal rolls.
-      Required consequences stay mandatory until
-      the player advances.
-    </p>
-
-  </div>
-
-  <!-- LIVE BUTTON PREVIEW -->
-
-  <div class="buttonPreview">
-
-    <h3>👀 Live Game Button Preview</h3>
-
-    <p class="sectionHint">
-      This preview updates when you change the
-      selected slide's settings.
-    </p>
-
-    <div
-      id="actionPreview"
-      class="previewButton previewGreen"
-    >
-      🎲 Roll Again
+<div class="gameMock">
+  <div class="mockStats">
+    <div>
+      <div class="mockTimer">00:03:42</div>
+      <div class="mockCaption">Survival Time</div>
     </div>
-
-    <p
-      id="actionPreviewDescription"
-      class="previewCaption"
-    >
-      Normal slide — player can roll again.
-    </p>
-
-    <div class="divider"></div>
-
-    <div class="previewButton previewRed">
-      💦 I Nutted 💦
+    <div class="mockDie">
+      <div class="mockDieNumber" id="mockDie">1</div>
+      <div class="mockCaption">D12 Roll</div>
     </div>
-
-    <p class="previewCaption">
-      Red button — triggers Hunt Success.
-    </p>
-
-    <div class="previewButton previewBlack">
-      🏳️ I'm Tapping Out 🏳️
-    </div>
-
-    <p class="previewCaption">
-      Black button with white flags —
-      triggers the Tap Out ending.
-    </p>
-
-    <p class="sectionHint">
-      The preview reflects your game's button design.
-      Button colors and ending labels are defined
-      in index.html.
-    </p>
-
   </div>
-
-  <div class="actions" style="margin-top:16px">
-    <button id="add" type="button">
-      + Add Bonus Slide
-    </button>
-
-    <button id="remove" type="button">
-      Remove Bonus Slide
-    </button>
+  <h3 class="mockTitle" id="mockTitle">Slide 1</h3>
+  <div class="mockMedia" id="mockMedia">No media selected</div>
+  <p class="mockDescription" id="mockDescription">Slide description</p>
+  <p class="mockHunter" id="mockHunter"></p>
+  <div class="mockControls">
+    <button class="mockRoll" id="mockRoll">🎲 Roll Again</button>
+    <button class="mockCame">💦 I Came 💦</button>
+    <button class="mockTap">🏳️ I'm Tapping Out 🏳️</button>
   </div>
+</div>
 
+<label><input type="checkbox" id="consequence"> Require Accept Consequences</label>
+<label>Consequence destination<select id="destination"></select></label>
+<label>Reroll lockout in seconds
+<input id="rerollLockSeconds" type="number" min="0" max="86400">
+</label>
+<div class="actions">
+<button id="add" type="button">Add bonus slide</button>
+<button id="remove" type="button">Remove bonus slide</button>
+</div>
 </section>
-
-<!-- SUPABASE -->
 
 <section>
-  <h2>🏆 Supabase Leaderboard</h2>
-
-  <p>
-    Enter only your public project URL and
-    publishable/anon key.
-    Never enter a secret or service_role key.
-  </p>
-
-  <label>
-    Supabase project URL
-    <input
-      id="supabaseUrl"
-      placeholder="https://project.supabase.co"
-    >
-  </label>
-
-  <label>
-    Supabase publishable / anon key
-    <input id="supabaseKey">
-  </label>
+<h2>Supabase leaderboard</h2>
+<p>Enter only your public project URL and publishable/anon key. Never enter a secret or service_role key.</p>
+<label>Supabase project URL<input id="supabaseUrl" placeholder="https://project.supabase.co"></label>
+<label>Supabase publishable / anon key<input id="supabaseKey"></label>
 </section>
-
-<!-- LEADERBOARD RESET -->
 
 <section>
-  <h2>🗑️ Reset Leaderboards</h2>
-
-  <p class="warning">
-    <strong>Danger zone:</strong>
-    This permanently deletes every saved player score.
-    The Soldier Leaderboard and Hunter Scoreboard
-    will both reset to empty.
-  </p>
-
-  <p>
-    Your game slides and configuration will not be deleted.
-  </p>
-
-  <label>
-    Admin reset password
-    <input
-      id="resetPassword"
-      type="password"
-      placeholder="Enter your private reset password"
-      autocomplete="off"
-    >
-  </label>
-
-  <button
-    id="resetLeaderboards"
-    class="danger"
-    type="button"
-  >
-    Reset Both Leaderboards
-  </button>
-
-  <p
-    id="resetNotice"
-    class="notice"
-    aria-live="polite"
-  ></p>
-
-  <small>
-    The password is sent only to your protected
-    Supabase function. It is not saved in your
-    game configuration.
-  </small>
+<h2>Reset Leaderboards</h2>
+<p class="warning"><strong>Danger zone:</strong> This permanently deletes every saved player score. The Soldier Leaderboard and Hunter Scoreboard will both reset to empty.</p>
+<p>Your game slides and configuration will not be deleted.</p>
+<label>Admin reset password
+<input id="resetPassword" type="password" placeholder="Enter your private reset password" autocomplete="off">
+</label>
+<button id="resetLeaderboards" class="danger" type="button">Reset Both Leaderboards</button>
+<p id="resetNotice" class="notice" aria-live="polite"></p>
+<small>The password is sent only to your protected Supabase function. It is not saved in your game configuration.</small>
 </section>
-
-<!-- GITHUB PUBLISHING -->
 
 <section>
-  <h2>🚀 Publish to GitHub</h2>
-
-  <p>
-    Your saved draft loads automatically.
-    Publishing saves your draft first, then checks
-    GitHub's version without replacing your edits.
-  </p>
-
-  <div class="actions">
-    <button id="loadGitHub" type="button">
-      Load from GitHub (replace editor)
-    </button>
-  </div>
-
-  <label>
-    Publishing password
-    <input
-      id="publishPassword"
-      type="password"
-      placeholder="Enter your private publishing password"
-      autocomplete="off"
-    >
-  </label>
-
-  <button
-    id="publishGitHub"
-    class="primary"
-    type="button"
-    style="width:100%"
-  >
-    🚀 Publish to GitHub
-  </button>
-
-  <p
-    id="publishNotice"
-    class="notice"
-    aria-live="polite"
-  ></p>
-
-  <small>
-    Your GitHub token stays securely in Supabase.
-    Your publishing password is never saved in
-    game-config.json.
-
-    If GitHub changed since your draft's known
-    version, publishing stops rather than
-    overwriting those changes.
-  </small>
+<h2>🚀 Publish to GitHub</h2>
+<p>Your saved draft loads automatically. Publishing saves your draft first, then checks GitHub's version without replacing your edits.</p>
+<div class="actions">
+<button id="loadGitHub" type="button">Load from GitHub (replace editor)</button>
+</div>
+<label>Publishing password
+<input id="publishPassword" type="password" placeholder="Enter your private publishing password" autocomplete="off">
+</label>
+<button id="publishGitHub" class="primary" type="button">🚀 Publish to GitHub</button>
+<p id="publishNotice" class="notice" aria-live="polite"></p>
+<small>Your GitHub token stays securely in Supabase. Your publishing password is never saved in game-config.json. If GitHub changed since your draft's known version, publishing stops rather than overwriting those changes.</small>
 </section>
-
-<!-- SAVE AND BACKUP -->
 
 <section>
-  <h2>💾 Save & Backup</h2>
-
-  <p>
-    Save Draft stores edits on this iPhone.
-    Publish to GitHub saves automatically.
-    Copy Configuration provides a manual backup.
-  </p>
-
-  <div class="actions">
-
-    <button
-      id="save"
-      class="primary"
-      type="button"
-    >
-      💾 Save Draft
-    </button>
-
-    <button id="copy" type="button">
-      Copy Configuration
-    </button>
-
-    <button id="reset" type="button">
-      Reset Defaults
-    </button>
-
-  </div>
-
-  <p
-    id="notice"
-    class="notice"
-    aria-live="polite"
-  ></p>
+<h2>Save and publish</h2>
+<p>Save Draft stores edits on this iPhone. Publish to GitHub saves automatically. Copy Configuration provides a manual backup.</p>
+<div class="actions">
+<button id="save" type="button">Save Draft</button>
+<button class="primary" id="copy" type="button">Copy Configuration</button>
+<button id="reset" type="button">Reset Defaults</button>
+</div>
+<p id="notice" class="notice" aria-live="polite"></p>
 </section>
-
-<!-- CASH APP PREVIEW -->
-
-<section style="text-align:center">
-  <h2>☕ Game Donation Button</h2>
-
-  <p>
-    Your game currently includes this
-    optional Cash App donation link.
-  </p>
-
-  <a
-    class="cashAppPreview"
-    href="https://cash.app/$dudewolfgame"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    ☕ Buy Me a Coffee — Cash App
-  </a>
-
-  <p class="sectionHint">
-    This link is defined in index.html.
-    It is shown here for reference.
-  </p>
-</section>
-
 </main>
-
 <script>
+
 'use strict';
 
-/* DEFAULT CONFIGURATION */
-
 const DEFAULT = {
-  title:"D12 Consequences",
-  introTitle:"Your fate awaits",
-  introText:"Roll the twelve-sided die to begin.",
-  homeImageUrl:"",
-  supabaseUrl:"",
-  supabaseKey:"",
-  slides:Array.from({length:24},(_,i)=>({
-    id:i+1,
-    title:"Outcome "+(i+1),
-    description:"Placeholder for slide "+(i+1),
-    type:"placeholder",
-    url:"",
-    redditUser:"",
-    consequence:false,
-    destination:1,
-    rerollLockSeconds:0
+  title: "D12 Consequences",
+  introTitle: "Your fate awaits",
+  introText: "Roll the twelve-sided die to begin.",
+  homeImageUrl: "",
+  supabaseUrl: "",
+  supabaseKey: "",
+  slides: Array.from({length: 24}, (_, i) => ({
+    id: i + 1,
+    title: "Outcome " + (i + 1),
+    description: "Placeholder for slide " + (i + 1),
+    type: "placeholder",
+    url: "",
+    redditUser: "",
+    consequence: false,
+    destination: 1,
+    rerollLockSeconds: 0
   }))
 };
 
 const el = id => document.getElementById(id);
-
-const clone = x =>
-  JSON.parse(JSON.stringify(x));
+const clone = value => JSON.parse(JSON.stringify(value));
 
 const DRAFT_KEY = "d12_config_v5";
 const SHA_KEY = "d12_github_sha_v1";
@@ -777,25 +212,22 @@ let selected = 1;
 let githubExpectedSha = null;
 let hasSavedDraft = false;
 
-/* LOAD SAVED IPHONE DRAFT */
-
 try {
   const stored = localStorage.getItem(DRAFT_KEY);
 
-  if(stored) {
+  if (stored) {
     const saved = JSON.parse(stored);
 
-    if(saved && Array.isArray(saved.slides)) {
+    if (saved && Array.isArray(saved.slides)) {
       cfg = saved;
       hasSavedDraft = true;
-
       githubExpectedSha =
         localStorage.getItem(SHA_KEY) || null;
     }
   }
-} catch(e) {}
-
-/* MESSAGES */
+} catch (error) {
+  console.warn("Could not restore saved draft:", error);
+}
 
 function message(text) {
   el("notice").textContent = text;
@@ -805,116 +237,216 @@ function publishMessage(text) {
   el("publishNotice").textContent = text;
 }
 
-/* SLIDE HELPERS */
-
 function slide() {
-  return cfg.slides.find(
-    s => s.id === selected
-  );
+  return cfg.slides.find(s => s.id === selected);
 }
 
-/* MEDIA PREVIEW */
+/* REDGIFS, IMGUR AND DIRECT MEDIA */
 
-function preview(id,type,url,fallback) {
+function resolveMedia(value, type) {
+  const url = String(value || "").trim();
+
+  if (!url) return null;
+
+  if (
+    /^data:(image|video)\//i.test(url) ||
+    /^blob:/i.test(url)
+  ) {
+    return {
+      kind: /^data:video\//i.test(url)
+        ? "video"
+        : "image",
+      url
+    };
+  }
+
+  let parsed;
+
+  try {
+    parsed = new URL(url);
+  } catch (error) {
+    return null;
+  }
+
+  if (!["https:", "http:"].includes(parsed.protocol)) {
+    return null;
+  }
+
+  const host = parsed.hostname
+    .toLowerCase()
+    .replace(/^www\./, "");
+
+  const parts = parsed.pathname
+    .split("/")
+    .filter(Boolean);
+
+  if (
+    host === "redgifs.com" ||
+    host === "v3.redgifs.com"
+  ) {
+    const id =
+      parts[0] === "watch" ||
+      parts[0] === "ifr"
+        ? parts[1]
+        : null;
+
+    if (id && /^[a-z0-9-]+$/i.test(id)) {
+      return {
+        kind: "embed",
+        url: "https://www.redgifs.com/ifr/" + id,
+        original: url
+      };
+    }
+  }
+
+  if (
+    host === "imgur.com" ||
+    host === "m.imgur.com"
+  ) {
+    if (
+      parts[0] === "a" ||
+      parts[0] === "gallery"
+    ) {
+      const id = parts[1];
+
+      if (id && /^[a-z0-9]+$/i.test(id)) {
+        return {
+          kind: "embed",
+          url:
+            "https://imgur.com/" +
+            (parts[0] === "a" ? "a/" : "gallery/") +
+            id +
+            "/embed",
+          original: url
+        };
+      }
+    }
+
+    const id = parts[0];
+
+    if (id && /^[a-z0-9]+$/i.test(id)) {
+      return {
+        kind: "embed",
+        url: "https://imgur.com/" + id + "/embed",
+        original: url
+      };
+    }
+  }
+
+  if (
+    host === "i.imgur.com" &&
+    /\.gifv$/i.test(parsed.pathname)
+  ) {
+    parsed.pathname = parsed.pathname.replace(
+      /\.gifv$/i,
+      ".mp4"
+    );
+
+    return {
+      kind: "video",
+      url: parsed.href
+    };
+  }
+
+  return {
+    kind:
+      type === "video" ||
+      /\.(mp4|webm|mov)(?:$|[?#])/i.test(url)
+        ? "video"
+        : "image",
+    url
+  };
+}
+
+function preview(id, type, url, fallback) {
   const box = el(id);
   box.replaceChildren();
 
-  if(
-    url &&
-    /^(https?:\/\/|data:)/i.test(url)
-  ) {
-    const media = document.createElement(
-      type === "video" ? "video" : "img"
-    );
+  const media = resolveMedia(url, type);
 
-    media.src = url;
-
-    if(type === "video") {
-      media.controls = true;
-      media.playsInline = true;
-    }
-
-    media.onerror = () => {
-      box.textContent = "Media could not load";
-    };
-
-    box.append(media);
-  } else {
-    box.textContent =
-      fallback || "No media selected";
-  }
-}
-
-/* LIVE BUTTON PREVIEW */
-
-function updateButtonPreview() {
-  const required =
-    el("consequence").checked;
-
-  const destination =
-    Number(el("destination").value);
-
-  const lockSeconds =
-    Math.max(
-      0,
-      Number(el("rerollLockSeconds").value) || 0
-    );
-
-  const button = el("actionPreview");
-  const description =
-    el("actionPreviewDescription");
-
-  if(selected === 16) {
-    button.textContent = "🏆 VICTORY!";
-    button.style.background = "#8a6416";
-    button.style.borderColor = "#ffd76b";
-
-    description.textContent =
-      "Slide 16 automatically triggers the " +
-      "NNN Survivor ending.";
-
+  if (!media) {
+    box.textContent = fallback || "No media selected";
     return;
   }
 
-  button.style.background = "";
-  button.style.borderColor = "";
+  const node = document.createElement(
+    media.kind === "embed"
+      ? "iframe"
+      : media.kind === "video"
+        ? "video"
+        : "img"
+  );
 
-  if(required) {
-    button.textContent =
-      "⚡ Show Me My Consequences";
+  node.src = media.url;
 
-    description.textContent =
-      "Required consequence — player advances " +
-      "to Slide " + destination +
-      " without rolling again.";
-  } else {
-    button.textContent =
-      "🎲 Roll Again";
-
-    description.textContent =
-      lockSeconds > 0
-        ? "Normal slide — Roll Again unlocks " +
-          "after " + lockSeconds + " seconds."
-        : "Normal slide — player can roll again.";
+  if (media.kind === "embed") {
+    node.title = "Embedded media preview";
+    node.loading = "lazy";
+    node.setAttribute(
+      "allow",
+      "autoplay; fullscreen; picture-in-picture"
+    );
+    node.setAttribute("allowfullscreen", "");
   }
+
+  if (media.kind === "video") {
+    node.controls = true;
+    node.playsInline = true;
+  }
+
+  node.onerror = () => {
+    box.textContent =
+      "Media could not load. Check the URL or open it at its source.";
+  };
+
+  box.append(node);
 }
 
-/* SLIDE BUTTONS */
+/* LIVE GAME LAYOUT PREVIEW */
+
+function updateGamePreview() {
+  const s = slide();
+
+  if (!s) return;
+
+  el("mockDie").textContent = String(s.id);
+
+  el("mockTitle").textContent =
+    s.title || "Slide " + s.id;
+
+  el("mockDescription").textContent =
+    s.description || "No description yet.";
+
+  el("mockHunter").textContent =
+    s.redditUser
+      ? "Featured: " + s.redditUser
+      : "";
+
+  el("mockRoll").textContent =
+    s.consequence
+      ? "⚡ Show Me My Consequences"
+      : "🎲 Roll Again";
+
+  preview(
+    "mockMedia",
+    s.type,
+    s.url,
+    "No media selected"
+  );
+}
+
+/* SLIDE SELECTION */
 
 function buttons() {
   const box = el("slideButtons");
   box.replaceChildren();
 
-  cfg.slides.sort(
-    (a,b) => a.id - b.id
-  );
+  cfg.slides.sort((a, b) => a.id - b.id);
 
   cfg.slides.forEach(s => {
-    const button =
-      document.createElement("button");
+    const button = document.createElement("button");
 
     button.textContent = s.id;
-
     button.className =
       s.id === selected ? "active" : "";
 
@@ -932,8 +464,7 @@ function buttons() {
   destination.replaceChildren();
 
   cfg.slides.forEach(s => {
-    const option =
-      document.createElement("option");
+    const option = document.createElement("option");
 
     option.value = s.id;
     option.textContent = "Slide " + s.id;
@@ -942,45 +473,23 @@ function buttons() {
   });
 }
 
-/* EDIT SELECTED SLIDE */
-
 function edit() {
   const s = slide();
 
-  if(!s) return;
+  if (!s) return;
 
-  el("selectedSlideBadge").textContent =
-    "Slide " + s.id;
-
-  el("slideTitle").value =
-    s.title || "";
-
-  el("description").value =
-    s.description || "";
-
-  el("redditUser").value =
-    s.redditUser || "";
-
-  el("type").value =
-    s.type || "placeholder";
-
-  el("url").value =
-    s.url || "";
-
-  el("consequence").checked =
-    s.consequence === true ||
-    s.consequence === "true" ||
-    s.mustAccept === true ||
-    s.forceConsequence === true;
-
-  el("destination").value =
-    s.destination || 1;
+  el("slideTitle").value = s.title || "";
+  el("description").value = s.description || "";
+  el("redditUser").value = s.redditUser || "";
+  el("type").value = s.type || "placeholder";
+  el("url").value = s.url || "";
+  el("consequence").checked = !!s.consequence;
+  el("destination").value = s.destination || 1;
 
   el("rerollLockSeconds").value =
     s.rerollLockSeconds || 0;
 
-  el("remove").disabled =
-    selected <= 24;
+  el("remove").disabled = selected <= 24;
 
   preview(
     "preview",
@@ -989,10 +498,8 @@ function edit() {
     "Slide " + s.id
   );
 
-  updateButtonPreview();
+  updateGamePreview();
 }
-
-/* FILL EDITOR */
 
 function fill() {
   [
@@ -1017,33 +524,22 @@ function fill() {
   );
 }
 
-/* COMMIT EDITOR CHANGES */
+/* SAVE EDITOR FIELDS INTO CONFIG */
 
 function commit() {
   const s = slide();
 
-  if(s) {
-    s.title =
-      el("slideTitle").value;
-
-    s.description =
-      el("description").value;
-
+  if (s) {
+    s.title = el("slideTitle").value;
+    s.description = el("description").value;
     s.redditUser =
       el("redditUser").value.trim();
 
-    s.type =
-      el("type").value;
-
-    s.url =
-      el("url").value.trim();
+    s.type = el("type").value;
+    s.url = el("url").value.trim();
 
     s.consequence =
       el("consequence").checked;
-
-    // Keep the existing config format.
-    // The game's new action-button logic
-    // reads the same consequence field.
 
     s.destination =
       Number(el("destination").value);
@@ -1073,10 +569,10 @@ function commit() {
   });
 }
 
-/* VALIDATION */
+/* CONFIG VALIDATION */
 
 function validate() {
-  if(
+  if (
     /service_role|sb_secret_/i.test(
       cfg.supabaseKey
     )
@@ -1086,14 +582,14 @@ function validate() {
     );
   }
 
-  if(!Array.isArray(cfg.slides)) {
+  if (!Array.isArray(cfg.slides)) {
     throw Error("Slides must be an array.");
   }
 
   const ids = new Set();
 
-  for(const s of cfg.slides) {
-    if(
+  for (const s of cfg.slides) {
+    if (
       !Number.isInteger(s.id) ||
       s.id < 1 ||
       s.id > 99 ||
@@ -1106,54 +602,58 @@ function validate() {
 
     ids.add(s.id);
 
-    if(
-      !["placeholder","image","video"]
-        .includes(s.type)
+    if (
+      !["placeholder", "image", "video"].includes(
+        s.type
+      )
     ) {
       throw Error(
-        "Slide " + s.id +
-        ": invalid media type."
+        "Slide " + s.id + ": invalid media type."
       );
     }
 
-    if(
+    if (
       s.redditUser &&
-      !/^u\/[A-Za-z0-9_-]{3,20}$/
-        .test(s.redditUser)
+      !/^u\/[A-Za-z0-9_-]{3,20}$/.test(
+        s.redditUser
+      )
     ) {
       throw Error(
-        "Slide " + s.id +
+        "Slide " +
+        s.id +
         ": use a Reddit name like u/username"
       );
     }
 
-    if(
+    if (
       !Number.isInteger(s.rerollLockSeconds) ||
       s.rerollLockSeconds < 0 ||
       s.rerollLockSeconds > 86400
     ) {
       throw Error(
-        "Slide " + s.id +
+        "Slide " +
+        s.id +
         ": invalid reroll lockout."
       );
     }
   }
 
-  for(let id = 1; id <= 24; id++) {
-    if(!ids.has(id)) {
+  for (let id = 1; id <= 24; id++) {
+    if (!ids.has(id)) {
       throw Error(
         "Required slide " + id + " is missing."
       );
     }
   }
 
-  for(const s of cfg.slides) {
-    if(
+  for (const s of cfg.slides) {
+    if (
       s.consequence &&
       !ids.has(s.destination)
     ) {
       throw Error(
-        "Slide " + s.id +
+        "Slide " +
+        s.id +
         ": consequence destination missing."
       );
     }
@@ -1174,17 +674,16 @@ function saveDraft() {
   hasSavedDraft = true;
 
   message(
-    "Draft saved on this iPhone. " +
-    "Publish to GitHub to update your game."
+    "Draft saved on this iPhone. Publish to GitHub to update your game."
   );
 }
 
 el("save").onclick = () => {
   try {
     saveDraft();
-  } catch(e) {
+  } catch (error) {
     message(
-      "Save failed: " + e.message
+      "Save failed: " + error.message
     );
   }
 };
@@ -1196,18 +695,16 @@ el("copy").onclick = async () => {
     commit();
     validate();
 
-    const json =
-      JSON.stringify(cfg,null,2);
+    const json = JSON.stringify(cfg, null, 2);
 
-    if(
+    if (
       navigator.clipboard &&
       window.isSecureContext
     ) {
       await navigator.clipboard.writeText(json);
 
       message(
-        "Configuration copied! " +
-        "Paste into game-config.json on GitHub."
+        "Configuration copied! Paste into game-config.json on GitHub."
       );
     } else {
       const textarea =
@@ -1224,9 +721,9 @@ el("copy").onclick = async () => {
         "Copy attempted. Paste into GitHub to confirm."
       );
     }
-  } catch(e) {
+  } catch (error) {
     message(
-      "Copy failed: " + e.message
+      "Copy failed: " + error.message
     );
   }
 };
@@ -1239,26 +736,24 @@ el("add").onclick = () => {
   const id =
     Math.max(...cfg.slides.map(s => s.id)) + 1;
 
-  if(id > 99) {
-    return message(
-      "Maximum slide number is 99."
-    );
+  if (id > 99) {
+    message("Maximum slide number is 99.");
+    return;
   }
 
   cfg.slides.push({
     id,
-    title:"Bonus slide " + id,
-    description:"",
-    type:"placeholder",
-    url:"",
-    redditUser:"",
-    consequence:false,
-    destination:1,
-    rerollLockSeconds:0
+    title: "Bonus slide " + id,
+    description: "",
+    type: "placeholder",
+    url: "",
+    redditUser: "",
+    consequence: false,
+    destination: 1,
+    rerollLockSeconds: 0
   });
 
   selected = id;
-
   buttons();
   edit();
 };
@@ -1266,32 +761,33 @@ el("add").onclick = () => {
 /* REMOVE BONUS SLIDE */
 
 el("remove").onclick = () => {
-  if(selected <= 24) return;
+  if (selected <= 24) return;
+
+  const removedId = selected;
 
   cfg.slides = cfg.slides.filter(
-    s => s.id !== selected
+    s => s.id !== removedId
   );
 
   cfg.slides.forEach(s => {
-    if(s.destination === selected) {
+    if (s.destination === removedId) {
       s.destination = 1;
     }
   });
 
   selected = 1;
-
   buttons();
   edit();
 };
 
-/* RESET DEFAULTS */
+/* RESET EDITOR DEFAULTS */
 
 el("reset").onclick = () => {
-  if(
-    !confirm("Reset all edits on this device?")
-  ) {
-    return;
-  }
+  if (
+    !confirm(
+      "Reset all edits on this device?"
+    )
+  ) return;
 
   cfg = clone(DEFAULT);
   selected = 1;
@@ -1301,54 +797,51 @@ el("reset").onclick = () => {
   try {
     localStorage.removeItem(DRAFT_KEY);
     localStorage.removeItem(SHA_KEY);
-  } catch(e) {}
+  } catch (error) {
+    console.warn(error);
+  }
 
   fill();
 
   message(
-    "Defaults restored in the editor. " +
-    "Save Draft to keep them."
+    "Defaults restored in the editor. Save Draft to keep them."
   );
 };
 
 /* FILE UPLOADS */
 
-async function upload(file,kind) {
-  if(!file) return null;
+async function upload(file, kind) {
+  if (!file) return null;
 
   const max =
     file.type.startsWith("video/") ? 8 : 3;
 
-  if(file.size > max * 1024 * 1024) {
+  if (file.size > max * 1024 * 1024) {
     throw Error(
-      "File exceeds " + max +
+      "File exceeds " +
+      max +
       " MB. Use a hosted URL instead."
     );
   }
 
-  if(
+  if (
     kind === "home" &&
     !file.type.startsWith("image/")
   ) {
     throw Error("Choose an image.");
   }
 
-  return new Promise((resolve,reject) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
-    reader.onload = () =>
-      resolve(reader.result);
+    reader.onload = () => resolve(reader.result);
 
     reader.onerror = () =>
-      reject(
-        Error("Could not read file.")
-      );
+      reject(Error("Could not read file."));
 
     reader.readAsDataURL(file);
   });
 }
-
-/* HOME MEDIA */
 
 el("homeFile").onchange = async () => {
   try {
@@ -1357,7 +850,7 @@ el("homeFile").onchange = async () => {
       "home"
     );
 
-    if(!url) return;
+    if (!url) return;
 
     el("homeImageUrl").value = url;
     cfg.homeImageUrl = url;
@@ -1369,25 +862,23 @@ el("homeFile").onchange = async () => {
     );
 
     message(
-      "Home photo loaded. " +
-      "Publish to GitHub when ready."
+      "Home photo loaded. Publish to GitHub when ready."
     );
-  } catch(e) {
-    message(e.message);
+  } catch (error) {
+    message(error.message);
   }
 };
 
-/* SLIDE MEDIA */
-
 el("slideFile").onchange = async () => {
   try {
-    const file =
-      el("slideFile").files[0];
+    const file = el("slideFile").files[0];
 
-    const url =
-      await upload(file,"slide");
+    const url = await upload(
+      file,
+      "slide"
+    );
 
-    if(!url) return;
+    if (!url) return;
 
     el("type").value =
       file.type.startsWith("video/")
@@ -1405,15 +896,17 @@ el("slideFile").onchange = async () => {
       "Slide " + selected
     );
 
+    updateGamePreview();
+
     message(
       "Media loaded for slide " + selected + "."
     );
-  } catch(e) {
-    message(e.message);
+  } catch (error) {
+    message(error.message);
   }
 };
 
-/* LIVE INPUT UPDATES */
+/* LIVE FIELD PREVIEWS */
 
 el("homeImageUrl").oninput = () => {
   preview(
@@ -1433,7 +926,7 @@ el("homeImageUrl").oninput = () => {
   "destination",
   "rerollLockSeconds"
 ].forEach(id => {
-  el(id).addEventListener("input",() => {
+  el(id).addEventListener("input", () => {
     commit();
 
     preview(
@@ -1443,12 +936,7 @@ el("homeImageUrl").oninput = () => {
       "Slide " + selected
     );
 
-    updateButtonPreview();
-  });
-
-  el(id).addEventListener("change",() => {
-    commit();
-    updateButtonPreview();
+    updateGamePreview();
   });
 });
 
@@ -1457,54 +945,51 @@ el("homeImageUrl").oninput = () => {
 el("resetLeaderboards").onclick = async () => {
   const notice = el("resetNotice");
   const button = el("resetLeaderboards");
-
-  const password =
-    el("resetPassword").value;
+  const password = el("resetPassword").value;
 
   const projectUrl =
-    el("supabaseUrl")
-      .value.trim()
-      .replace(/\/$/,"");
+    el("supabaseUrl").value
+      .trim()
+      .replace(/\/$/, "");
 
   const publicKey =
     el("supabaseKey").value.trim();
 
-  if(!password) {
+  if (!password) {
     notice.textContent =
       "Enter your admin reset password.";
     return;
   }
 
-  if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i
-      .test(projectUrl)
+  if (
+    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(
+      projectUrl
+    )
   ) {
     notice.textContent =
       "Enter a valid Supabase project URL above.";
     return;
   }
 
-  if(!publicKey) {
+  if (!publicKey) {
     notice.textContent =
       "Enter your public Supabase key above.";
     return;
   }
 
   const confirmation = prompt(
-    "WARNING: This permanently deletes ALL leaderboard scores.\n\n" +
-    "Type RESET to continue:"
+    "WARNING: This permanently deletes ALL leaderboard scores.\n\nType RESET to continue:"
   );
 
-  if(confirmation !== "RESET") {
+  if (confirmation !== "RESET") {
     notice.textContent =
       "Reset cancelled. No scores deleted.";
     return;
   }
 
-  if(
+  if (
     !confirm(
-      "Final confirmation: permanently erase every " +
-      "Soldier score and Hunter claim?"
+      "Final confirmation: permanently erase every Soldier score and Hunter claim?"
     )
   ) {
     notice.textContent =
@@ -1513,6 +998,7 @@ el("resetLeaderboards").onclick = async () => {
   }
 
   button.disabled = true;
+
   notice.textContent =
     "Resetting leaderboards…";
 
@@ -1521,83 +1007,84 @@ el("resetLeaderboards").onclick = async () => {
       projectUrl +
       "/functions/v1/reset-leaderboards",
       {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "apikey":publicKey
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: publicKey
         },
-        body:JSON.stringify({
+        body: JSON.stringify({
           password,
-          confirmation:"RESET"
+          confirmation: "RESET"
         })
       }
     );
 
     const raw = await response.text();
-
     let result;
 
     try {
       result = JSON.parse(raw);
-    } catch(e) {
+    } catch (error) {
       throw Error(
         "Unexpected server response: " +
-        raw.slice(0,180)
+        raw.slice(0, 180)
       );
     }
 
-    if(!response.ok || !result.ok) {
+    if (!response.ok || !result.ok) {
       throw Error(
         result.error ||
         "Reset failed (HTTP " +
-        response.status + ")"
+        response.status +
+        ")"
       );
     }
 
     notice.textContent =
-      "Success! Both leaderboards have been reset. " +
-      "Refresh your game to see the empty scoreboards.";
+      "Success! Both leaderboards have been reset. Refresh your game to see the empty scoreboards.";
 
     el("resetPassword").value = "";
 
-  } catch(e) {
+  } catch (error) {
     notice.textContent =
-      "Reset failed: " + e.message;
+      "Reset failed: " + error.message;
+
   } finally {
     button.disabled = false;
   }
 };
 
-/* SECURE GITHUB CONFIG FETCH */
+/* LOAD CONFIGURATION FROM GITHUB */
 
 async function getGitHubConfig() {
   const response = await fetch(
     GITHUB_CONFIG_API,
     {
-      headers:{
-        "Accept":"application/vnd.github+json"
+      headers: {
+        Accept: "application/vnd.github+json"
       },
-      cache:"no-store"
+      cache: "no-store"
     }
   );
 
-  if(!response.ok) {
+  if (!response.ok) {
     throw Error(
       "Could not load GitHub configuration (HTTP " +
-      response.status + ")"
+      response.status +
+      ")"
     );
   }
 
   const file = await response.json();
 
-  if(!file.sha || !file.content) {
+  if (!file.sha || !file.content) {
     throw Error(
       "GitHub did not return the configuration file."
     );
   }
 
   const encoded =
-    file.content.replace(/\s/g,"");
+    file.content.replace(/\s/g, "");
 
   const binary = atob(encoded);
 
@@ -1610,7 +1097,7 @@ async function getGitHubConfig() {
     new TextDecoder().decode(bytes)
   );
 
-  if(
+  if (
     !config ||
     !Array.isArray(config.slides)
   ) {
@@ -1621,24 +1108,20 @@ async function getGitHubConfig() {
 
   return {
     config,
-    sha:file.sha
+    sha: file.sha
   };
 }
 
-/* LOAD FROM GITHUB */
+/* LOAD GITHUB BUTTON */
 
 el("loadGitHub").onclick = async () => {
   const button = el("loadGitHub");
 
-  if(
+  if (
     !confirm(
-      "Load the current GitHub configuration?\n\n" +
-      "This REPLACES the editor's current draft. " +
-      "Save or copy your draft first if you need it."
+      "Load the current GitHub configuration?\n\nThis REPLACES the editor's current draft. Save or copy your draft first if you need it."
     )
-  ) {
-    return;
-  }
+  ) return;
 
   button.disabled = true;
 
@@ -1647,8 +1130,7 @@ el("loadGitHub").onclick = async () => {
   );
 
   try {
-    const latest =
-      await getGitHubConfig();
+    const latest = await getGitHubConfig();
 
     localStorage.setItem(
       DRAFT_KEY,
@@ -1668,20 +1150,20 @@ el("loadGitHub").onclick = async () => {
     fill();
 
     publishMessage(
-      "GitHub configuration loaded and saved as " +
-      "your draft. Edit and publish whenever you're ready."
+      "GitHub configuration loaded and saved as your draft. Edit and publish whenever you're ready."
     );
 
-  } catch(error) {
+  } catch (error) {
     publishMessage(
       "Load failed: " + error.message
     );
+
   } finally {
     button.disabled = false;
   }
 };
 
-/* PUBLISH TO GITHUB */
+/* SECURE GITHUB PUBLISHING */
 
 el("publishGitHub").onclick = async () => {
   const button = el("publishGitHub");
@@ -1692,9 +1174,10 @@ el("publishGitHub").onclick = async () => {
     publishMessage(
       "Draft saved automatically. Checking GitHub..."
     );
-  } catch(error) {
+  } catch (error) {
     publishMessage(
-      "Could not save draft: " + error.message
+      "Could not save draft: " +
+      error.message
     );
     return;
   }
@@ -1702,7 +1185,7 @@ el("publishGitHub").onclick = async () => {
   const password =
     el("publishPassword").value;
 
-  if(!password) {
+  if (!password) {
     publishMessage(
       "Draft saved. Enter your publishing password."
     );
@@ -1710,16 +1193,17 @@ el("publishGitHub").onclick = async () => {
   }
 
   const projectUrl =
-    el("supabaseUrl")
-      .value.trim()
-      .replace(/\/$/,"");
+    el("supabaseUrl").value
+      .trim()
+      .replace(/\/$/, "");
 
   const publicKey =
     el("supabaseKey").value.trim();
 
-  if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i
-      .test(projectUrl)
+  if (
+    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(
+      projectUrl
+    )
   ) {
     publishMessage(
       "Draft saved. Enter a valid Supabase project URL."
@@ -1727,7 +1211,7 @@ el("publishGitHub").onclick = async () => {
     return;
   }
 
-  if(!publicKey) {
+  if (!publicKey) {
     publishMessage(
       "Draft saved. Enter your public Supabase key."
     );
@@ -1740,51 +1224,43 @@ el("publishGitHub").onclick = async () => {
     const response = await fetch(
       GITHUB_CONFIG_API,
       {
-        headers:{
-          "Accept":"application/vnd.github+json"
+        headers: {
+          Accept: "application/vnd.github+json"
         },
-        cache:"no-store"
+        cache: "no-store"
       }
     );
 
-    if(!response.ok) {
+    if (!response.ok) {
       throw Error(
         "Could not check GitHub (HTTP " +
-        response.status + ")"
+        response.status +
+        ")"
       );
     }
 
     const remote = await response.json();
 
-    if(typeof remote.sha !== "string") {
+    if (typeof remote.sha !== "string") {
       throw Error(
         "GitHub did not return a file version."
       );
     }
 
-    if(
+    if (
       githubExpectedSha &&
       githubExpectedSha !== remote.sha
     ) {
       publishMessage(
-        "Your draft is safe on this iPhone, " +
-        "but GitHub changed since your last " +
-        "synchronized version. Publishing stopped " +
-        "to avoid overwriting newer changes. " +
-        "Do not tap Load from GitHub unless you " +
-        "want to replace your draft."
+        "Your draft is safe on this iPhone, but GitHub changed since your last synchronized version. Publishing stopped to avoid overwriting newer changes. Do not tap Load from GitHub unless you want to replace your draft."
       );
       return;
     }
 
-    if(!githubExpectedSha) {
-      if(
+    if (!githubExpectedSha) {
+      if (
         !confirm(
-          "Your saved draft has no recorded GitHub " +
-          "version.\n\n" +
-          "Your draft will NOT be replaced.\n\n" +
-          "Publish your entire saved draft over the " +
-          "current GitHub configuration?"
+          "Your saved draft has no recorded GitHub version.\n\nYour draft will NOT be replaced.\n\nPublish your entire saved draft over the current GitHub configuration?"
         )
       ) {
         publishMessage(
@@ -1792,11 +1268,10 @@ el("publishGitHub").onclick = async () => {
         );
         return;
       }
-    } else if(
+
+    } else if (
       !confirm(
-        "Draft saved automatically. " +
-        "GitHub has no newer changes.\n\n" +
-        "Publish your current draft now?"
+        "Draft saved automatically. GitHub has no newer changes.\n\nPublish your current draft now?"
       )
     ) {
       publishMessage(
@@ -1813,41 +1288,40 @@ el("publishGitHub").onclick = async () => {
       projectUrl +
       "/functions/v1/publish-game-config",
       {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "apikey":publicKey
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: publicKey
         },
-        body:JSON.stringify({
+        body: JSON.stringify({
           password,
-          expectedSha:remote.sha,
-          config:cfg
+          expectedSha: remote.sha,
+          config: cfg
         })
       }
     );
 
-    const raw =
-      await publishResponse.text();
-
+    const raw = await publishResponse.text();
     let result;
 
     try {
       result = JSON.parse(raw);
-    } catch(e) {
+    } catch (error) {
       throw Error(
         "Unexpected server response: " +
-        raw.slice(0,180)
+        raw.slice(0, 180)
       );
     }
 
-    if(
+    if (
       !publishResponse.ok ||
       !result.ok
     ) {
       throw Error(
         result.error ||
         "Publishing failed (HTTP " +
-        publishResponse.status + ")"
+        publishResponse.status +
+        ")"
       );
     }
 
@@ -1855,21 +1329,18 @@ el("publishGitHub").onclick = async () => {
       result.sha || null;
 
     try {
-      if(githubExpectedSha) {
+      if (githubExpectedSha) {
         localStorage.setItem(
           SHA_KEY,
           githubExpectedSha
         );
       } else {
-        localStorage.removeItem(
-          SHA_KEY
-        );
+        localStorage.removeItem(SHA_KEY);
       }
-    } catch(e) {
+
+    } catch (error) {
       publishMessage(
-        "Published successfully, but Safari " +
-        "could not remember GitHub's new version. " +
-        "Your draft remains saved."
+        "Published successfully, but Safari could not remember GitHub's new version. Your draft remains saved."
       );
       return;
     }
@@ -1877,34 +1348,31 @@ el("publishGitHub").onclick = async () => {
     el("publishPassword").value = "";
 
     publishMessage(
-      "Success! Your draft was saved and " +
-      "game-config.json published to GitHub. " +
-      "No reload was needed."
+      "Success! Your draft was saved and game-config.json published to GitHub. No reload was needed."
     );
 
-  } catch(error) {
+  } catch (error) {
     publishMessage(
-      "Your draft is preserved on this iPhone. " +
-      "Publishing failed: " + error.message
+      "Your draft is preserved on this iPhone. Publishing failed: " +
+      error.message
     );
+
   } finally {
     button.disabled = false;
   }
 };
 
-/* INITIALIZE */
+/* INITIALIZE ADMIN STUDIO */
 
 fill();
 
-if(hasSavedDraft) {
+if (hasSavedDraft) {
   publishMessage(
-    "Saved iPhone draft loaded. You can edit " +
-    "and publish without pulling from GitHub."
+    "Saved iPhone draft loaded. You can edit and publish without pulling from GitHub."
   );
 } else {
   publishMessage(
-    "No saved draft found. Load from GitHub once " +
-    "to begin, or edit the defaults and publish deliberately."
+    "No saved draft found. Load from GitHub once to begin, or edit the defaults and publish deliberately."
   );
 }
 
