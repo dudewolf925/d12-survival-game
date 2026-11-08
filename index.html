@@ -373,6 +373,285 @@ th{color:white}
   .panel{padding:13px}
   .gameControls button{font-size:16px}
 }
+
+<!-- D12 SWIPE IF YOU DARE UPDATE -->
+
+<style>
+.d12DareOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 11000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, .96);
+}
+
+.d12DarePopup {
+  width: 100%;
+  max-width: 500px;
+  padding: 35px 22px;
+  text-align: center;
+  border: 3px solid #b42335;
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    #351018,
+    #101010 65%,
+    #291018
+  );
+  box-shadow: 0 0 45px #b4233580;
+}
+
+.d12DareIcon {
+  font-size: 65px;
+  margin-bottom: 12px;
+}
+
+.d12DareTitle {
+  font-size: clamp(27px, 8vw, 42px);
+  font-weight: 900;
+  color: #ff6174;
+  margin-bottom: 15px;
+}
+
+.d12DareMessage {
+  font-size: clamp(18px, 5vw, 24px);
+  line-height: 1.5;
+  font-weight: 700;
+  color: white;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.d12DareCountdown {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.d12DareProgress {
+  height: 7px;
+  margin-top: 12px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #555;
+}
+
+.d12DareProgressFill {
+  height: 100%;
+  width: 100%;
+  background: #ff6174;
+  transition: width .1s linear;
+}
+</style>
+
+<div
+  id="d12DareOverlay"
+  class="d12DareOverlay hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="d12DareTitle"
+>
+  <div class="d12DarePopup">
+    <div class="d12DareIcon">😈</div>
+
+    <div
+      id="d12DareTitle"
+      class="d12DareTitle"
+    >
+      YOU DARED!
+    </div>
+
+    <div
+      id="d12DareMessage"
+      class="d12DareMessage"
+    ></div>
+
+    <div
+      id="d12DareCountdown"
+      class="d12DareCountdown"
+    >
+      Continuing in 5 seconds…
+    </div>
+
+    <div class="d12DareProgress">
+      <div
+        id="d12DareProgressFill"
+        class="d12DareProgressFill"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const DARE_DURATION = 5000;
+
+  let dareTimer = null;
+  let dareInterval = null;
+  let dareShownForSlide = null;
+
+  const overlay =
+    document.getElementById('d12DareOverlay');
+
+  const messageElement =
+    document.getElementById('d12DareMessage');
+
+  const countdownElement =
+    document.getElementById('d12DareCountdown');
+
+  const progressElement =
+    document.getElementById('d12DareProgressFill');
+
+  function closeDarePopup() {
+    clearTimeout(dareTimer);
+    clearInterval(dareInterval);
+
+    dareTimer = null;
+    dareInterval = null;
+
+    overlay.classList.add('hidden');
+
+    if (
+      !document.querySelector(
+        '.overlay:not(.hidden)'
+      )
+    ) {
+      document.body.classList.remove('popupOpen');
+    }
+  }
+
+  function showDarePopup(slide) {
+    if (!slide || endingStarted || doublesPending) {
+      return;
+    }
+
+    const message =
+      slide.swipeMessage ||
+      slide.dareMessage ||
+      'You were warned... now face what comes next! 😈';
+
+    messageElement.textContent = message;
+
+    overlay.classList.remove('hidden');
+    document.body.classList.add('popupOpen');
+
+    const started = Date.now();
+
+    progressElement.style.width = '100%';
+
+    clearTimeout(dareTimer);
+    clearInterval(dareInterval);
+
+    dareInterval = setInterval(() => {
+      const remaining = Math.max(
+        0,
+        DARE_DURATION - (Date.now() - started)
+      );
+
+      const seconds = Math.ceil(remaining / 1000);
+
+      countdownElement.textContent =
+        'Continuing in ' + seconds +
+        ' second' + (seconds === 1 ? '…' : 's…');
+
+      progressElement.style.width =
+        (remaining / DARE_DURATION * 100) + '%';
+
+    }, 100);
+
+    dareTimer = setTimeout(
+      closeDarePopup,
+      DARE_DURATION
+    );
+  }
+
+  function installSwipeWatcher() {
+    const container =
+      document.getElementById('slideMedia');
+
+    if (!container) return;
+
+    const track =
+      container.querySelector('.d12GalleryTrack');
+
+    if (!track) return;
+
+    const hint =
+      container.querySelector('.d12GalleryHint');
+
+    if (hint) {
+      hint.textContent = 'Swipe left if you dare 😈';
+    }
+
+    let triggered = false;
+
+    function checkSwipe() {
+      if (triggered || !track.clientWidth) return;
+
+      const position =
+        track.scrollLeft / track.clientWidth;
+
+      if (position >= 0.8) {
+        triggered = true;
+
+        if (
+          current &&
+          dareShownForSlide !== current
+        ) {
+          dareShownForSlide = current;
+          showDarePopup(current);
+        }
+      }
+    }
+
+    track.addEventListener(
+      'scroll',
+      checkSwipe,
+      {passive: true}
+    );
+  }
+
+  /*
+    Watch for each new slide gallery.
+    This also works when a slide is reached
+    through doubles or consequences.
+  */
+
+  const slideMedia =
+    document.getElementById('slideMedia');
+
+  if (slideMedia) {
+    const observer = new MutationObserver(() => {
+      installSwipeWatcher();
+    });
+
+    observer.observe(slideMedia, {
+      childList: true,
+      subtree: false
+    });
+
+    installSwipeWatcher();
+  }
+
+  /*
+    Reset the popup if the game ends.
+  */
+
+  const originalFinishGame = finishGame;
+
+  finishGame = function (...args) {
+    closeDarePopup();
+    return originalFinishGame(...args);
+  };
+
+})();
+</script>
+
 </style>
 </head>
 <body>
