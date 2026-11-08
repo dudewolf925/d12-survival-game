@@ -26,7 +26,6 @@ body{
   color:var(--text);
   font:16px/1.5 system-ui,-apple-system,sans-serif;
 }
-
 body.popupOpen{overflow:hidden}
 
 main{
@@ -253,9 +252,7 @@ textarea{
   justify-content:center;
 }
 
-.d12GalleryPage .mediaBox{
-  width:100%;
-}
+.d12GalleryPage .mediaBox{width:100%}
 
 .d12GalleryPage .media{
   width:100%;
@@ -498,9 +495,7 @@ th{color:white}
   color:#fff;
 }
 
-.doublesNumber.final{
-  color:#ffdf78;
-}
+.doublesNumber.final{color:#ffdf78}
 
 .doublesNumberLabel{
   font-size:11px;
@@ -536,7 +531,6 @@ th{color:white}
   width:100%;
   height:100%;
   background:#ffcf56;
-  transition:width .1s linear;
 }
 
 /* WINNER */
@@ -561,9 +555,7 @@ th{color:white}
   font-variant-numeric:tabular-nums;
 }
 
-.winnerPopup label{
-  text-align:left;
-}
+.winnerPopup label{text-align:left}
 
 /* TAP OUT */
 
@@ -608,12 +600,7 @@ th{color:white}
   text-align:center;
   border:3px solid #b42335;
   border-radius:22px;
-  background:linear-gradient(
-    145deg,
-    #351018,
-    #101010 65%,
-    #291018
-  );
+  background:linear-gradient(145deg,#351018,#101010 65%,#291018);
   box-shadow:0 0 45px #b4233580;
 }
 
@@ -656,7 +643,6 @@ th{color:white}
   height:100%;
   width:100%;
   background:#ff6174;
-  transition:width .1s linear;
 }
 
 @media(max-width:420px){
@@ -703,8 +689,8 @@ th{color:white}
     Enter your username before starting.
   </p>
 
-  <button id="start" type="button">
-    I agree to risk it all
+  <button id="start" type="button" disabled>
+    Loading Game…
   </button>
 </section>
 
@@ -734,11 +720,7 @@ th{color:white}
   </div>
 
   <div class="gameControls">
-    <button
-      id="roll"
-      type="button"
-      class="rollButton"
-    >
+    <button id="roll" type="button" class="rollButton">
       🎲 Roll Again
     </button>
 
@@ -750,29 +732,17 @@ th{color:white}
       ⚡ Show Me My Consequences
     </button>
 
-    <button
-      id="finish"
-      type="button"
-      class="cameButton"
-    >
+    <button id="finish" type="button" class="cameButton">
       💦 I Came 💦
     </button>
 
-    <button
-      id="tapOut"
-      type="button"
-      class="tapButton"
-    >
+    <button id="tapOut" type="button" class="tapButton">
       🏳️ I'm Tapping Out 🏳️
     </button>
   </div>
 
   <p id="rollHint" class="rollHint"></p>
-  <p
-    id="status"
-    class="status"
-    aria-live="polite"
-  ></p>
+  <p id="status" class="status" aria-live="polite"></p>
 
   <button
     id="retrySave"
@@ -805,9 +775,7 @@ th{color:white}
       </thead>
 
       <tbody id="soldierRows">
-        <tr>
-          <td colspan="4">Loading…</td>
-        </tr>
+        <tr><td colspan="4">Loading…</td></tr>
       </tbody>
     </table>
   </div>
@@ -832,9 +800,7 @@ th{color:white}
       </thead>
 
       <tbody id="hunterRows">
-        <tr>
-          <td colspan="2">Loading…</td>
-        </tr>
+        <tr><td colspan="2">Loading…</td></tr>
       </tbody>
     </table>
   </div>
@@ -865,10 +831,7 @@ th{color:white}
   </p>
 </section>
 
-<p
-  class="center notice"
-  id="configStatus"
-></p>
+<p class="center notice" id="configStatus"></p>
 </main>
 
 <!-- DOUBLES POPUP -->
@@ -891,49 +854,28 @@ th{color:white}
 
     <div class="doublesNumbers">
       <div class="doublesNumberBox">
-        <div
-          id="doublesOriginal"
-          class="doublesNumber"
-        >8</div>
-
-        <div class="doublesNumberLabel">
-          ORIGINAL ROLL
-        </div>
+        <div id="doublesOriginal" class="doublesNumber">8</div>
+        <div class="doublesNumberLabel">ORIGINAL ROLL</div>
       </div>
 
       <div class="doublesArrow">➜</div>
 
       <div class="doublesNumberBox">
-        <div
-          id="doublesResult"
-          class="doublesNumber final"
-        >16</div>
-
-        <div class="doublesNumberLabel">
-          DOUBLED ROLL
-        </div>
+        <div id="doublesResult" class="doublesNumber final">16</div>
+        <div class="doublesNumberLabel">DOUBLED ROLL</div>
       </div>
     </div>
 
-    <p
-      id="doublesDestination"
-      class="doublesDestination"
-    >
+    <p id="doublesDestination" class="doublesDestination">
       Advancing to Slide 16!
     </p>
 
-    <p
-      id="doublesCountdown"
-      class="doublesCountdown"
-    >
+    <p id="doublesCountdown" class="doublesCountdown">
       Automatically continuing in 5 seconds…
     </p>
 
     <div class="countdownTrack">
-      <div
-        id="doublesProgress"
-        class="countdownFill"
-      ></div>
+      <div id="doublesProgress" class="countdownFill"></div>
     </div>
 
     <p class="popupSmall">
@@ -952,9 +894,7 @@ th{color:white}
   aria-labelledby="huntHeading"
 >
   <div class="popup">
-    <h2 id="huntHeading">
-      🎯 HUNT SUCCESSFUL!
-    </h2>
+    <h2 id="huntHeading">🎯 HUNT SUCCESSFUL!</h2>
 
     <img
       id="huntGif"
@@ -963,17 +903,11 @@ th{color:white}
       alt="Hunt success animation"
     >
 
-    <div
-      id="huntBanner"
-      class="popupBanner"
-    >
+    <div id="huntBanner" class="popupBanner">
       Successfully hunted!
     </div>
 
-    <p
-      id="huntTime"
-      class="popupTime"
-    ></p>
+    <p id="huntTime" class="popupTime"></p>
 
     <label for="redditPost">
       ✍️ Customize your Reddit post
@@ -998,11 +932,7 @@ th{color:white}
       You can review it before submitting.
     </p>
 
-    <button
-      id="closeHunt"
-      type="button"
-      class="secondary"
-    >
+    <button id="closeHunt" type="button" class="secondary">
       Close and View My Score
     </button>
   </div>
@@ -1020,24 +950,15 @@ th{color:white}
   <div class="popup winnerPopup">
     <div class="winnerTrophy">🏆</div>
 
-    <h2 id="winnerHeading">
-      NNN SURVIVOR!
-    </h2>
+    <h2 id="winnerHeading">NNN SURVIVOR!</h2>
 
-    <p>
-      You survived the D12 Challenge!
-    </p>
+    <p>You survived the D12 Challenge!</p>
 
-    <div
-      id="winnerTime"
-      class="winnerTime"
-    >
+    <div id="winnerTime" class="winnerTime">
       00:00:00
     </div>
 
-    <p class="muted">
-      Final Survival Time
-    </p>
+    <p class="muted">Final Survival Time</p>
 
     <label for="winnerPost">
       ✍️ Customize your victory post
@@ -1057,11 +978,7 @@ th{color:white}
       🏆 Share Victory to Reddit
     </button>
 
-    <button
-      id="closeWinner"
-      type="button"
-      class="secondary"
-    >
+    <button id="closeWinner" type="button" class="secondary">
       Close and View My Score
     </button>
   </div>
@@ -1077,9 +994,7 @@ th{color:white}
   aria-labelledby="tapHeading"
 >
   <div class="popup tapPopup">
-    <h2 id="tapHeading">
-      🛡️ TAPPED OUT!
-    </h2>
+    <h2 id="tapHeading">🛡️ TAPPED OUT!</h2>
 
     <img
       id="tapGif"
@@ -1101,10 +1016,7 @@ th{color:white}
       ▶ View Tap Out animation
     </a>
 
-    <p
-      id="tapTime"
-      class="popupTime"
-    ></p>
+    <p id="tapTime" class="popupTime"></p>
 
     <p class="center">
       You walked away before losing control.
@@ -1128,11 +1040,7 @@ th{color:white}
       🟠 Share Tap Out to Reddit
     </button>
 
-    <button
-      id="closeTap"
-      type="button"
-      class="secondary"
-    >
+    <button id="closeTap" type="button" class="secondary">
       Close and View My Score
     </button>
   </div>
@@ -1150,22 +1058,13 @@ th{color:white}
   <div class="d12DarePopup">
     <div class="d12DareIcon">😈</div>
 
-    <div
-      id="d12DareTitle"
-      class="d12DareTitle"
-    >
+    <div id="d12DareTitle" class="d12DareTitle">
       YOU DARED!
     </div>
 
-    <div
-      id="d12DareMessage"
-      class="d12DareMessage"
-    ></div>
+    <div id="d12DareMessage" class="d12DareMessage"></div>
 
-    <div
-      id="d12DareCountdown"
-      class="d12DareCountdown"
-    >
+    <div id="d12DareCountdown" class="d12DareCountdown">
       Continuing in 5 seconds…
     </div>
 
@@ -1216,6 +1115,7 @@ const DEFAULT = {
 
 let config = {...DEFAULT};
 let slides = new Map();
+let configReady = false;
 let current = null;
 let elapsed = 0;
 let startedAt = 0;
@@ -1243,32 +1143,48 @@ let dareInterval = null;
 /* TIME */
 
 function fmt(ms){
-  const seconds = Math.max(0,Math.floor(ms/1000));
+  const seconds = Math.max(
+    0,
+    Math.floor(ms/1000)
+  );
 
   return [
     Math.floor(seconds/3600),
     Math.floor(seconds%3600/60),
     seconds%60
-  ].map(n=>String(n).padStart(2,'0')).join(':');
+  ].map(
+    n=>String(n).padStart(2,'0')
+  ).join(':');
 }
 
 function readableTime(ms){
-  const total = Math.max(0,Math.floor(ms/1000));
+  const total = Math.max(
+    0,
+    Math.floor(ms/1000)
+  );
+
   const hours = Math.floor(total/3600);
   const minutes = Math.floor((total%3600)/60);
   const seconds = total%60;
   const parts = [];
 
   if(hours){
-    parts.push(hours+(hours===1?' hour':' hours'));
+    parts.push(
+      hours+
+      (hours===1?' hour':' hours')
+    );
   }
 
   if(minutes){
-    parts.push(minutes+(minutes===1?' minute':' minutes'));
+    parts.push(
+      minutes+
+      (minutes===1?' minute':' minutes')
+    );
   }
 
   parts.push(
-    seconds+(seconds===1?' second':' seconds')
+    seconds+
+    (seconds===1?' second':' seconds')
   );
 
   return parts.join(', ');
@@ -1284,8 +1200,13 @@ function updateClock(){
 /* SUPABASE */
 
 function online(){
-  const url = String(config.supabaseUrl||'').trim();
-  const key = String(config.supabaseKey||'').trim();
+  const url = String(
+    config.supabaseUrl||''
+  ).trim();
+
+  const key = String(
+    config.supabaseKey||''
+  ).trim();
 
   return (
     /^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/i.test(url) &&
@@ -1297,14 +1218,18 @@ function online(){
 }
 
 async function request(path,options={}){
-  const base = String(config.supabaseUrl||'')
-    .trim()
-    .replace(/\/$/,'');
+  const base = String(
+    config.supabaseUrl||''
+  ).trim().replace(/\/$/,'');
 
-  const key = String(config.supabaseKey||'').trim();
+  const key = String(
+    config.supabaseKey||''
+  ).trim();
 
   if(!online()){
-    throw Error('Supabase is not configured.');
+    throw Error(
+      'Supabase is not configured.'
+    );
   }
 
   const headers = {
@@ -1314,7 +1239,8 @@ async function request(path,options={}){
   };
 
   if(key.startsWith('eyJ')){
-    headers.Authorization = 'Bearer '+key;
+    headers.Authorization =
+      'Bearer '+key;
   }
 
   const response = await fetch(
@@ -1323,31 +1249,43 @@ async function request(path,options={}){
   );
 
   if(!response.ok){
-    const detail = await response.text().catch(()=>'');
+    const detail = await response.text()
+      .catch(()=>'');
 
     throw Error(
-      'Supabase HTTP '+response.status+': '+
+      'Supabase HTTP '+
+      response.status+
+      ': '+
       detail.slice(0,220)
     );
   }
 
-  if(response.status===204) return null;
+  if(response.status===204){
+    return null;
+  }
 
   const body = await response.text();
 
-  return body ? JSON.parse(body) : null;
+  return body
+    ? JSON.parse(body)
+    : null;
 }
 
 /* NORMALIZE SLIDES */
 
 function normalizeSlide(s,index){
-  if(!s || typeof s!=='object') return null;
+  if(!s || typeof s!=='object'){
+    return null;
+  }
 
   const id = Number(
     s.id ?? s.slide ?? s.number ?? index+1
   );
 
-  if(!Number.isInteger(id)||id<1){
+  if(
+    !Number.isInteger(id) ||
+    id<1
+  ){
     return null;
   }
 
@@ -1404,7 +1342,7 @@ function normalizeSlide(s,index){
       s.consequence??s.consequences??false,
 
     destination:
-      destinationValue===''||
+      destinationValue==='' ||
       destinationValue===null
         ? null
         : Number(destinationValue),
@@ -1436,7 +1374,9 @@ function parseSlides(raw){
     return [];
   }
 
-  return data.map(normalizeSlide).filter(Boolean);
+  return data.map(
+    normalizeSlide
+  ).filter(Boolean);
 }
 
 /* MEDIA DETECTION */
@@ -1452,13 +1392,17 @@ function resolveMedia(value){
           ''
         );
 
-  const url = String(source||'').trim();
+  const url = String(
+    source||''
+  ).trim();
 
   if(!url) return null;
 
   const explicitType =
     typeof value==='object' && value
-      ? String(value.type||'').toLowerCase()
+      ? String(
+          value.type||''
+        ).toLowerCase()
       : '';
 
   if(
@@ -1514,10 +1458,14 @@ function resolveMedia(value){
         ? parts[1]
         : null;
 
-    if(id&&/^[a-z0-9-]+$/i.test(id)){
+    if(
+      id &&
+      /^[a-z0-9-]+$/i.test(id)
+    ){
       return {
         kind:'embed',
-        url:'https://www.redgifs.com/ifr/'+id,
+        url:
+          'https://www.redgifs.com/ifr/'+id,
         original:url
       };
     }
@@ -1535,7 +1483,10 @@ function resolveMedia(value){
     ){
       const id = parts[1];
 
-      if(id&&/^[a-z0-9]+$/i.test(id)){
+      if(
+        id &&
+        /^[a-z0-9]+$/i.test(id)
+      ){
         return {
           kind:'embed',
           url:
@@ -1554,10 +1505,16 @@ function resolveMedia(value){
 
     const id = parts[0];
 
-    if(id&&/^[a-z0-9]+$/i.test(id)){
+    if(
+      id &&
+      /^[a-z0-9]+$/i.test(id)
+    ){
       return {
         kind:'embed',
-        url:'https://imgur.com/'+id+'/embed',
+        url:
+          'https://imgur.com/'+
+          id+
+          '/embed',
         original:url
       };
     }
@@ -1567,10 +1524,15 @@ function resolveMedia(value){
 
   if(
     host==='i.imgur.com' &&
-    /\.gifv$/i.test(parsed.pathname)
+    /\.gifv$/i.test(
+      parsed.pathname
+    )
   ){
     parsed.pathname =
-      parsed.pathname.replace(/\.gifv$/i,'.mp4');
+      parsed.pathname.replace(
+        /\.gifv$/i,
+        '.mp4'
+      );
 
     return {
       kind:'video',
@@ -1614,7 +1576,9 @@ function mediaNode(value){
   node.src = media.url;
 
   if(media.kind==='embed'){
-    node.title = 'Embedded slide media';
+    node.title =
+      'Embedded slide media';
+
     node.loading = 'lazy';
 
     node.referrerPolicy =
@@ -1625,7 +1589,10 @@ function mediaNode(value){
       'autoplay; fullscreen; picture-in-picture'
     );
 
-    node.setAttribute('allowfullscreen','');
+    node.setAttribute(
+      'allowfullscreen',
+      ''
+    );
   }
 
   if(media.kind==='video'){
@@ -1649,11 +1616,19 @@ function mediaPage(value){
 
   if(!media) return null;
 
-  const page = document.createElement('div');
-  page.className = 'd12GalleryPage';
+  const page = document.createElement(
+    'div'
+  );
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'mediaBox';
+  page.className =
+    'd12GalleryPage';
+
+  const wrapper = document.createElement(
+    'div'
+  );
+
+  wrapper.className =
+    'mediaBox';
 
   const node = mediaNode(value);
 
@@ -1665,17 +1640,24 @@ function mediaPage(value){
     media.kind==='embed' &&
     media.original
   ){
-    const link = document.createElement('a');
+    const link = document.createElement(
+      'a'
+    );
 
-    link.className = 'mediaFallback';
+    link.className =
+      'mediaFallback';
+
     link.href = media.original;
     link.target = '_blank';
-    link.rel = 'noopener noreferrer';
+    link.rel =
+      'noopener noreferrer';
 
     link.textContent =
       'Media not playing? Open on '+
       (
-        media.url.includes('redgifs.com')
+        media.url.includes(
+          'redgifs.com'
+        )
           ? 'RedGIFs'
           : 'Imgur'
       );
@@ -1698,14 +1680,18 @@ function closeDarePopup(){
   dareInterval = null;
   darePending = false;
 
-  $('d12DareOverlay').classList.add('hidden');
+  $('d12DareOverlay').classList.add(
+    'hidden'
+  );
 
   if(
     !document.querySelector(
       '.overlay:not(.hidden)'
     )
   ){
-    document.body.classList.remove('popupOpen');
+    document.body.classList.remove(
+      'popupOpen'
+    );
   }
 }
 
@@ -1717,40 +1703,50 @@ function showDarePopup(slide){
     finished ||
     doublesPending
   ){
-    return;
+    return false;
   }
 
   darePending = true;
 
-  const message =
-    String(
-      slide.swipeMessage ||
-      slide.dareMessage ||
-      'You were warned... now face what comes next! 😈'
-    );
+  const message = String(
+    slide.swipeMessage ||
+    slide.dareMessage ||
+    'You were warned... now face what comes next! 😈'
+  );
 
-  setText('d12DareMessage',message);
+  setText(
+    'd12DareMessage',
+    message
+  );
 
   setText(
     'd12DareCountdown',
     'Continuing in 5 seconds…'
   );
 
-  $('d12DareProgressFill').style.width = '100%';
+  $('d12DareProgressFill').style.width =
+    '100%';
 
-  $('d12DareOverlay').classList.remove('hidden');
+  $('d12DareOverlay').classList.remove(
+    'hidden'
+  );
 
-  document.body.classList.add('popupOpen');
+  document.body.classList.add(
+    'popupOpen'
+  );
 
   const start = Date.now();
 
   dareInterval = setInterval(()=>{
     const remaining = Math.max(
       0,
-      DARE_DISPLAY_MS-(Date.now()-start)
+      DARE_DISPLAY_MS-
+      (Date.now()-start)
     );
 
-    const seconds = Math.ceil(remaining/1000);
+    const seconds = Math.ceil(
+      remaining/1000
+    );
 
     setText(
       'd12DareCountdown',
@@ -1763,13 +1759,19 @@ function showDarePopup(slide){
     );
 
     $('d12DareProgressFill').style.width =
-      (remaining/DARE_DISPLAY_MS*100)+'%';
+      (
+        remaining/
+        DARE_DISPLAY_MS*
+        100
+      )+'%';
   },100);
 
   dareTimeout = setTimeout(
     closeDarePopup,
     DARE_DISPLAY_MS
   );
+
+  return true;
 }
 
 /* SINGLE MEDIA OR SWIPE GALLERY */
@@ -1785,7 +1787,8 @@ function showMedia(id,value){
 
   if(id==='slideMedia'){
     const first = value;
-    const second = current?.media2||'';
+    const second =
+      current?.media2||'';
 
     if(first) items.push(first);
     if(second) items.push(second);
@@ -1801,24 +1804,37 @@ function showMedia(id,value){
   if(!items.length) return;
 
   if(items.length===1){
-    const page = mediaPage(items[0]);
+    const page = mediaPage(
+      items[0]
+    );
 
     if(page){
-      const wrapper = page.firstElementChild;
+      const wrapper =
+        page.firstElementChild;
 
       if(wrapper){
-        container.append(wrapper);
+        container.append(
+          wrapper
+        );
       }
     }
 
     return;
   }
 
-  const gallery = document.createElement('div');
-  gallery.className = 'd12Gallery';
+  const gallery = document.createElement(
+    'div'
+  );
 
-  const track = document.createElement('div');
-  track.className = 'd12GalleryTrack';
+  gallery.className =
+    'd12Gallery';
+
+  const track = document.createElement(
+    'div'
+  );
+
+  track.className =
+    'd12GalleryTrack';
 
   track.setAttribute(
     'aria-label',
@@ -1826,14 +1842,17 @@ function showMedia(id,value){
   );
 
   for(const item of items){
-    const page = mediaPage(item);
+    const page = mediaPage(
+      item
+    );
 
     if(page){
       track.append(page);
     }
   }
 
-  const count = track.children.length;
+  const count =
+    track.children.length;
 
   if(!count) return;
 
@@ -1842,10 +1861,17 @@ function showMedia(id,value){
 
   if(count===1) return;
 
-  const navigation = document.createElement('div');
-  navigation.className = 'd12GalleryNav';
+  const navigation = document.createElement(
+    'div'
+  );
 
-  const previous = document.createElement('button');
+  navigation.className =
+    'd12GalleryNav';
+
+  const previous = document.createElement(
+    'button'
+  );
+
   previous.type = 'button';
   previous.textContent = '❮';
 
@@ -1854,11 +1880,20 @@ function showMedia(id,value){
     'Previous media'
   );
 
-  const counter = document.createElement('span');
-  counter.className = 'd12GalleryCounter';
-  counter.textContent = '1 / '+count;
+  const counter = document.createElement(
+    'span'
+  );
 
-  const next = document.createElement('button');
+  counter.className =
+    'd12GalleryCounter';
+
+  counter.textContent =
+    '1 / '+count;
+
+  const next = document.createElement(
+    'button'
+  );
+
   next.type = 'button';
   next.textContent = '❯';
 
@@ -1871,9 +1906,11 @@ function showMedia(id,value){
   let dareTriggered = false;
 
   const gallerySlide =
-    id==='slideMedia' ? current : null;
+    id==='slideMedia'
+      ? current
+      : null;
 
-  function triggerDareIfNeeded(){
+  function checkDarePosition(){
     if(
       dareTriggered ||
       !gallerySlide ||
@@ -1883,32 +1920,46 @@ function showMedia(id,value){
     }
 
     const position =
-      track.scrollLeft/track.clientWidth;
+      track.scrollLeft/
+      track.clientWidth;
 
     if(position>=0.8){
-      dareTriggered = true;
-      showDarePopup(gallerySlide);
+      const opened =
+        showDarePopup(
+          gallerySlide
+        );
+
+      if(opened){
+        dareTriggered = true;
+      }
     }
   }
 
   function moveTo(nextIndex){
     index = Math.max(
       0,
-      Math.min(count-1,nextIndex)
+      Math.min(
+        count-1,
+        nextIndex
+      )
     );
 
     track.scrollTo({
-      left:track.clientWidth*index,
+      left:
+        track.clientWidth*
+        index,
       behavior:'smooth'
     });
 
     counter.textContent =
-      (index+1)+' / '+count;
+      (index+1)+
+      ' / '+
+      count;
 
-    if(index>=1 && !dareTriggered){
-      dareTriggered = true;
-      showDarePopup(gallerySlide);
-    }
+    /*
+     * The scroll listener triggers the
+     * popup only when Media 2 is reached.
+     */
   }
 
   previous.onclick = ()=>{
@@ -1922,22 +1973,29 @@ function showMedia(id,value){
   track.addEventListener(
     'scroll',
     ()=>{
-      if(!track.clientWidth) return;
+      if(
+        !track.clientWidth
+      ){
+        return;
+      }
 
       index = Math.max(
         0,
         Math.min(
           count-1,
           Math.round(
-            track.scrollLeft/track.clientWidth
+            track.scrollLeft/
+            track.clientWidth
           )
         )
       );
 
       counter.textContent =
-        (index+1)+' / '+count;
+        (index+1)+
+        ' / '+
+        count;
 
-      triggerDareIfNeeded();
+      checkDarePosition();
     },
     {passive:true}
   );
@@ -1948,35 +2006,57 @@ function showMedia(id,value){
     next
   );
 
-  container.append(navigation);
+  container.append(
+    navigation
+  );
 
-  const hint = document.createElement('p');
-  hint.className = 'd12GalleryHint';
+  const hint = document.createElement(
+    'p'
+  );
+
+  hint.className =
+    'd12GalleryHint';
 
   hint.textContent =
     'Swipe left if you dare 😈';
 
-  container.append(hint);
+  container.append(
+    hint
+  );
 }
 
 /* LOAD CONFIGURATION */
 
 async function loadPublished(){
+  const startButton = $('start');
+
+  startButton.disabled = true;
+  startButton.textContent =
+    'Loading Game…';
+
+  configReady = false;
+
   try{
     const response = await fetch(
-      './game-config.json?ts='+Date.now(),
+      './game-config.json?ts='+
+      Date.now(),
       {cache:'no-store'}
     );
 
     if(!response.ok){
       throw Error(
-        'game-config.json HTTP '+response.status
+        'game-config.json HTTP '+
+        response.status
       );
     }
 
-    const published = await response.json();
+    const published =
+      await response.json();
 
-    config = {...DEFAULT,...published};
+    config = {
+      ...DEFAULT,
+      ...published
+    };
 
     setText(
       'gameTitle',
@@ -2017,22 +2097,55 @@ async function loadPublished(){
     );
 
     slides = new Map(
-      arr.map(s=>[s.id,s])
+      arr.map(
+        s=>[s.id,s]
+      )
     );
+
+    const missing = [];
+
+    for(let id=1;id<=12;id++){
+      if(!slides.has(id)){
+        missing.push(id);
+      }
+    }
+
+    if(missing.length){
+      throw Error(
+        'Missing required D12 slides: '+
+        missing.join(', ')
+      );
+    }
+
+    configReady = true;
+
+    startButton.disabled = false;
+    startButton.textContent =
+      'I agree to risk it all';
 
     setText(
       'configStatus',
-      arr.length
-        ? 'Game configuration loaded · '+
-          arr.length+' slides'
-        : 'Configuration loaded, but no slides found.'
+      'Game configuration loaded · '+
+      arr.length+
+      ' slides'
     );
 
   }catch(error){
+    configReady = false;
+
+    startButton.disabled = true;
+    startButton.textContent =
+      'Game Unavailable';
+
     setText(
       'configStatus',
       'Could not load game-config.json: '+
       error.message
+    );
+
+    setText(
+      'nameHint',
+      'Game configuration could not be loaded. Refresh this page to try again.'
     );
   }
 
@@ -2049,6 +2162,14 @@ async function loadPublished(){
 /* START GAME */
 
 function begin(){
+  if(!configReady){
+    setText(
+      'nameHint',
+      'Please wait for the game to load.'
+    );
+    return;
+  }
+
   const input = $('playerName');
   const name = input.value.trim();
 
@@ -2072,8 +2193,13 @@ function begin(){
 
   playerName = name;
 
-  $('home').classList.add('hidden');
-  $('game').classList.remove('hidden');
+  $('home').classList.add(
+    'hidden'
+  );
+
+  $('game').classList.remove(
+    'hidden'
+  );
 
   setText(
     'soldierName',
@@ -2086,14 +2212,21 @@ function begin(){
 }
 
 function getSlide(id){
-  return slides.get(Number(id))||null;
+  return slides.get(
+    Number(id)
+  )||null;
 }
 
 /* REROLL LOCK */
 
 function clearRerollTimer(){
-  if(rerollUnlockTimer!==null){
-    clearTimeout(rerollUnlockTimer);
+  if(
+    rerollUnlockTimer!==null
+  ){
+    clearTimeout(
+      rerollUnlockTimer
+    );
+
     rerollUnlockTimer = null;
   }
 }
@@ -2108,16 +2241,22 @@ function isRequiredConsequence(slide){
 }
 
 function validDestination(slide){
-  const destination = Number(slide.destination);
+  const destination = Number(
+    slide.destination
+  );
 
   if(
-    !Number.isInteger(destination) ||
+    !Number.isInteger(
+      destination
+    ) ||
     destination<1
   ){
     return null;
   }
 
-  return getSlide(destination);
+  return getSlide(
+    destination
+  );
 }
 
 /* ACTION BUTTON */
@@ -2153,14 +2292,15 @@ function showSlide(slide){
 
   current = slide;
 
-  $('slideArea').classList.remove('hidden');
+  $('slideArea').classList.remove(
+    'hidden'
+  );
 
   setText(
     'slideTitle',
-    slide.title||'Slide '+slide.id
+    slide.title||
+    'Slide '+slide.id
   );
-
-  /* TITLE -> GALLERY -> DESCRIPTION */
 
   const firstMedia =
     typeof slide.media==='string'
@@ -2200,20 +2340,33 @@ function showSlide(slide){
       'You survived. Victory is yours!'
     );
 
-    setText('rollHint','');
+    setText(
+      'rollHint',
+      ''
+    );
 
-    finishGame(true,false);
+    finishGame(
+      true,
+      false
+    );
+
     return;
   }
 
-  const target = validDestination(slide);
-  const required = isRequiredConsequence(slide);
+  const target =
+    validDestination(slide);
+
+  const required =
+    isRequiredConsequence(slide);
 
   setAction(
-    required?'consequence':'roll'
+    required
+      ? 'consequence'
+      : 'roll'
   );
 
-  $('accept').disabled = !target;
+  $('accept').disabled =
+    !target;
 
   if(required){
     rollLocked = true;
@@ -2247,7 +2400,9 @@ function showSlide(slide){
 
   const lockSeconds = Math.max(
     0,
-    Number(slide.rerollLockSeconds)||0
+    Number(
+      slide.rerollLockSeconds
+    )||0
   );
 
   if(lockSeconds>0){
@@ -2274,14 +2429,22 @@ function showSlide(slide){
 
       rollLocked = false;
       $('roll').disabled = false;
-      setText('rollHint','');
+
+      setText(
+        'rollHint',
+        ''
+      );
 
     },lockSeconds*1000);
 
   }else{
     rollLocked = false;
     $('roll').disabled = false;
-    setText('rollHint','');
+
+    setText(
+      'rollHint',
+      ''
+    );
   }
 }
 
@@ -2319,12 +2482,17 @@ function showDoubles(originalRoll,target){
     'doublesDestination',
     target.id===16
       ? '🏆 Slide 16 — VICTORY!'
-      : '⚡ Advancing to Slide '+target.id+'!'
+      : '⚡ Advancing to Slide '+
+        target.id+'!'
   );
 
-  $('doublesOverlay').classList.remove('hidden');
+  $('doublesOverlay').classList.remove(
+    'hidden'
+  );
 
-  document.body.classList.add('popupOpen');
+  document.body.classList.add(
+    'popupOpen'
+  );
 
   const start = Date.now();
 
@@ -2333,15 +2501,19 @@ function showDoubles(originalRoll,target){
     'Automatically continuing in 5 seconds…'
   );
 
-  $('doublesProgress').style.width = '100%';
+  $('doublesProgress').style.width =
+    '100%';
 
   doublesInterval = setInterval(()=>{
     const remaining = Math.max(
       0,
-      DOUBLES_DISPLAY_MS-(Date.now()-start)
+      DOUBLES_DISPLAY_MS-
+      (Date.now()-start)
     );
 
-    const seconds = Math.ceil(remaining/1000);
+    const seconds = Math.ceil(
+      remaining/1000
+    );
 
     setText(
       'doublesCountdown',
@@ -2354,7 +2526,11 @@ function showDoubles(originalRoll,target){
     );
 
     $('doublesProgress').style.width =
-      (remaining/DOUBLES_DISPLAY_MS*100)+'%';
+      (
+        remaining/
+        DOUBLES_DISPLAY_MS*
+        100
+      )+'%';
 
   },100);
 
@@ -2372,19 +2548,29 @@ function continueDoubles(){
     return;
   }
 
-  const target = doublesTarget;
+  const target =
+    doublesTarget;
 
-  clearTimeout(doublesTimeout);
-  clearInterval(doublesInterval);
+  clearTimeout(
+    doublesTimeout
+  );
+
+  clearInterval(
+    doublesInterval
+  );
 
   doublesTimeout = null;
   doublesInterval = null;
   doublesPending = false;
   doublesTarget = null;
 
-  $('doublesOverlay').classList.add('hidden');
+  $('doublesOverlay').classList.add(
+    'hidden'
+  );
 
-  document.body.classList.remove('popupOpen');
+  document.body.classList.remove(
+    'popupOpen'
+  );
 
   $('finish').disabled = false;
   $('tapOut').disabled = false;
@@ -2397,6 +2583,7 @@ function continueDoubles(){
 
 function roll(){
   if(
+    !configReady ||
     finished ||
     endingStarted ||
     rollLocked ||
@@ -2416,14 +2603,21 @@ function roll(){
   }
 
   const number =
-    Math.floor(Math.random()*12)+1;
+    Math.floor(
+      Math.random()*12
+    )+1;
 
   rollCount++;
 
-  setText('die',number);
+  setText(
+    'die',
+    number
+  );
 
   const doubledSlide =
-    getSlide(number*2);
+    getSlide(
+      number*2
+    );
 
   const canDouble =
     rollCount>=DOUBLES_START_ROLL &&
@@ -2442,17 +2636,23 @@ function roll(){
     return;
   }
 
-  const slide = getSlide(number);
+  const slide = getSlide(
+    number
+  );
 
   if(slide){
-    showSlide(slide);
+    showSlide(
+      slide
+    );
 
   }else{
     closeDarePopup();
 
     current = null;
 
-    $('slideArea').classList.add('hidden');
+    $('slideArea').classList.add(
+      'hidden'
+    );
 
     setAction('roll');
 
@@ -2461,7 +2661,8 @@ function roll(){
 
     setText(
       'rollHint',
-      'Slide '+number+' is not configured.'
+      'Slide '+number+
+      ' is not configured.'
     );
   }
 
@@ -2482,7 +2683,8 @@ function accept(){
     return;
   }
 
-  const target = validDestination(current);
+  const target =
+    validDestination(current);
 
   if(!target){
     setText(
@@ -2493,27 +2695,39 @@ function accept(){
     return;
   }
 
-  showSlide(target);
+  showSlide(
+    target
+  );
 }
 
 /* POPUP HELPERS */
 
 function openPopup(id){
-  $(id).classList.remove('hidden');
+  $(id).classList.remove(
+    'hidden'
+  );
 
-  document.body.classList.add('popupOpen');
+  document.body.classList.add(
+    'popupOpen'
+  );
 }
 
 function closePopup(id){
-  $(id).classList.add('hidden');
+  $(id).classList.add(
+    'hidden'
+  );
 
   if(
     !document.querySelector(
       '.overlay:not(.hidden)'
     ) &&
-    $('d12DareOverlay').classList.contains('hidden')
+    $('d12DareOverlay').classList.contains(
+      'hidden'
+    )
   ){
-    document.body.classList.remove('popupOpen');
+    document.body.classList.remove(
+      'popupOpen'
+    );
   }
 }
 
@@ -2522,21 +2736,26 @@ function closePopup(id){
 function showHuntSuccess(){
   if(!current) return;
 
-  const hunter =
-    String(current.redditUser||'').trim()||
-    'an unassigned hunter';
+  const hunter = String(
+    current.redditUser||''
+  ).trim()||
+  'an unassigned hunter';
 
   $('huntGif').src =
-    HUNT_GIF+'?play='+Date.now();
+    HUNT_GIF+
+    '?play='+
+    Date.now();
 
   setText(
     'huntBanner',
-    'Successfully hunted by '+hunter
+    'Successfully hunted by '+
+    hunter
   );
 
   setText(
     'huntTime',
-    '⏱️ Survival Time: '+fmt(elapsed)
+    '⏱️ Survival Time: '+
+    fmt(elapsed)
   );
 
   $('redditPost').value =
@@ -2548,13 +2767,17 @@ function showHuntSuccess(){
     '. 🎲\n\n'+
     'My D12 Survival Game experience:\n\n';
 
-  openPopup('huntOverlay');
+  openPopup(
+    'huntOverlay'
+  );
 }
 
 /* REDDIT SHARING */
 
 function shareToReddit(textId,title){
-  const post = $(textId).value.trim();
+  const post = $(
+    textId
+  ).value.trim();
 
   if(!post){
     alert(
@@ -2592,7 +2815,9 @@ function showWinnerCelebration(){
     'it all the way to victory! 🎲\n\n'+
     "Here's how I survived:\n\n";
 
-  openPopup('winnerOverlay');
+  openPopup(
+    'winnerOverlay'
+  );
 }
 
 /* TAP OUT */
@@ -2600,7 +2825,8 @@ function showWinnerCelebration(){
 function showTapOutCelebration(){
   setText(
     'tapTime',
-    '⏱️ Survival Time: '+fmt(elapsed)
+    '⏱️ Survival Time: '+
+    fmt(elapsed)
   );
 
   $('tapPost').value =
@@ -2613,9 +2839,13 @@ function showTapOutCelebration(){
     'Why I decided to tap out:\n\n';
 
   $('tapGif').src =
-    TAP_OUT_GIF+'?play='+Date.now();
+    TAP_OUT_GIF+
+    '?play='+
+    Date.now();
 
-  openPopup('tapOverlay');
+  openPopup(
+    'tapOverlay'
+  );
 }
 
 /* FINISH GAME */
@@ -2684,7 +2914,9 @@ function finishGame(won=false,tappedOut=false){
 function localScores(){
   try{
     const rows = JSON.parse(
-      localStorage.getItem('d12_scores_v5')||'[]'
+      localStorage.getItem(
+        'd12_scores_v5'
+      )||'[]'
     );
 
     return Array.isArray(rows)
@@ -2697,9 +2929,13 @@ function localScores(){
 }
 
 function safeCell(row,value){
-  const cell = document.createElement('td');
+  const cell = document.createElement(
+    'td'
+  );
 
-  cell.textContent = String(value??'');
+  cell.textContent = String(
+    value??''
+  );
 
   row.append(cell);
 }
@@ -2714,8 +2950,13 @@ function isTappedOut(record){
 /* LEADERBOARDS */
 
 function renderBoards(rows){
-  const soldier = $('soldierRows');
-  const hunter = $('hunterRows');
+  const soldier = $(
+    'soldierRows'
+  );
+
+  const hunter = $(
+    'hunterRows'
+  );
 
   soldier.replaceChildren();
   hunter.replaceChildren();
@@ -2729,18 +2970,26 @@ function renderBoards(rows){
     .slice(0,100);
 
   if(!sorted.length){
-    const row = document.createElement('tr');
-    const cell = document.createElement('td');
+    const row = document.createElement(
+      'tr'
+    );
+
+    const cell = document.createElement(
+      'td'
+    );
 
     cell.colSpan = 4;
-    cell.textContent = 'No scores yet.';
+    cell.textContent =
+      'No scores yet.';
 
     row.append(cell);
     soldier.append(row);
   }
 
   for(const record of sorted){
-    const row = document.createElement('tr');
+    const row = document.createElement(
+      'tr'
+    );
 
     safeCell(
       row,
@@ -2749,7 +2998,9 @@ function renderBoards(rows){
 
     safeCell(
       row,
-      fmt(record.duration_ms||0)
+      fmt(
+        record.duration_ms||0
+      )
     );
 
     const result = isTappedOut(record)
@@ -2762,7 +3013,10 @@ function renderBoards(rows){
             'Unassigned'
           );
 
-    safeCell(row,result);
+    safeCell(
+      row,
+      result
+    );
 
     safeCell(
       row,
@@ -2804,18 +3058,26 @@ function renderBoards(rows){
   );
 
   if(!ranked.length){
-    const row = document.createElement('tr');
-    const cell = document.createElement('td');
+    const row = document.createElement(
+      'tr'
+    );
+
+    const cell = document.createElement(
+      'td'
+    );
 
     cell.colSpan = 2;
-    cell.textContent = 'No hunter claims yet.';
+    cell.textContent =
+      'No hunter claims yet.';
 
     row.append(cell);
     hunter.append(row);
   }
 
   for(const [name,count] of ranked){
-    const row = document.createElement('tr');
+    const row = document.createElement(
+      'tr'
+    );
 
     safeCell(row,name);
     safeCell(row,count);
@@ -2853,7 +3115,9 @@ async function board(){
     }
 
     renderBoards(
-      Array.isArray(rows)?rows:[]
+      Array.isArray(rows)
+        ? rows
+        : []
     );
 
   }catch(error){
@@ -2880,13 +3144,19 @@ async function saveScore(){
 
   saving = true;
 
-  $('retrySave').classList.add('hidden');
+  $('retrySave').classList.add(
+    'hidden'
+  );
 
   const tappedOut =
     finishKind==='tapped_out';
 
   const endingSlide = tappedOut
-    ? (current?current.id:1)
+    ? (
+        current
+          ? current.id
+          : 1
+      )
     : current.id;
 
   const record = {
@@ -2902,14 +3172,18 @@ async function saveScore(){
         ? 'ruined'
         : finishKind,
 
-    ending_slide:endingSlide,
+    ending_slide:
+      endingSlide,
 
     featured_reddit_user:
       tappedOut
         ? TAP_OUT_MARKER
         : finishKind==='winner'
           ? null
-          : (current.redditUser||null)
+          : (
+              current.redditUser||
+              null
+            )
   };
 
   try{
@@ -2919,20 +3193,28 @@ async function saveScore(){
         {
           method:'POST',
           headers:{
-            Prefer:'return=minimal'
+            Prefer:
+              'return=minimal'
           },
-          body:JSON.stringify(record)
+          body:JSON.stringify(
+            record
+          )
         }
       );
 
     }else{
-      const rows = localScores();
+      const rows =
+        localScores();
 
-      rows.push(record);
+      rows.push(
+        record
+      );
 
       localStorage.setItem(
         'd12_scores_v5',
-        JSON.stringify(rows)
+        JSON.stringify(
+          rows
+        )
       );
     }
 
@@ -2945,7 +3227,9 @@ async function saveScore(){
       error.message
     );
 
-    $('retrySave').classList.remove('hidden');
+    $('retrySave').classList.remove(
+      'hidden'
+    );
 
     return;
   }
@@ -3044,17 +3328,23 @@ $('shareTap').addEventListener(
 
 $('closeHunt').addEventListener(
   'click',
-  ()=>closePopup('huntOverlay')
+  ()=>closePopup(
+    'huntOverlay'
+  )
 );
 
 $('closeWinner').addEventListener(
   'click',
-  ()=>closePopup('winnerOverlay')
+  ()=>closePopup(
+    'winnerOverlay'
+  )
 );
 
 $('closeTap').addEventListener(
   'click',
-  ()=>closePopup('tapOverlay')
+  ()=>closePopup(
+    'tapOverlay'
+  )
 );
 
 /* USERNAME ENTER KEY */
@@ -3062,7 +3352,9 @@ $('closeTap').addEventListener(
 $('playerName').addEventListener(
   'keydown',
   event=>{
-    if(event.key==='Enter'){
+    if(
+      event.key==='Enter'
+    ){
       begin();
     }
   }
