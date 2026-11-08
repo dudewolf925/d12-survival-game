@@ -1,21 +1,21 @@
 {
-  "title": "A NNN challenge new test",
+  "title": "A NNN challenge",
   "introTitle": "Do you have what it takes to survive the hunt?",
-  "introText": "Roll the die if you’re willing to risk it all.\n\nIt begins",
+  "introText": "Roll the D12 if you’re willing to risk it all.",
   "homeImageUrl": "https://i.imgur.com/ME7W3yO_d.webp?maxwidth=760&fidelity=grand",
   "supabaseUrl": "https://nustqxwldlgsdncebwxt.supabase.co",
   "supabaseKey": "sb_publishable_eHWFWDOvdBpcn1B_9mYryg_KjiCvEdr",
   "slides": [
     {
       "id": 1,
-      "title": "Outcome 1",
-      "description": "Placeholder for slide 1",
-      "type": "placeholder",
-      "url": "",
-      "redditUser": "u/Hunter1",
+      "title": "I’m coming for you ",
+      "description": "Grab hold of that cock and give it some nice slow strokes while you watch me tease.  \n\nAnd you should stroke until you are able to roll again",
+      "type": "video",
+      "url": "https://www.reddit.com/r/NoNutNovemberChalleng/s/yGCiSd5eTK",
+      "redditUser": "u/dreamalicious",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 65
     },
     {
       "id": 2,
