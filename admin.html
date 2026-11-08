@@ -5,6 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>D12 Admin Studio</title>
+
 <style>
 *{box-sizing:border-box}
 :root{font-family:system-ui,-apple-system,sans-serif;color-scheme:dark}
@@ -12,6 +13,7 @@ body{margin:0;background:#000;color:#f8f8f8}
 main{max-width:850px;margin:auto;padding:16px}
 h1{font-size:28px;margin-bottom:4px}
 h2{font-size:20px;margin-top:0}
+h3{margin-top:25px}
 p,small{color:#c5c5c5;line-height:1.5}
 section{background:#171717;border:1px solid #666;border-radius:17px;padding:17px;margin:15px 0}
 label{display:block;margin:14px 0;font-size:14px;color:#eee}
@@ -24,13 +26,15 @@ button.danger{background:#b42335;border-color:#ff6174;color:white;font-weight:bo
 button:disabled{opacity:.5;cursor:not-allowed}
 .actions{display:flex;flex-wrap:wrap;gap:8px}
 .slides{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
-.preview{height:260px;background:#080808;border:1px solid #666;border-radius:12px;display:grid;place-items:center;overflow:hidden}
+.preview{height:260px;background:#080808;border:1px solid #666;border-radius:12px;display:grid;place-items:center;overflow:hidden;color:#aaa;text-align:center}
 .preview img,.preview video{width:100%;height:100%;object-fit:contain}
 .preview iframe{width:100%;height:100%;border:0}
 .mediaHelp{color:#c5c5c5;font-size:13px;line-height:1.5}
 .notice{white-space:pre-wrap;color:#eee}
 .warning{color:#ffb8c3}
 .success{color:#a8f0bc}
+.secondMediaPanel{margin:18px 0;padding:15px;border:1px solid #777;border-radius:13px;background:#101010}
+.secondMediaPanel h3{margin:0 0 8px}
 .gameMock{border:1px solid #666;border-radius:17px;padding:15px;background:#171717;max-width:520px;margin:auto}
 .mockStats{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #555;padding-bottom:13px;margin-bottom:15px}
 .mockTimer{font-size:27px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -38,9 +42,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .mockDie{background:#0d0d0d;border:1px solid #666;border-radius:12px;padding:5px 16px;text-align:center}
 .mockDieNumber{font-size:38px;line-height:1.1;font-weight:900}
 .mockTitle{text-align:center;font-size:25px;margin:8px 0 15px;overflow-wrap:anywhere}
-.mockMedia{width:100%;min-height:160px;background:#080808;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#aaa}
-.mockMedia img,.mockMedia video{display:block;width:100%;max-height:390px;object-fit:contain}
-.mockMedia iframe{width:100%;height:350px;border:0}
+.mockMedia{width:100%;min-height:160px;background:#080808;border-radius:12px;overflow:hidden;color:#aaa}
 .mockDescription{white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.65;margin:15px 0}
 .mockHunter{color:#ccc;text-align:center;font-size:13px}
 .mockControls{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid #555}
@@ -48,6 +50,20 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .mockRoll{background:#16803c;border-color:#5ad783}
 .mockCame{background:#b42335;border-color:#ff6174}
 .mockTap{background:#000;border:2px solid #eee}
+
+/* TWO-MEDIA SWIPE GALLERY */
+.gallery{width:100%;overflow:hidden}
+.galleryTrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;touch-action:pan-x pan-y}
+.galleryTrack::-webkit-scrollbar{display:none}
+.galleryPage{flex:0 0 100%;min-width:0;scroll-snap-align:start;background:#080808;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:180px}
+.galleryPage img,.galleryPage video{display:block;width:100%;max-height:390px;object-fit:contain}
+.galleryPage iframe{display:block;width:100%;height:350px;border:0}
+.galleryPage a{color:#9cdbff;font-size:12px;margin:8px}
+.galleryNav{display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 0}
+.galleryNav button{min-width:48px;min-height:42px}
+.galleryCounter{color:white;font-size:14px;font-weight:700}
+.galleryHint{text-align:center;font-size:12px;color:#aaa;margin:0 0 10px}
+.galleryEmpty{padding:60px 12px;text-align:center;color:#aaa}
 @media(max-width:500px){
 .slides{grid-template-columns:repeat(4,1fr)}
 main{padding:12px}
@@ -56,252 +72,6 @@ main{padding:12px}
 </style>
 </head>
 
-<!-- D12 TWO-MEDIA SWIPE GALLERY -->
-<style>
-.d12Gallery {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #080808;
-}
-
-.d12GalleryTrack {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
-}
-
-.d12GalleryTrack::-webkit-scrollbar {
-  display: none;
-}
-
-.d12GalleryPage {
-  flex: 0 0 100%;
-  min-width: 0;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.d12GalleryPage .mediaBox {
-  width: 100%;
-}
-
-.d12GalleryPage .media {
-  width: 100%;
-  max-height: 520px;
-  object-fit: contain;
-}
-
-.d12GalleryPage .mediaEmbed {
-  width: 100%;
-  aspect-ratio: 9 / 16;
-  max-height: 650px;
-}
-
-.d12GalleryNav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  margin: 12px 0 4px;
-}
-
-.d12GalleryNav button {
-  min-width: 48px;
-  min-height: 42px;
-  padding: 8px 15px;
-  background: #333;
-  border: 1px solid #888;
-}
-
-.d12GalleryCounter {
-  font-size: 14px;
-  font-weight: 700;
-  color: #eee;
-}
-
-.d12GalleryHint {
-  text-align: center;
-  font-size: 12px;
-  color: #aaa;
-  margin: 4px 0 10px;
-}
-</style>
-
-<script>
-(function () {
-  "use strict";
-
-  // Keep the original single-media renderer for home images.
-  const originalShowMedia = showMedia;
-
-  function galleryItem(value) {
-    const media = resolveMedia(value);
-
-    if (!media) return null;
-
-    const page = document.createElement("div");
-    page.className = "d12GalleryPage";
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "mediaBox";
-
-    const node = mediaNode(value);
-
-    if (!node) return null;
-
-    wrapper.append(node);
-
-    if (media.kind === "embed" && media.original) {
-      const link = document.createElement("a");
-      link.className = "mediaFallback";
-      link.href = media.original;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = "Open media at source";
-      wrapper.append(link);
-    }
-
-    page.append(wrapper);
-
-    return page;
-  }
-
-  function renderGallery(containerId, values) {
-    const container = document.getElementById(containerId);
-
-    if (!container) return;
-
-    const items = values.filter(value => {
-      return typeof value === "string" &&
-        value.trim().length > 0;
-    });
-
-    if (items.length === 0) {
-      container.replaceChildren();
-      return;
-    }
-
-    if (items.length === 1) {
-      originalShowMedia(containerId, items[0]);
-      return;
-    }
-
-    container.replaceChildren();
-
-    const gallery = document.createElement("div");
-    gallery.className = "d12Gallery";
-
-    const track = document.createElement("div");
-    track.className = "d12GalleryTrack";
-
-    for (const value of items) {
-      const page = galleryItem(value);
-
-      if (page) track.append(page);
-    }
-
-    if (!track.children.length) return;
-
-    gallery.append(track);
-    container.append(gallery);
-
-    const count = track.children.length;
-
-    if (count < 2) return;
-
-    const navigation = document.createElement("div");
-    navigation.className = "d12GalleryNav";
-
-    const previous = document.createElement("button");
-    previous.type = "button";
-    previous.textContent = "❮";
-    previous.setAttribute("aria-label", "Previous media");
-
-    const counter = document.createElement("span");
-    counter.className = "d12GalleryCounter";
-    counter.textContent = "1 / " + count;
-
-    const next = document.createElement("button");
-    next.type = "button";
-    next.textContent = "❯";
-    next.setAttribute("aria-label", "Next media");
-
-    let index = 0;
-
-    function moveTo(nextIndex) {
-      index = Math.max(
-        0,
-        Math.min(count - 1, nextIndex)
-      );
-
-      track.scrollTo({
-        left: track.clientWidth * index,
-        behavior: "smooth"
-      });
-
-      counter.textContent =
-        (index + 1) + " / " + count;
-    }
-
-    previous.onclick = () => moveTo(index - 1);
-    next.onclick = () => moveTo(index + 1);
-
-    track.addEventListener("scroll", () => {
-      if (!track.clientWidth) return;
-
-      index = Math.max(
-        0,
-        Math.min(
-          count - 1,
-          Math.round(
-            track.scrollLeft / track.clientWidth
-          )
-        )
-      );
-
-      counter.textContent =
-        (index + 1) + " / " + count;
-    }, {passive: true});
-
-    navigation.append(previous, counter, next);
-    container.append(navigation);
-
-    const hint = document.createElement("p");
-    hint.className = "d12GalleryHint";
-    hint.textContent = "Swipe left or right to view more";
-
-    container.append(hint);
-  }
-
-  // Override only slide media. Home media still works as before.
-  showMedia = function (containerId, value) {
-    if (containerId !== "slideMedia") {
-      originalShowMedia(containerId, value);
-      return;
-    }
-
-    const second =
-      current && typeof current.media2 === "string"
-        ? current.media2
-        : "";
-
-    renderGallery(containerId, [
-      typeof value === "string" ? value : (value?.url || ""),
-      second
-    ]);
-  };
-})();
-</script>
-
 <body>
 <main>
 <h1>🎲 D12 Admin Studio</h1>
@@ -309,68 +79,118 @@ main{padding:12px}
 
 <section>
 <h2>Game settings</h2>
-<label>Game title<input id="title"></label>
-<label>Home heading<input id="introTitle"></label>
-<label>Home message<textarea id="introText"></textarea></label>
-<label>Home image URL<input id="homeImageUrl" placeholder="https://..."></label>
-<label>Choose home photo<input id="homeFile" type="file" accept="image/*"></label>
+<label>Game title
+<input id="title">
+</label>
+<label>Home heading
+<input id="introTitle">
+</label>
+<label>Home message
+<textarea id="introText"></textarea>
+</label>
+<label>Home image URL
+<input id="homeImageUrl" placeholder="https://...">
+</label>
+<label>Choose home photo
+<input id="homeFile" type="file" accept="image/*">
+</label>
 <div class="preview" id="homePreview"></div>
-<small>Hosted image URLs are recommended. Embedded media can make your configuration too large to publish.</small>
+<small>Hosted image URLs are recommended. Embedded files can make your configuration too large to publish.</small>
 </section>
 
 <section>
 <h2>Slides</h2>
 <p>D12 rolls select slides 1–12. Consequence branches can lead to slides 13–24. Slide 16 is the winning slide.</p>
+
 <div class="slides" id="slideButtons"></div>
-<label>Slide title<input id="slideTitle"></label>
-<label>Description<textarea id="description"></textarea></label>
-<label>Featured Reddit Hunter<input id="redditUser" placeholder="u/username"></label>
-<label>Media type
+
+<label>Slide title
+<input id="slideTitle">
+</label>
+
+<label>Description
+<textarea id="description"></textarea>
+</label>
+
+<label>Featured Reddit Hunter
+<input id="redditUser" placeholder="u/username">
+</label>
+
+<label>Primary media type
 <select id="type">
 <option value="placeholder">Placeholder</option>
 <option value="image">Image</option>
 <option value="video">Video</option>
 </select>
 </label>
-<label>Media URL (RedGIFs, Imgur, direct image or video)
-<input id="url" placeholder="https://www.redgifs.com/watch/... or https://imgur.com/...">
+
+<label>Media 1 URL — Image, GIF, RedGIFs or Imgur
+<input id="url" placeholder="https://www.redgifs.com/watch/...">
 </label>
-<p class="mediaHelp">Paste a RedGIFs watch link, an Imgur post/album link, or a direct image/video URL. The game detects the media automatically. Embedded players depend on the provider allowing playback.</p>
-<label>Choose slide photo or video
+
+<p class="mediaHelp">Paste a RedGIFs watch link, an Imgur link, or a direct image/video URL. The game detects supported media automatically.</p>
+
+<label>Choose first slide photo or video
 <input id="slideFile" type="file" accept="image/*,video/*">
 </label>
+
 <div class="preview" id="preview"></div>
 
-<h3>Live Game Layout Preview</h3>
-<p class="mediaHelp">Updates as you edit this slide. The buttons show the actual game layout; they do not play the game here.</p>
+<div class="secondMediaPanel">
+<h3>🖼️ Second Gallery Item</h3>
+<p class="mediaHelp">Optional. Add a second image, GIF, or video. Your game will display a swipe gallery when both media URLs are filled in.</p>
 
-<div class="gameMock">
-  <div class="mockStats">
-    <div>
-      <div class="mockTimer">00:03:42</div>
-      <div class="mockCaption">Survival Time</div>
-    </div>
-    <div class="mockDie">
-      <div class="mockDieNumber" id="mockDie">1</div>
-      <div class="mockCaption">D12 Roll</div>
-    </div>
-  </div>
-  <h3 class="mockTitle" id="mockTitle">Slide 1</h3>
-  <div class="mockMedia" id="mockMedia">No media selected</div>
-  <p class="mockDescription" id="mockDescription">Slide description</p>
-  <p class="mockHunter" id="mockHunter"></p>
-  <div class="mockControls">
-    <button class="mockRoll" id="mockRoll">🎲 Roll Again</button>
-    <button class="mockCame">💦 I Came 💦</button>
-    <button class="mockTap">🏳️ I'm Tapping Out 🏳️</button>
-  </div>
+<label>Media 2 URL
+<input id="media2" placeholder="https://www.redgifs.com/watch/...">
+</label>
+
+<label>Choose second photo or video
+<input id="media2File" type="file" accept="image/*,video/*">
+</label>
+
+<div class="preview" id="secondMediaPreview"></div>
 </div>
 
-<label><input type="checkbox" id="consequence"> Require Accept Consequences</label>
-<label>Consequence destination<select id="destination"></select></label>
+<h3>Live Game Layout Preview</h3>
+<p class="mediaHelp">The preview updates as you edit. Swipe left or right between media items, or use the arrow buttons.</p>
+
+<div class="gameMock">
+<div class="mockStats">
+<div>
+<div class="mockTimer">00:03:42</div>
+<div class="mockCaption">Survival Time</div>
+</div>
+<div class="mockDie">
+<div class="mockDieNumber" id="mockDie">1</div>
+<div class="mockCaption">D12 Roll</div>
+</div>
+</div>
+
+<h3 class="mockTitle" id="mockTitle">Slide 1</h3>
+<div class="mockMedia" id="mockMedia">No media selected</div>
+<p class="mockDescription" id="mockDescription">Slide description</p>
+<p class="mockHunter" id="mockHunter"></p>
+
+<div class="mockControls">
+<button class="mockRoll" id="mockRoll">🎲 Roll Again</button>
+<button class="mockCame">💦 I Came 💦</button>
+<button class="mockTap">🏳️ I'm Tapping Out 🏳️</button>
+</div>
+</div>
+
+<label>
+<input type="checkbox" id="consequence">
+Require Accept Consequences
+</label>
+
+<label>Consequence destination
+<select id="destination"></select>
+</label>
+
 <label>Reroll lockout in seconds
 <input id="rerollLockSeconds" type="number" min="0" max="86400">
 </label>
+
 <div class="actions">
 <button id="add" type="button">Add bonus slide</button>
 <button id="remove" type="button">Remove bonus slide</button>
@@ -380,17 +200,23 @@ main{padding:12px}
 <section>
 <h2>Supabase leaderboard</h2>
 <p>Enter only your public project URL and publishable/anon key. Never enter a secret or service_role key.</p>
-<label>Supabase project URL<input id="supabaseUrl" placeholder="https://project.supabase.co"></label>
-<label>Supabase publishable / anon key<input id="supabaseKey"></label>
+<label>Supabase project URL
+<input id="supabaseUrl" placeholder="https://project.supabase.co">
+</label>
+<label>Supabase publishable / anon key
+<input id="supabaseKey">
+</label>
 </section>
 
 <section>
 <h2>Reset Leaderboards</h2>
 <p class="warning"><strong>Danger zone:</strong> This permanently deletes every saved player score. The Soldier Leaderboard and Hunter Scoreboard will both reset to empty.</p>
 <p>Your game slides and configuration will not be deleted.</p>
+
 <label>Admin reset password
 <input id="resetPassword" type="password" placeholder="Enter your private reset password" autocomplete="off">
 </label>
+
 <button id="resetLeaderboards" class="danger" type="button">Reset Both Leaderboards</button>
 <p id="resetNotice" class="notice" aria-live="polite"></p>
 <small>The password is sent only to your protected Supabase function. It is not saved in your game configuration.</small>
@@ -399,31 +225,39 @@ main{padding:12px}
 <section>
 <h2>🚀 Publish to GitHub</h2>
 <p>Your saved draft loads automatically. Publishing saves your draft first, then checks GitHub's version without replacing your edits.</p>
+
 <div class="actions">
 <button id="loadGitHub" type="button">Load from GitHub (replace editor)</button>
 </div>
+
 <label>Publishing password
 <input id="publishPassword" type="password" placeholder="Enter your private publishing password" autocomplete="off">
 </label>
+
 <button id="publishGitHub" class="primary" type="button">🚀 Publish to GitHub</button>
 <p id="publishNotice" class="notice" aria-live="polite"></p>
+
 <small>Your GitHub token stays securely in Supabase. Your publishing password is never saved in game-config.json. If GitHub changed since your draft's known version, publishing stops rather than overwriting those changes.</small>
 </section>
 
 <section>
 <h2>Save and publish</h2>
 <p>Save Draft stores edits on this iPhone. Publish to GitHub saves automatically. Copy Configuration provides a manual backup.</p>
+
 <div class="actions">
 <button id="save" type="button">Save Draft</button>
 <button class="primary" id="copy" type="button">Copy Configuration</button>
 <button id="reset" type="button">Reset Defaults</button>
 </div>
+
 <p id="notice" class="notice" aria-live="polite"></p>
 </section>
 </main>
-<script>
 
-'use strict';
+<script>
+"use strict";
+
+/* DEFAULT GAME CONFIGURATION */
 
 const DEFAULT = {
   title: "D12 Consequences",
@@ -432,16 +266,17 @@ const DEFAULT = {
   homeImageUrl: "",
   supabaseUrl: "",
   supabaseKey: "",
-  slides: Array.from({length: 24}, (_, i) => ({
-    id: i + 1,
-    title: "Outcome " + (i + 1),
-    description: "Placeholder for slide " + (i + 1),
-    type: "placeholder",
-    url: "",
-    redditUser: "",
-    consequence: false,
-    destination: 1,
-    rerollLockSeconds: 0
+  slides: Array.from({length:24}, (_,i) => ({
+    id:i+1,
+    title:"Outcome "+(i+1),
+    description:"Placeholder for slide "+(i+1),
+    type:"placeholder",
+    url:"",
+    media2:"",
+    redditUser:"",
+    consequence:false,
+    destination:1,
+    rerollLockSeconds:0
   }))
 };
 
@@ -459,6 +294,8 @@ let selected = 1;
 let githubExpectedSha = null;
 let hasSavedDraft = false;
 
+/* RESTORE SAVED DRAFT */
+
 try {
   const stored = localStorage.getItem(DRAFT_KEY);
 
@@ -472,8 +309,8 @@ try {
         localStorage.getItem(SHA_KEY) || null;
     }
   }
-} catch (error) {
-  console.warn("Could not restore saved draft:", error);
+} catch(error) {
+  console.warn("Could not restore saved draft:",error);
 }
 
 function message(text) {
@@ -488,9 +325,9 @@ function slide() {
   return cfg.slides.find(s => s.id === selected);
 }
 
-/* REDGIFS, IMGUR AND DIRECT MEDIA */
+/* MEDIA URL DETECTION */
 
-function resolveMedia(value, type) {
+function resolveMedia(value,type) {
   const url = String(value || "").trim();
 
   if (!url) return null;
@@ -500,9 +337,7 @@ function resolveMedia(value, type) {
     /^blob:/i.test(url)
   ) {
     return {
-      kind: /^data:video\//i.test(url)
-        ? "video"
-        : "image",
+      kind:/^data:video\//i.test(url) ? "video" : "image",
       url
     };
   }
@@ -511,17 +346,17 @@ function resolveMedia(value, type) {
 
   try {
     parsed = new URL(url);
-  } catch (error) {
+  } catch(error) {
     return null;
   }
 
-  if (!["https:", "http:"].includes(parsed.protocol)) {
+  if (!["https:","http:"].includes(parsed.protocol)) {
     return null;
   }
 
   const host = parsed.hostname
     .toLowerCase()
-    .replace(/^www\./, "");
+    .replace(/^www\./,"");
 
   const parts = parsed.pathname
     .split("/")
@@ -539,9 +374,9 @@ function resolveMedia(value, type) {
 
     if (id && /^[a-z0-9-]+$/i.test(id)) {
       return {
-        kind: "embed",
-        url: "https://www.redgifs.com/ifr/" + id,
-        original: url
+        kind:"embed",
+        url:"https://www.redgifs.com/ifr/"+id,
+        original:url
       };
     }
   }
@@ -558,13 +393,13 @@ function resolveMedia(value, type) {
 
       if (id && /^[a-z0-9]+$/i.test(id)) {
         return {
-          kind: "embed",
+          kind:"embed",
           url:
             "https://imgur.com/" +
             (parts[0] === "a" ? "a/" : "gallery/") +
             id +
             "/embed",
-          original: url
+          original:url
         };
       }
     }
@@ -573,9 +408,9 @@ function resolveMedia(value, type) {
 
     if (id && /^[a-z0-9]+$/i.test(id)) {
       return {
-        kind: "embed",
-        url: "https://imgur.com/" + id + "/embed",
-        original: url
+        kind:"embed",
+        url:"https://imgur.com/"+id+"/embed",
+        original:url
       };
     }
   }
@@ -584,14 +419,12 @@ function resolveMedia(value, type) {
     host === "i.imgur.com" &&
     /\.gifv$/i.test(parsed.pathname)
   ) {
-    parsed.pathname = parsed.pathname.replace(
-      /\.gifv$/i,
-      ".mp4"
-    );
+    parsed.pathname =
+      parsed.pathname.replace(/\.gifv$/i,".mp4");
 
     return {
-      kind: "video",
-      url: parsed.href
+      kind:"video",
+      url:parsed.href
     };
   }
 
@@ -605,16 +438,12 @@ function resolveMedia(value, type) {
   };
 }
 
-function preview(id, type, url, fallback) {
-  const box = el(id);
-  box.replaceChildren();
+/* CREATE MEDIA ELEMENT */
 
-  const media = resolveMedia(url, type);
+function makeMedia(value,type) {
+  const media = resolveMedia(value,type);
 
-  if (!media) {
-    box.textContent = fallback || "No media selected";
-    return;
-  }
+  if (!media) return null;
 
   const node = document.createElement(
     media.kind === "embed"
@@ -627,18 +456,40 @@ function preview(id, type, url, fallback) {
   node.src = media.url;
 
   if (media.kind === "embed") {
-    node.title = "Embedded media preview";
+    node.title = "Embedded slide media";
     node.loading = "lazy";
     node.setAttribute(
       "allow",
       "autoplay; fullscreen; picture-in-picture"
     );
-    node.setAttribute("allowfullscreen", "");
+    node.setAttribute("allowfullscreen","");
   }
 
   if (media.kind === "video") {
     node.controls = true;
     node.playsInline = true;
+    node.preload = "metadata";
+  }
+
+  if (media.kind === "image") {
+    node.alt = "Slide media";
+    node.loading = "lazy";
+  }
+
+  return node;
+}
+
+/* SINGLE MEDIA PREVIEW */
+
+function preview(id,type,url,fallback) {
+  const box = el(id);
+  box.replaceChildren();
+
+  const node = makeMedia(url,type);
+
+  if (!node) {
+    box.textContent = fallback || "No media selected";
+    return;
   }
 
   node.onerror = () => {
@@ -649,7 +500,129 @@ function preview(id, type, url, fallback) {
   box.append(node);
 }
 
-/* LIVE GAME LAYOUT PREVIEW */
+/* TWO-ITEM SWIPE GALLERY */
+
+function renderGallery() {
+  const box = el("mockMedia");
+  const s = slide();
+
+  box.replaceChildren();
+
+  if (!s) return;
+
+  const items = [
+    {url:String(s.url || "").trim(),type:s.type},
+    {url:String(s.media2 || "").trim(),type:"image"}
+  ].filter(item => item.url);
+
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "galleryEmpty";
+    empty.textContent = "No media selected";
+    box.append(empty);
+    return;
+  }
+
+  const gallery = document.createElement("div");
+  gallery.className = "gallery";
+
+  const track = document.createElement("div");
+  track.className = "galleryTrack";
+
+  for (const item of items) {
+    const page = document.createElement("div");
+    page.className = "galleryPage";
+
+    const node = makeMedia(item.url,item.type);
+
+    if (node) {
+      page.append(node);
+
+      const media = resolveMedia(item.url,item.type);
+
+      if (media && media.kind === "embed" && media.original) {
+        const link = document.createElement("a");
+        link.href = media.original;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Open at source";
+        page.append(link);
+      }
+    } else {
+      page.textContent = "Invalid media URL";
+    }
+
+    track.append(page);
+  }
+
+  gallery.append(track);
+
+  if (items.length > 1) {
+    const nav = document.createElement("div");
+    nav.className = "galleryNav";
+
+    const prev = document.createElement("button");
+    prev.type = "button";
+    prev.textContent = "❮";
+    prev.setAttribute("aria-label","Previous media");
+
+    const counter = document.createElement("span");
+    counter.className = "galleryCounter";
+    counter.textContent = "1 / "+items.length;
+
+    const next = document.createElement("button");
+    next.type = "button";
+    next.textContent = "❯";
+    next.setAttribute("aria-label","Next media");
+
+    let index = 0;
+
+    function goTo(i) {
+      index = Math.max(
+        0,
+        Math.min(items.length-1,i)
+      );
+
+      track.scrollTo({
+        left:track.clientWidth*index,
+        behavior:"smooth"
+      });
+
+      counter.textContent =
+        (index+1)+" / "+items.length;
+    }
+
+    prev.onclick = () => goTo(index-1);
+    next.onclick = () => goTo(index+1);
+
+    track.addEventListener("scroll",() => {
+      if (!track.clientWidth) return;
+
+      index = Math.max(
+        0,
+        Math.min(
+          items.length-1,
+          Math.round(track.scrollLeft/track.clientWidth)
+        )
+      );
+
+      counter.textContent =
+        (index+1)+" / "+items.length;
+    },{passive:true});
+
+    nav.append(prev,counter,next);
+    gallery.append(nav);
+
+    const hint = document.createElement("p");
+    hint.className = "galleryHint";
+    hint.textContent = "Swipe left or right to view more";
+    gallery.append(hint);
+  }
+
+  box.append(gallery);
+}
+
+/* LIVE GAME PREVIEW */
 
 function updateGamePreview() {
   const s = slide();
@@ -659,14 +632,14 @@ function updateGamePreview() {
   el("mockDie").textContent = String(s.id);
 
   el("mockTitle").textContent =
-    s.title || "Slide " + s.id;
+    s.title || "Slide "+s.id;
 
   el("mockDescription").textContent =
     s.description || "No description yet.";
 
   el("mockHunter").textContent =
     s.redditUser
-      ? "Featured: " + s.redditUser
+      ? "Featured: "+s.redditUser
       : "";
 
   el("mockRoll").textContent =
@@ -674,25 +647,21 @@ function updateGamePreview() {
       ? "⚡ Show Me My Consequences"
       : "🎲 Roll Again";
 
-  preview(
-    "mockMedia",
-    s.type,
-    s.url,
-    "No media selected"
-  );
+  renderGallery();
 }
 
-/* SLIDE SELECTION */
+/* SLIDE BUTTONS */
 
 function buttons() {
   const box = el("slideButtons");
   box.replaceChildren();
 
-  cfg.slides.sort((a, b) => a.id - b.id);
+  cfg.slides.sort((a,b) => a.id-b.id);
 
   cfg.slides.forEach(s => {
     const button = document.createElement("button");
 
+    button.type = "button";
     button.textContent = s.id;
     button.className =
       s.id === selected ? "active" : "";
@@ -714,11 +683,13 @@ function buttons() {
     const option = document.createElement("option");
 
     option.value = s.id;
-    option.textContent = "Slide " + s.id;
+    option.textContent = "Slide "+s.id;
 
     destination.append(option);
   });
 }
+
+/* LOAD SELECTED SLIDE INTO EDITOR */
 
 function edit() {
   const s = slide();
@@ -730,23 +701,36 @@ function edit() {
   el("redditUser").value = s.redditUser || "";
   el("type").value = s.type || "placeholder";
   el("url").value = s.url || "";
+  el("media2").value = s.media2 || "";
+
   el("consequence").checked = !!s.consequence;
   el("destination").value = s.destination || 1;
-
   el("rerollLockSeconds").value =
     s.rerollLockSeconds || 0;
 
   el("remove").disabled = selected <= 24;
 
+  el("slideFile").value = "";
+  el("media2File").value = "";
+
   preview(
     "preview",
     s.type,
     s.url,
-    "Slide " + s.id
+    "Slide "+s.id+" — no first media"
+  );
+
+  preview(
+    "secondMediaPreview",
+    "image",
+    s.media2,
+    "No second media selected"
   );
 
   updateGamePreview();
 }
+
+/* LOAD CONFIG INTO EDITOR */
 
 function fill() {
   [
@@ -784,6 +768,7 @@ function commit() {
 
     s.type = el("type").value;
     s.url = el("url").value.trim();
+    s.media2 = el("media2").value.trim();
 
     s.consequence =
       el("consequence").checked;
@@ -796,9 +781,7 @@ function commit() {
       Math.min(
         86400,
         Math.floor(
-          Number(
-            el("rerollLockSeconds").value
-          ) || 0
+          Number(el("rerollLockSeconds").value) || 0
         )
       )
     );
@@ -816,7 +799,7 @@ function commit() {
   });
 }
 
-/* CONFIG VALIDATION */
+/* VALIDATION */
 
 function validate() {
   if (
@@ -850,24 +833,19 @@ function validate() {
     ids.add(s.id);
 
     if (
-      !["placeholder", "image", "video"].includes(
-        s.type
-      )
+      !["placeholder","image","video"].includes(s.type)
     ) {
       throw Error(
-        "Slide " + s.id + ": invalid media type."
+        "Slide "+s.id+": invalid media type."
       );
     }
 
     if (
       s.redditUser &&
-      !/^u\/[A-Za-z0-9_-]{3,20}$/.test(
-        s.redditUser
-      )
+      !/^u\/[A-Za-z0-9_-]{3,20}$/.test(s.redditUser)
     ) {
       throw Error(
-        "Slide " +
-        s.id +
+        "Slide "+s.id+
         ": use a Reddit name like u/username"
       );
     }
@@ -878,17 +856,24 @@ function validate() {
       s.rerollLockSeconds > 86400
     ) {
       throw Error(
-        "Slide " +
-        s.id +
-        ": invalid reroll lockout."
+        "Slide "+s.id+": invalid reroll lockout."
+      );
+    }
+
+    if (
+      s.media2 != null &&
+      typeof s.media2 !== "string"
+    ) {
+      throw Error(
+        "Slide "+s.id+": second media must be a URL string."
       );
     }
   }
 
-  for (let id = 1; id <= 24; id++) {
+  for (let id=1;id<=24;id++) {
     if (!ids.has(id)) {
       throw Error(
-        "Required slide " + id + " is missing."
+        "Required slide "+id+" is missing."
       );
     }
   }
@@ -899,8 +884,7 @@ function validate() {
       !ids.has(s.destination)
     ) {
       throw Error(
-        "Slide " +
-        s.id +
+        "Slide "+s.id+
         ": consequence destination missing."
       );
     }
@@ -928,10 +912,8 @@ function saveDraft() {
 el("save").onclick = () => {
   try {
     saveDraft();
-  } catch (error) {
-    message(
-      "Save failed: " + error.message
-    );
+  } catch(error) {
+    message("Save failed: "+error.message);
   }
 };
 
@@ -942,7 +924,7 @@ el("copy").onclick = async () => {
     commit();
     validate();
 
-    const json = JSON.stringify(cfg, null, 2);
+    const json = JSON.stringify(cfg,null,2);
 
     if (
       navigator.clipboard &&
@@ -954,8 +936,7 @@ el("copy").onclick = async () => {
         "Configuration copied! Paste into game-config.json on GitHub."
       );
     } else {
-      const textarea =
-        document.createElement("textarea");
+      const textarea = document.createElement("textarea");
 
       textarea.value = json;
       document.body.append(textarea);
@@ -968,10 +949,8 @@ el("copy").onclick = async () => {
         "Copy attempted. Paste into GitHub to confirm."
       );
     }
-  } catch (error) {
-    message(
-      "Copy failed: " + error.message
-    );
+  } catch(error) {
+    message("Copy failed: "+error.message);
   }
 };
 
@@ -990,14 +969,15 @@ el("add").onclick = () => {
 
   cfg.slides.push({
     id,
-    title: "Bonus slide " + id,
-    description: "",
-    type: "placeholder",
-    url: "",
-    redditUser: "",
-    consequence: false,
-    destination: 1,
-    rerollLockSeconds: 0
+    title:"Bonus slide "+id,
+    description:"",
+    type:"placeholder",
+    url:"",
+    media2:"",
+    redditUser:"",
+    consequence:false,
+    destination:1,
+    rerollLockSeconds:0
   });
 
   selected = id;
@@ -1009,6 +989,8 @@ el("add").onclick = () => {
 
 el("remove").onclick = () => {
   if (selected <= 24) return;
+
+  commit();
 
   const removedId = selected;
 
@@ -1027,13 +1009,11 @@ el("remove").onclick = () => {
   edit();
 };
 
-/* RESET EDITOR DEFAULTS */
+/* RESET DEFAULTS */
 
 el("reset").onclick = () => {
   if (
-    !confirm(
-      "Reset all edits on this device?"
-    )
+    !confirm("Reset all edits on this device?")
   ) return;
 
   cfg = clone(DEFAULT);
@@ -1044,7 +1024,7 @@ el("reset").onclick = () => {
   try {
     localStorage.removeItem(DRAFT_KEY);
     localStorage.removeItem(SHA_KEY);
-  } catch (error) {
+  } catch(error) {
     console.warn(error);
   }
 
@@ -1057,16 +1037,15 @@ el("reset").onclick = () => {
 
 /* FILE UPLOADS */
 
-async function upload(file, kind) {
+async function upload(file,kind) {
   if (!file) return null;
 
   const max =
     file.type.startsWith("video/") ? 8 : 3;
 
-  if (file.size > max * 1024 * 1024) {
+  if (file.size > max*1024*1024) {
     throw Error(
-      "File exceeds " +
-      max +
+      "File exceeds "+max+
       " MB. Use a hosted URL instead."
     );
   }
@@ -1078,11 +1057,18 @@ async function upload(file, kind) {
     throw Error("Choose an image.");
   }
 
-  return new Promise((resolve, reject) => {
+  if (
+    kind !== "home" &&
+    !file.type.startsWith("image/") &&
+    !file.type.startsWith("video/")
+  ) {
+    throw Error("Choose an image or video.");
+  }
+
+  return new Promise((resolve,reject) => {
     const reader = new FileReader();
 
     reader.onload = () => resolve(reader.result);
-
     reader.onerror = () =>
       reject(Error("Could not read file."));
 
@@ -1102,53 +1088,89 @@ el("homeFile").onchange = async () => {
     el("homeImageUrl").value = url;
     cfg.homeImageUrl = url;
 
-    preview(
-      "homePreview",
-      "image",
-      url
-    );
+    preview("homePreview","image",url);
 
     message(
       "Home photo loaded. Publish to GitHub when ready."
     );
-  } catch (error) {
+  } catch(error) {
     message(error.message);
   }
 };
 
 el("slideFile").onchange = async () => {
+  const targetSlide = selected;
+
   try {
     const file = el("slideFile").files[0];
-
-    const url = await upload(
-      file,
-      "slide"
-    );
+    const url = await upload(file,"slide");
 
     if (!url) return;
 
-    el("type").value =
+    const s = cfg.slides.find(
+      item => item.id === targetSlide
+    );
+
+    if (!s) return;
+
+    s.type =
       file.type.startsWith("video/")
         ? "video"
         : "image";
 
-    el("url").value = url;
+    s.url = url;
 
-    commit();
+    if (selected === targetSlide) {
+      el("type").value = s.type;
+      el("url").value = url;
+      commit();
 
-    preview(
-      "preview",
-      slide().type,
-      url,
-      "Slide " + selected
-    );
-
-    updateGamePreview();
+      preview("preview",s.type,url);
+      updateGamePreview();
+    }
 
     message(
-      "Media loaded for slide " + selected + "."
+      "First media loaded for slide "+targetSlide+"."
     );
-  } catch (error) {
+  } catch(error) {
+    message(error.message);
+  }
+};
+
+el("media2File").onchange = async () => {
+  const targetSlide = selected;
+
+  try {
+    const file = el("media2File").files[0];
+    const url = await upload(file,"slide");
+
+    if (!url) return;
+
+    const s = cfg.slides.find(
+      item => item.id === targetSlide
+    );
+
+    if (!s) return;
+
+    s.media2 = url;
+
+    if (selected === targetSlide) {
+      el("media2").value = url;
+      commit();
+
+      preview(
+        "secondMediaPreview",
+        "image",
+        url
+      );
+
+      updateGamePreview();
+    }
+
+    message(
+      "Second media loaded for slide "+targetSlide+"."
+    );
+  } catch(error) {
     message(error.message);
   }
 };
@@ -1169,18 +1191,26 @@ el("homeImageUrl").oninput = () => {
   "redditUser",
   "type",
   "url",
+  "media2",
   "consequence",
   "destination",
   "rerollLockSeconds"
 ].forEach(id => {
-  el(id).addEventListener("input", () => {
+  el(id).addEventListener("input",() => {
     commit();
 
     preview(
       "preview",
       slide().type,
       slide().url,
-      "Slide " + selected
+      "No first media"
+    );
+
+    preview(
+      "secondMediaPreview",
+      "image",
+      slide().media2,
+      "No second media selected"
     );
 
     updateGamePreview();
@@ -1197,7 +1227,7 @@ el("resetLeaderboards").onclick = async () => {
   const projectUrl =
     el("supabaseUrl").value
       .trim()
-      .replace(/\/$/, "");
+      .replace(/\/$/,"");
 
   const publicKey =
     el("supabaseKey").value.trim();
@@ -1245,23 +1275,20 @@ el("resetLeaderboards").onclick = async () => {
   }
 
   button.disabled = true;
-
-  notice.textContent =
-    "Resetting leaderboards…";
+  notice.textContent = "Resetting leaderboards…";
 
   try {
     const response = await fetch(
-      projectUrl +
-      "/functions/v1/reset-leaderboards",
+      projectUrl+"/functions/v1/reset-leaderboards",
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: publicKey
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          apikey:publicKey
         },
-        body: JSON.stringify({
+        body:JSON.stringify({
           password,
-          confirmation: "RESET"
+          confirmation:"RESET"
         })
       }
     );
@@ -1271,19 +1298,17 @@ el("resetLeaderboards").onclick = async () => {
 
     try {
       result = JSON.parse(raw);
-    } catch (error) {
+    } catch(error) {
       throw Error(
-        "Unexpected server response: " +
-        raw.slice(0, 180)
+        "Unexpected server response: "+
+        raw.slice(0,180)
       );
     }
 
     if (!response.ok || !result.ok) {
       throw Error(
         result.error ||
-        "Reset failed (HTTP " +
-        response.status +
-        ")"
+        "Reset failed (HTTP "+response.status+")"
       );
     }
 
@@ -1292,10 +1317,9 @@ el("resetLeaderboards").onclick = async () => {
 
     el("resetPassword").value = "";
 
-  } catch (error) {
+  } catch(error) {
     notice.textContent =
-      "Reset failed: " + error.message;
-
+      "Reset failed: "+error.message;
   } finally {
     button.disabled = false;
   }
@@ -1307,18 +1331,17 @@ async function getGitHubConfig() {
   const response = await fetch(
     GITHUB_CONFIG_API,
     {
-      headers: {
-        Accept: "application/vnd.github+json"
+      headers:{
+        Accept:"application/vnd.github+json"
       },
-      cache: "no-store"
+      cache:"no-store"
     }
   );
 
   if (!response.ok) {
     throw Error(
-      "Could not load GitHub configuration (HTTP " +
-      response.status +
-      ")"
+      "Could not load GitHub configuration (HTTP "+
+      response.status+")"
     );
   }
 
@@ -1330,9 +1353,7 @@ async function getGitHubConfig() {
     );
   }
 
-  const encoded =
-    file.content.replace(/\s/g, "");
-
+  const encoded = file.content.replace(/\s/g,"");
   const binary = atob(encoded);
 
   const bytes = Uint8Array.from(
@@ -1355,11 +1376,11 @@ async function getGitHubConfig() {
 
   return {
     config,
-    sha: file.sha
+    sha:file.sha
   };
 }
 
-/* LOAD GITHUB BUTTON */
+/* LOAD FROM GITHUB BUTTON */
 
 el("loadGitHub").onclick = async () => {
   const button = el("loadGitHub");
@@ -1400,11 +1421,10 @@ el("loadGitHub").onclick = async () => {
       "GitHub configuration loaded and saved as your draft. Edit and publish whenever you're ready."
     );
 
-  } catch (error) {
+  } catch(error) {
     publishMessage(
-      "Load failed: " + error.message
+      "Load failed: "+error.message
     );
-
   } finally {
     button.disabled = false;
   }
@@ -1421,10 +1441,9 @@ el("publishGitHub").onclick = async () => {
     publishMessage(
       "Draft saved automatically. Checking GitHub..."
     );
-  } catch (error) {
+  } catch(error) {
     publishMessage(
-      "Could not save draft: " +
-      error.message
+      "Could not save draft: "+error.message
     );
     return;
   }
@@ -1442,7 +1461,7 @@ el("publishGitHub").onclick = async () => {
   const projectUrl =
     el("supabaseUrl").value
       .trim()
-      .replace(/\/$/, "");
+      .replace(/\/$/,"");
 
   const publicKey =
     el("supabaseKey").value.trim();
@@ -1471,18 +1490,17 @@ el("publishGitHub").onclick = async () => {
     const response = await fetch(
       GITHUB_CONFIG_API,
       {
-        headers: {
-          Accept: "application/vnd.github+json"
+        headers:{
+          Accept:"application/vnd.github+json"
         },
-        cache: "no-store"
+        cache:"no-store"
       }
     );
 
     if (!response.ok) {
       throw Error(
-        "Could not check GitHub (HTTP " +
-        response.status +
-        ")"
+        "Could not check GitHub (HTTP "+
+        response.status+")"
       );
     }
 
@@ -1515,7 +1533,6 @@ el("publishGitHub").onclick = async () => {
         );
         return;
       }
-
     } else if (
       !confirm(
         "Draft saved automatically. GitHub has no newer changes.\n\nPublish your current draft now?"
@@ -1532,18 +1549,17 @@ el("publishGitHub").onclick = async () => {
     );
 
     const publishResponse = await fetch(
-      projectUrl +
-      "/functions/v1/publish-game-config",
+      projectUrl+"/functions/v1/publish-game-config",
       {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: publicKey
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          apikey:publicKey
         },
-        body: JSON.stringify({
+        body:JSON.stringify({
           password,
-          expectedSha: remote.sha,
-          config: cfg
+          expectedSha:remote.sha,
+          config:cfg
         })
       }
     );
@@ -1553,10 +1569,10 @@ el("publishGitHub").onclick = async () => {
 
     try {
       result = JSON.parse(raw);
-    } catch (error) {
+    } catch(error) {
       throw Error(
-        "Unexpected server response: " +
-        raw.slice(0, 180)
+        "Unexpected server response: "+
+        raw.slice(0,180)
       );
     }
 
@@ -1566,9 +1582,8 @@ el("publishGitHub").onclick = async () => {
     ) {
       throw Error(
         result.error ||
-        "Publishing failed (HTTP " +
-        publishResponse.status +
-        ")"
+        "Publishing failed (HTTP "+
+        publishResponse.status+")"
       );
     }
 
@@ -1584,8 +1599,7 @@ el("publishGitHub").onclick = async () => {
       } else {
         localStorage.removeItem(SHA_KEY);
       }
-
-    } catch (error) {
+    } catch(error) {
       publishMessage(
         "Published successfully, but Safari could not remember GitHub's new version. Your draft remains saved."
       );
@@ -1598,12 +1612,11 @@ el("publishGitHub").onclick = async () => {
       "Success! Your draft was saved and game-config.json published to GitHub. No reload was needed."
     );
 
-  } catch (error) {
+  } catch(error) {
     publishMessage(
-      "Your draft is preserved on this iPhone. Publishing failed: " +
+      "Your draft is preserved on this iPhone. Publishing failed: "+
       error.message
     );
-
   } finally {
     button.disabled = false;
   }
