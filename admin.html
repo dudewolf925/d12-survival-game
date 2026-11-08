@@ -3,325 +3,743 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>D12 Admin Studio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>D12 Admin Studio — Black Edition</title>
+
 <style>
 *{box-sizing:border-box}
-:root{font-family:system-ui,sans-serif;color-scheme:dark}
+
+:root{
+  font-family:system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+  --bg:#000000;
+  --panel:#171717;
+  --edge:#666666;
+  --text:#f8f8f8;
+  --muted:#c5c5c5;
+  --green:#16803c;
+  --red:#b42335;
+}
+
 body{
   margin:0;
-  background:linear-gradient(150deg,#302044,#0d0d18 65%);
-  color:#f6f0ff
+  background:var(--bg);
+  color:var(--text);
 }
-main{max-width:850px;margin:auto;padding:16px}
-h1{font-size:27px}
-h2{font-size:20px;margin-top:0}
-p,small{color:#c6bbd6;line-height:1.5}
+
+main{
+  max-width:850px;
+  margin:auto;
+  padding:16px 14px 50px;
+}
+
+h1{
+  font-size:clamp(27px,7vw,36px);
+  text-align:center;
+  margin:15px 0 6px;
+}
+
+h2{
+  font-size:21px;
+  margin-top:0;
+}
+
+p,small{
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.subtitle{
+  text-align:center;
+  margin-bottom:25px;
+}
+
 section{
-  background:#1b1727;
-  border:1px solid #554768;
+  background:var(--panel);
+  border:1px solid var(--edge);
   border-radius:18px;
   padding:17px;
-  margin:15px 0
+  margin:15px 0;
+  box-shadow:0 8px 25px #0008;
 }
+
 label{
   display:block;
   margin:14px 0;
   font-size:14px;
-  color:#e4d9f3
+  color:#eeeeee;
+  font-weight:600;
 }
+
 input,textarea,select{
   display:block;
   width:100%;
   margin-top:6px;
   padding:12px;
-  background:#0e0d19;
-  border:1px solid #625674;
+  background:#101010;
+  border:1px solid #888888;
   border-radius:10px;
   color:white;
-  font:inherit
+  font:inherit;
 }
-input[type=checkbox]{display:inline;width:auto}
-textarea{min-height:90px}
+
+input:focus,textarea:focus,select:focus{
+  outline:2px solid #74d99a;
+  outline-offset:1px;
+}
+
+input[type=checkbox]{
+  display:inline-block;
+  width:21px;
+  height:21px;
+  margin:0 8px 0 0;
+  vertical-align:middle;
+  accent-color:#16803c;
+}
+
+.checkboxLabel{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px;
+  background:#101010;
+  border:1px solid #666666;
+  border-radius:10px;
+}
+
+.checkboxLabel input{
+  flex:0 0 auto;
+  margin:0;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
 button{
-  background:#332743;
-  border:1px solid #79658c;
+  background:#333333;
+  border:1px solid #999999;
   border-radius:10px;
   color:white;
   padding:12px;
-  font:inherit;
-  cursor:pointer
+  font:600 15px system-ui;
+  cursor:pointer;
+  min-height:46px;
 }
-button.primary,button.active{
-  background:#c7aaff;
-  color:#21112d;
-  font-weight:bold
+
+button.primary{
+  background:var(--green);
+  border-color:#5ad783;
+  color:#ffffff;
+  font-weight:800;
 }
+
+button.active{
+  background:#eeeeee;
+  color:#111111;
+  border-color:#ffffff;
+  font-weight:900;
+}
+
 button.danger{
-  background:#a51e32;
+  background:var(--red);
   border-color:#ed6575;
   color:white;
-  font-weight:bold
+  font-weight:800;
 }
-button:disabled{opacity:.5;cursor:not-allowed}
-.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.actions button{
+  flex:1;
+  min-width:130px;
+}
+
 .slides{
   display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:7px
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:7px;
 }
+
+.slides button{
+  padding:10px 3px;
+}
+
 .preview{
   height:260px;
-  background:#100e1c;
-  border:1px solid #57446c;
+  background:#080808;
+  border:1px solid #666666;
   border-radius:15px;
   display:grid;
   place-items:center;
-  overflow:hidden
+  overflow:hidden;
+  color:#aaaaaa;
+  text-align:center;
 }
+
 .preview img,.preview video{
   width:100%;
   height:100%;
-  object-fit:contain
+  object-fit:contain;
 }
-.notice{white-space:pre-wrap;color:#e7cfff}
-.warning{color:#ffb8c3}
-.success{color:#a8f0bc}
+
+.notice{
+  white-space:pre-wrap;
+  color:#eeeeee;
+  overflow-wrap:anywhere;
+}
+
+.warning{
+  color:#ffb8c3;
+}
+
+.success{
+  color:#a8f0bc;
+}
+
+.sectionHint{
+  font-size:13px;
+  color:#bbbbbb;
+}
+
+.editorHeading{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin:18px 0 5px;
+}
+
+.slideBadge{
+  border:1px solid #999999;
+  border-radius:20px;
+  padding:5px 12px;
+  font-size:13px;
+  font-weight:800;
+  color:white;
+  background:#333333;
+}
+
+.consequencePanel{
+  margin:18px 0;
+  padding:14px;
+  border:1px solid #777777;
+  border-radius:14px;
+  background:#101010;
+}
+
+.consequencePanel h3{
+  margin:0 0 8px;
+  font-size:18px;
+}
+
+.buttonPreview{
+  background:#080808;
+  border:1px solid #777777;
+  border-radius:16px;
+  padding:15px;
+  margin-top:15px;
+}
+
+.buttonPreview h3{
+  margin:0 0 8px;
+  font-size:18px;
+}
+
+.previewButton{
+  display:block;
+  width:100%;
+  text-align:center;
+  border-radius:12px;
+  padding:14px 10px;
+  font-size:17px;
+  font-weight:800;
+  margin:10px 0;
+  color:white;
+}
+
+.previewGreen{
+  background:#16803c;
+  border:1px solid #5ad783;
+}
+
+.previewRed{
+  background:#b42335;
+  border:1px solid #ff6174;
+}
+
+.previewBlack{
+  background:#000000;
+  border:2px solid #ffffff;
+}
+
+.previewCaption{
+  font-size:12px;
+  color:#bbbbbb;
+  text-align:center;
+  margin:4px 0 12px;
+}
+
+.statusLine{
+  color:#cccccc;
+  font-size:13px;
+}
+
+.divider{
+  height:1px;
+  background:#555555;
+  margin:16px 0;
+}
+
+.cashAppPreview{
+  display:block;
+  background:#00D632;
+  color:#111111;
+  padding:15px;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:800;
+  text-align:center;
+  text-decoration:none;
+}
+
 @media(max-width:500px){
-  .slides{grid-template-columns:repeat(4,1fr)}
+  .slides{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+
+  section{
+    padding:14px;
+  }
 }
 </style>
 </head>
+
 <body>
 <main>
 
-<h1>🎲 D12 Admin Studio</h1>
-<p>
-Edit your game on your iPhone and publish changes
-directly to GitHub using your secure Supabase connection.
-Saved drafts are preserved when checking GitHub.
+<h1>🎲 D12 ADMIN STUDIO</h1>
+
+<p class="subtitle">
+  🖤 Black Edition · Slide Editor & Publishing
 </p>
 
+<p class="subtitle">
+  Edit your game on your iPhone and publish changes
+  directly to GitHub using your secure Supabase connection.
+  Saved drafts are preserved when checking GitHub.
+</p>
+
+<!-- GAME SETTINGS -->
+
 <section>
-<h2>Game settings</h2>
+  <h2>⚙️ Game Settings</h2>
 
-<label>
-Game title
-<input id="title">
-</label>
+  <label>
+    Game title
+    <input id="title">
+  </label>
 
-<label>
-Home heading
-<input id="introTitle">
-</label>
+  <label>
+    Home heading
+    <input id="introTitle">
+  </label>
 
-<label>
-Home message
-<textarea id="introText"></textarea>
-</label>
+  <label>
+    Home message
+    <textarea id="introText"></textarea>
+  </label>
 
-<label>
-Home image URL
-<input id="homeImageUrl" placeholder="https://...">
-</label>
+  <label>
+    Home image URL
+    <input id="homeImageUrl" placeholder="https://...">
+  </label>
 
-<label>
-Choose home photo
-<input id="homeFile" type="file" accept="image/*">
-</label>
+  <label>
+    Choose home photo
+    <input id="homeFile" type="file" accept="image/*">
+  </label>
 
-<div class="preview" id="homePreview"></div>
+  <div class="preview" id="homePreview"></div>
 
-<small>
-Hosted image URLs are recommended. Embedded media can
-make your configuration too large to publish.
-</small>
+  <p class="sectionHint">
+    Hosted image URLs are recommended. Embedded media
+    can make your configuration too large to publish.
+  </p>
 </section>
 
+<!-- SLIDES -->
+
 <section>
-<h2>Slides</h2>
+  <h2>🎲 Slide Editor</h2>
 
-<p>
-D12 rolls select slides 1–12.
-Consequence branches can lead to slides 13–24.
-Slide 16 is the winning slide.
-</p>
+  <p>
+    D12 rolls select slides 1–12.
+    Consequence branches can lead to slides 13–24.
+    Slide 16 is the winning slide.
+  </p>
 
-<div class="slides" id="slideButtons"></div>
+  <div class="slides" id="slideButtons"></div>
 
-<label>
-Slide title
-<input id="slideTitle">
-</label>
+  <div class="editorHeading">
+    <h2 style="margin:0">Edit Selected Slide</h2>
+    <span class="slideBadge" id="selectedSlideBadge">
+      Slide 1
+    </span>
+  </div>
 
-<label>
-Description
-<textarea id="description"></textarea>
-</label>
+  <label>
+    Slide title
+    <input id="slideTitle">
+  </label>
 
-<label>
-Featured Reddit Hunter
-<input id="redditUser" placeholder="u/username">
-</label>
+  <label>
+    Description
+    <textarea id="description"></textarea>
+  </label>
 
-<label>
-Media type
-<select id="type">
-<option value="placeholder">Placeholder</option>
-<option value="image">Image</option>
-<option value="video">Video</option>
-</select>
-</label>
+  <label>
+    Featured Reddit Hunter
+    <input id="redditUser" placeholder="u/username">
+  </label>
 
-<label>
-Image or video URL
-<input id="url" placeholder="https://...">
-</label>
+  <label>
+    Media type
+    <select id="type">
+      <option value="placeholder">Placeholder</option>
+      <option value="image">Image</option>
+      <option value="video">Video</option>
+    </select>
+  </label>
 
-<label>
-Choose slide photo or video
-<input id="slideFile" type="file" accept="image/*,video/*">
-</label>
+  <label>
+    Image or video URL
+    <input id="url" placeholder="https://...">
+  </label>
 
-<div class="preview" id="preview"></div>
+  <label>
+    Choose slide photo or video
+    <input
+      id="slideFile"
+      type="file"
+      accept="image/*,video/*"
+    >
+  </label>
 
-<label>
-<input type="checkbox" id="consequence">
-Require Accept Consequences
-</label>
+  <div class="preview" id="preview"></div>
 
-<label>
-Consequence destination
-<select id="destination"></select>
-</label>
+  <!-- CONSEQUENCE CONTROLS -->
 
-<label>
-Reroll lockout in seconds
-<input id="rerollLockSeconds" type="number" min="0" max="86400">
-</label>
+  <div class="consequencePanel">
 
-<div class="actions">
-<button id="add" type="button">Add bonus slide</button>
-<button id="remove" type="button">Remove bonus slide</button>
-</div>
+    <h3>⚡ Consequence Settings</h3>
+
+    <p class="sectionHint">
+      Control whether the player rolls again or
+      must advance to another slide.
+    </p>
+
+    <label class="checkboxLabel">
+      <input type="checkbox" id="consequence">
+      <span>Require Consequences</span>
+    </label>
+
+    <p class="sectionHint" id="consequenceHelp">
+      When enabled, the green button changes to
+      Show Me My Consequences.
+    </p>
+
+    <label>
+      Consequence destination
+      <select id="destination"></select>
+    </label>
+
+    <label>
+      Reroll lockout in seconds
+      <input
+        id="rerollLockSeconds"
+        type="number"
+        min="0"
+        max="86400"
+      >
+    </label>
+
+    <p class="sectionHint">
+      The reroll lockout applies to normal rolls.
+      Required consequences stay mandatory until
+      the player advances.
+    </p>
+
+  </div>
+
+  <!-- LIVE BUTTON PREVIEW -->
+
+  <div class="buttonPreview">
+
+    <h3>👀 Live Game Button Preview</h3>
+
+    <p class="sectionHint">
+      This preview updates when you change the
+      selected slide's settings.
+    </p>
+
+    <div
+      id="actionPreview"
+      class="previewButton previewGreen"
+    >
+      🎲 Roll Again
+    </div>
+
+    <p
+      id="actionPreviewDescription"
+      class="previewCaption"
+    >
+      Normal slide — player can roll again.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="previewButton previewRed">
+      💦 I Nutted 💦
+    </div>
+
+    <p class="previewCaption">
+      Red button — triggers Hunt Success.
+    </p>
+
+    <div class="previewButton previewBlack">
+      🏳️ I'm Tapping Out 🏳️
+    </div>
+
+    <p class="previewCaption">
+      Black button with white flags —
+      triggers the Tap Out ending.
+    </p>
+
+    <p class="sectionHint">
+      The preview reflects your game's button design.
+      Button colors and ending labels are defined
+      in index.html.
+    </p>
+
+  </div>
+
+  <div class="actions" style="margin-top:16px">
+    <button id="add" type="button">
+      + Add Bonus Slide
+    </button>
+
+    <button id="remove" type="button">
+      Remove Bonus Slide
+    </button>
+  </div>
+
 </section>
 
+<!-- SUPABASE -->
+
 <section>
-<h2>Supabase leaderboard</h2>
+  <h2>🏆 Supabase Leaderboard</h2>
 
-<p>
-Enter only your public project URL and publishable/anon key.
-Never enter a secret or service_role key.
-</p>
+  <p>
+    Enter only your public project URL and
+    publishable/anon key.
+    Never enter a secret or service_role key.
+  </p>
 
-<label>
-Supabase project URL
-<input id="supabaseUrl" placeholder="https://project.supabase.co">
-</label>
+  <label>
+    Supabase project URL
+    <input
+      id="supabaseUrl"
+      placeholder="https://project.supabase.co"
+    >
+  </label>
 
-<label>
-Supabase publishable / anon key
-<input id="supabaseKey">
-</label>
+  <label>
+    Supabase publishable / anon key
+    <input id="supabaseKey">
+  </label>
 </section>
 
+<!-- LEADERBOARD RESET -->
+
 <section>
-<h2>Reset Leaderboards</h2>
+  <h2>🗑️ Reset Leaderboards</h2>
 
-<p class="warning">
-<strong>Danger zone:</strong>
-This permanently deletes every saved player score.
-The Soldier Leaderboard and Hunter Scoreboard
-will both reset to empty.
-</p>
+  <p class="warning">
+    <strong>Danger zone:</strong>
+    This permanently deletes every saved player score.
+    The Soldier Leaderboard and Hunter Scoreboard
+    will both reset to empty.
+  </p>
 
-<p>Your game slides and configuration will not be deleted.</p>
+  <p>
+    Your game slides and configuration will not be deleted.
+  </p>
 
-<label>
-Admin reset password
-<input
-  id="resetPassword"
-  type="password"
-  placeholder="Enter your private reset password"
-  autocomplete="off"
->
-</label>
+  <label>
+    Admin reset password
+    <input
+      id="resetPassword"
+      type="password"
+      placeholder="Enter your private reset password"
+      autocomplete="off"
+    >
+  </label>
 
-<button id="resetLeaderboards" class="danger" type="button">
-Reset Both Leaderboards
-</button>
+  <button
+    id="resetLeaderboards"
+    class="danger"
+    type="button"
+  >
+    Reset Both Leaderboards
+  </button>
 
-<p id="resetNotice" class="notice" aria-live="polite"></p>
+  <p
+    id="resetNotice"
+    class="notice"
+    aria-live="polite"
+  ></p>
 
-<small>
-The password is sent only to your protected Supabase function.
-It is not saved in your game configuration.
-</small>
+  <small>
+    The password is sent only to your protected
+    Supabase function. It is not saved in your
+    game configuration.
+  </small>
 </section>
 
+<!-- GITHUB PUBLISHING -->
+
 <section>
-<h2>🚀 Publish to GitHub</h2>
+  <h2>🚀 Publish to GitHub</h2>
 
-<p>
-Your saved draft loads automatically.
-Publishing saves your draft first, then checks GitHub's
-version without replacing your edits.
-</p>
+  <p>
+    Your saved draft loads automatically.
+    Publishing saves your draft first, then checks
+    GitHub's version without replacing your edits.
+  </p>
 
-<div class="actions">
-<button id="loadGitHub" type="button">
-Load from GitHub (replace editor)
-</button>
-</div>
+  <div class="actions">
+    <button id="loadGitHub" type="button">
+      Load from GitHub (replace editor)
+    </button>
+  </div>
 
-<label>
-Publishing password
-<input
-  id="publishPassword"
-  type="password"
-  placeholder="Enter your private publishing password"
-  autocomplete="off"
->
-</label>
+  <label>
+    Publishing password
+    <input
+      id="publishPassword"
+      type="password"
+      placeholder="Enter your private publishing password"
+      autocomplete="off"
+    >
+  </label>
 
-<button id="publishGitHub" class="primary" type="button">
-🚀 Publish to GitHub
-</button>
+  <button
+    id="publishGitHub"
+    class="primary"
+    type="button"
+    style="width:100%"
+  >
+    🚀 Publish to GitHub
+  </button>
 
-<p id="publishNotice" class="notice" aria-live="polite"></p>
+  <p
+    id="publishNotice"
+    class="notice"
+    aria-live="polite"
+  ></p>
 
-<small>
-Your GitHub token stays securely in Supabase.
-Your publishing password is never saved in game-config.json.
-If GitHub changed since your draft's known version,
-publishing stops rather than overwriting those changes.
-</small>
+  <small>
+    Your GitHub token stays securely in Supabase.
+    Your publishing password is never saved in
+    game-config.json.
+
+    If GitHub changed since your draft's known
+    version, publishing stops rather than
+    overwriting those changes.
+  </small>
 </section>
 
+<!-- SAVE AND BACKUP -->
+
 <section>
-<h2>Save and publish</h2>
+  <h2>💾 Save & Backup</h2>
 
-<p>
-Save Draft stores edits on this iPhone.
-Publish to GitHub saves automatically.
-Copy Configuration provides a manual backup.
-</p>
+  <p>
+    Save Draft stores edits on this iPhone.
+    Publish to GitHub saves automatically.
+    Copy Configuration provides a manual backup.
+  </p>
 
-<div class="actions">
-<button id="save" type="button">Save Draft</button>
-<button class="primary" id="copy" type="button">
-Copy Configuration
-</button>
-<button id="reset" type="button">Reset Defaults</button>
-</div>
+  <div class="actions">
 
-<p id="notice" class="notice" aria-live="polite"></p>
+    <button
+      id="save"
+      class="primary"
+      type="button"
+    >
+      💾 Save Draft
+    </button>
+
+    <button id="copy" type="button">
+      Copy Configuration
+    </button>
+
+    <button id="reset" type="button">
+      Reset Defaults
+    </button>
+
+  </div>
+
+  <p
+    id="notice"
+    class="notice"
+    aria-live="polite"
+  ></p>
+</section>
+
+<!-- CASH APP PREVIEW -->
+
+<section style="text-align:center">
+  <h2>☕ Game Donation Button</h2>
+
+  <p>
+    Your game currently includes this
+    optional Cash App donation link.
+  </p>
+
+  <a
+    class="cashAppPreview"
+    href="https://cash.app/$dudewolfgame"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    ☕ Buy Me a Coffee — Cash App
+  </a>
+
+  <p class="sectionHint">
+    This link is defined in index.html.
+    It is shown here for reference.
+  </p>
 </section>
 
 </main>
 
 <script>
 'use strict';
+
+/* DEFAULT CONFIGURATION */
 
 const DEFAULT = {
   title:"D12 Consequences",
@@ -344,7 +762,9 @@ const DEFAULT = {
 };
 
 const el = id => document.getElementById(id);
-const clone = x => JSON.parse(JSON.stringify(x));
+
+const clone = x =>
+  JSON.parse(JSON.stringify(x));
 
 const DRAFT_KEY = "d12_config_v5";
 const SHA_KEY = "d12_github_sha_v1";
@@ -357,7 +777,8 @@ let selected = 1;
 let githubExpectedSha = null;
 let hasSavedDraft = false;
 
-// Load the saved iPhone draft automatically.
+/* LOAD SAVED IPHONE DRAFT */
+
 try {
   const stored = localStorage.getItem(DRAFT_KEY);
 
@@ -374,6 +795,8 @@ try {
   }
 } catch(e) {}
 
+/* MESSAGES */
+
 function message(text) {
   el("notice").textContent = text;
 }
@@ -382,15 +805,24 @@ function publishMessage(text) {
   el("publishNotice").textContent = text;
 }
 
+/* SLIDE HELPERS */
+
 function slide() {
-  return cfg.slides.find(s => s.id === selected);
+  return cfg.slides.find(
+    s => s.id === selected
+  );
 }
+
+/* MEDIA PREVIEW */
 
 function preview(id,type,url,fallback) {
   const box = el(id);
   box.replaceChildren();
 
-  if(url && /^(https?:\/\/|data:)/i.test(url)) {
+  if(
+    url &&
+    /^(https?:\/\/|data:)/i.test(url)
+  ) {
     const media = document.createElement(
       type === "video" ? "video" : "img"
     );
@@ -408,21 +840,83 @@ function preview(id,type,url,fallback) {
 
     box.append(media);
   } else {
-    box.textContent = fallback || "No media selected";
+    box.textContent =
+      fallback || "No media selected";
   }
 }
+
+/* LIVE BUTTON PREVIEW */
+
+function updateButtonPreview() {
+  const required =
+    el("consequence").checked;
+
+  const destination =
+    Number(el("destination").value);
+
+  const lockSeconds =
+    Math.max(
+      0,
+      Number(el("rerollLockSeconds").value) || 0
+    );
+
+  const button = el("actionPreview");
+  const description =
+    el("actionPreviewDescription");
+
+  if(selected === 16) {
+    button.textContent = "🏆 VICTORY!";
+    button.style.background = "#8a6416";
+    button.style.borderColor = "#ffd76b";
+
+    description.textContent =
+      "Slide 16 automatically triggers the " +
+      "NNN Survivor ending.";
+
+    return;
+  }
+
+  button.style.background = "";
+  button.style.borderColor = "";
+
+  if(required) {
+    button.textContent =
+      "⚡ Show Me My Consequences";
+
+    description.textContent =
+      "Required consequence — player advances " +
+      "to Slide " + destination +
+      " without rolling again.";
+  } else {
+    button.textContent =
+      "🎲 Roll Again";
+
+    description.textContent =
+      lockSeconds > 0
+        ? "Normal slide — Roll Again unlocks " +
+          "after " + lockSeconds + " seconds."
+        : "Normal slide — player can roll again.";
+  }
+}
+
+/* SLIDE BUTTONS */
 
 function buttons() {
   const box = el("slideButtons");
   box.replaceChildren();
 
-  cfg.slides.sort((a,b) => a.id - b.id);
+  cfg.slides.sort(
+    (a,b) => a.id - b.id
+  );
 
   cfg.slides.forEach(s => {
-    const button = document.createElement("button");
+    const button =
+      document.createElement("button");
 
     button.textContent = s.id;
-    button.className = s.id === selected ? "active" : "";
+
+    button.className =
+      s.id === selected ? "active" : "";
 
     button.onclick = () => {
       commit();
@@ -438,29 +932,55 @@ function buttons() {
   destination.replaceChildren();
 
   cfg.slides.forEach(s => {
-    const option = document.createElement("option");
+    const option =
+      document.createElement("option");
+
     option.value = s.id;
     option.textContent = "Slide " + s.id;
+
     destination.append(option);
   });
 }
+
+/* EDIT SELECTED SLIDE */
 
 function edit() {
   const s = slide();
 
   if(!s) return;
 
-  el("slideTitle").value = s.title || "";
-  el("description").value = s.description || "";
-  el("redditUser").value = s.redditUser || "";
-  el("type").value = s.type || "placeholder";
-  el("url").value = s.url || "";
-  el("consequence").checked = !!s.consequence;
-  el("destination").value = s.destination || 1;
+  el("selectedSlideBadge").textContent =
+    "Slide " + s.id;
+
+  el("slideTitle").value =
+    s.title || "";
+
+  el("description").value =
+    s.description || "";
+
+  el("redditUser").value =
+    s.redditUser || "";
+
+  el("type").value =
+    s.type || "placeholder";
+
+  el("url").value =
+    s.url || "";
+
+  el("consequence").checked =
+    s.consequence === true ||
+    s.consequence === "true" ||
+    s.mustAccept === true ||
+    s.forceConsequence === true;
+
+  el("destination").value =
+    s.destination || 1;
+
   el("rerollLockSeconds").value =
     s.rerollLockSeconds || 0;
 
-  el("remove").disabled = selected <= 24;
+  el("remove").disabled =
+    selected <= 24;
 
   preview(
     "preview",
@@ -468,7 +988,11 @@ function edit() {
     s.url,
     "Slide " + s.id
   );
+
+  updateButtonPreview();
 }
+
+/* FILL EDITOR */
 
 function fill() {
   [
@@ -493,24 +1017,45 @@ function fill() {
   );
 }
 
+/* COMMIT EDITOR CHANGES */
+
 function commit() {
   const s = slide();
 
   if(s) {
-    s.title = el("slideTitle").value;
-    s.description = el("description").value;
-    s.redditUser = el("redditUser").value.trim();
-    s.type = el("type").value;
-    s.url = el("url").value.trim();
-    s.consequence = el("consequence").checked;
-    s.destination = Number(el("destination").value);
+    s.title =
+      el("slideTitle").value;
+
+    s.description =
+      el("description").value;
+
+    s.redditUser =
+      el("redditUser").value.trim();
+
+    s.type =
+      el("type").value;
+
+    s.url =
+      el("url").value.trim();
+
+    s.consequence =
+      el("consequence").checked;
+
+    // Keep the existing config format.
+    // The game's new action-button logic
+    // reads the same consequence field.
+
+    s.destination =
+      Number(el("destination").value);
 
     s.rerollLockSeconds = Math.max(
       0,
       Math.min(
         86400,
         Math.floor(
-          Number(el("rerollLockSeconds").value) || 0
+          Number(
+            el("rerollLockSeconds").value
+          ) || 0
         )
       )
     );
@@ -528,8 +1073,14 @@ function commit() {
   });
 }
 
+/* VALIDATION */
+
 function validate() {
-  if(/service_role|sb_secret_/i.test(cfg.supabaseKey)) {
+  if(
+    /service_role|sb_secret_/i.test(
+      cfg.supabaseKey
+    )
+  ) {
     throw Error(
       "Never publish a Supabase secret/service_role key."
     );
@@ -556,16 +1107,19 @@ function validate() {
     ids.add(s.id);
 
     if(
-      !["placeholder","image","video"].includes(s.type)
+      !["placeholder","image","video"]
+        .includes(s.type)
     ) {
       throw Error(
-        "Slide " + s.id + ": invalid media type."
+        "Slide " + s.id +
+        ": invalid media type."
       );
     }
 
     if(
       s.redditUser &&
-      !/^u\/[A-Za-z0-9_-]{3,20}$/.test(s.redditUser)
+      !/^u\/[A-Za-z0-9_-]{3,20}$/
+        .test(s.redditUser)
     ) {
       throw Error(
         "Slide " + s.id +
@@ -594,7 +1148,10 @@ function validate() {
   }
 
   for(const s of cfg.slides) {
-    if(s.consequence && !ids.has(s.destination)) {
+    if(
+      s.consequence &&
+      !ids.has(s.destination)
+    ) {
       throw Error(
         "Slide " + s.id +
         ": consequence destination missing."
@@ -602,6 +1159,8 @@ function validate() {
     }
   }
 }
+
+/* SAVE DRAFT */
 
 function saveDraft() {
   commit();
@@ -624,16 +1183,21 @@ el("save").onclick = () => {
   try {
     saveDraft();
   } catch(e) {
-    message("Save failed: " + e.message);
+    message(
+      "Save failed: " + e.message
+    );
   }
 };
+
+/* COPY CONFIGURATION */
 
 el("copy").onclick = async () => {
   try {
     commit();
     validate();
 
-    const json = JSON.stringify(cfg,null,2);
+    const json =
+      JSON.stringify(cfg,null,2);
 
     if(
       navigator.clipboard &&
@@ -652,6 +1216,7 @@ el("copy").onclick = async () => {
       textarea.value = json;
       document.body.append(textarea);
       textarea.select();
+
       document.execCommand("copy");
       textarea.remove();
 
@@ -660,9 +1225,13 @@ el("copy").onclick = async () => {
       );
     }
   } catch(e) {
-    message("Copy failed: " + e.message);
+    message(
+      "Copy failed: " + e.message
+    );
   }
 };
+
+/* ADD BONUS SLIDE */
 
 el("add").onclick = () => {
   commit();
@@ -671,7 +1240,9 @@ el("add").onclick = () => {
     Math.max(...cfg.slides.map(s => s.id)) + 1;
 
   if(id > 99) {
-    return message("Maximum slide number is 99.");
+    return message(
+      "Maximum slide number is 99."
+    );
   }
 
   cfg.slides.push({
@@ -687,9 +1258,12 @@ el("add").onclick = () => {
   });
 
   selected = id;
+
   buttons();
   edit();
 };
+
+/* REMOVE BONUS SLIDE */
 
 el("remove").onclick = () => {
   if(selected <= 24) return;
@@ -705,12 +1279,17 @@ el("remove").onclick = () => {
   });
 
   selected = 1;
+
   buttons();
   edit();
 };
 
+/* RESET DEFAULTS */
+
 el("reset").onclick = () => {
-  if(!confirm("Reset all edits on this device?")) {
+  if(
+    !confirm("Reset all edits on this device?")
+  ) {
     return;
   }
 
@@ -731,6 +1310,8 @@ el("reset").onclick = () => {
     "Save Draft to keep them."
   );
 };
+
+/* FILE UPLOADS */
 
 async function upload(file,kind) {
   if(!file) return null;
@@ -759,11 +1340,15 @@ async function upload(file,kind) {
       resolve(reader.result);
 
     reader.onerror = () =>
-      reject(Error("Could not read file."));
+      reject(
+        Error("Could not read file.")
+      );
 
     reader.readAsDataURL(file);
   });
 }
+
+/* HOME MEDIA */
 
 el("homeFile").onchange = async () => {
   try {
@@ -777,7 +1362,11 @@ el("homeFile").onchange = async () => {
     el("homeImageUrl").value = url;
     cfg.homeImageUrl = url;
 
-    preview("homePreview","image",url);
+    preview(
+      "homePreview",
+      "image",
+      url
+    );
 
     message(
       "Home photo loaded. " +
@@ -788,19 +1377,25 @@ el("homeFile").onchange = async () => {
   }
 };
 
+/* SLIDE MEDIA */
+
 el("slideFile").onchange = async () => {
   try {
-    const file = el("slideFile").files[0];
-    const url = await upload(file,"slide");
+    const file =
+      el("slideFile").files[0];
+
+    const url =
+      await upload(file,"slide");
 
     if(!url) return;
 
     el("type").value =
       file.type.startsWith("video/")
-      ? "video"
-      : "image";
+        ? "video"
+        : "image";
 
     el("url").value = url;
+
     commit();
 
     preview(
@@ -817,6 +1412,8 @@ el("slideFile").onchange = async () => {
     message(e.message);
   }
 };
+
+/* LIVE INPUT UPDATES */
 
 el("homeImageUrl").oninput = () => {
   preview(
@@ -845,23 +1442,29 @@ el("homeImageUrl").oninput = () => {
       slide().url,
       "Slide " + selected
     );
+
+    updateButtonPreview();
+  });
+
+  el(id).addEventListener("change",() => {
+    commit();
+    updateButtonPreview();
   });
 });
 
-// ========================================
-// SECURE LEADERBOARD RESET
-// ========================================
+/* SECURE LEADERBOARD RESET */
 
 el("resetLeaderboards").onclick = async () => {
   const notice = el("resetNotice");
   const button = el("resetLeaderboards");
 
-  const password = el("resetPassword").value;
+  const password =
+    el("resetPassword").value;
 
   const projectUrl =
     el("supabaseUrl")
-    .value.trim()
-    .replace(/\/$/,"");
+      .value.trim()
+      .replace(/\/$/,"");
 
   const publicKey =
     el("supabaseKey").value.trim();
@@ -873,9 +1476,8 @@ el("resetLeaderboards").onclick = async () => {
   }
 
   if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(
-      projectUrl
-    )
+    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i
+      .test(projectUrl)
   ) {
     notice.textContent =
       "Enter a valid Supabase project URL above.";
@@ -911,11 +1513,13 @@ el("resetLeaderboards").onclick = async () => {
   }
 
   button.disabled = true;
-  notice.textContent = "Resetting leaderboards…";
+  notice.textContent =
+    "Resetting leaderboards…";
 
   try {
     const response = await fetch(
-      projectUrl + "/functions/v1/reset-leaderboards",
+      projectUrl +
+      "/functions/v1/reset-leaderboards",
       {
         method:"POST",
         headers:{
@@ -930,6 +1534,7 @@ el("resetLeaderboards").onclick = async () => {
     );
 
     const raw = await response.text();
+
     let result;
 
     try {
@@ -963,9 +1568,7 @@ el("resetLeaderboards").onclick = async () => {
   }
 };
 
-// ========================================
-// SECURE GITHUB PUBLISHING
-// ========================================
+/* SECURE GITHUB CONFIG FETCH */
 
 async function getGitHubConfig() {
   const response = await fetch(
@@ -993,7 +1596,9 @@ async function getGitHubConfig() {
     );
   }
 
-  const encoded = file.content.replace(/\s/g,"");
+  const encoded =
+    file.content.replace(/\s/g,"");
+
   const binary = atob(encoded);
 
   const bytes = Uint8Array.from(
@@ -1005,7 +1610,10 @@ async function getGitHubConfig() {
     new TextDecoder().decode(bytes)
   );
 
-  if(!config || !Array.isArray(config.slides)) {
+  if(
+    !config ||
+    !Array.isArray(config.slides)
+  ) {
     throw Error(
       "GitHub configuration has no valid slides array."
     );
@@ -1016,6 +1624,8 @@ async function getGitHubConfig() {
     sha:file.sha
   };
 }
+
+/* LOAD FROM GITHUB */
 
 el("loadGitHub").onclick = async () => {
   const button = el("loadGitHub");
@@ -1037,10 +1647,9 @@ el("loadGitHub").onclick = async () => {
   );
 
   try {
-    const latest = await getGitHubConfig();
+    const latest =
+      await getGitHubConfig();
 
-    // Store the GitHub configuration and matching
-    // version together.
     localStorage.setItem(
       DRAFT_KEY,
       JSON.stringify(latest.config)
@@ -1072,10 +1681,11 @@ el("loadGitHub").onclick = async () => {
   }
 };
 
+/* PUBLISH TO GITHUB */
+
 el("publishGitHub").onclick = async () => {
   const button = el("publishGitHub");
 
-  // Automatically save the draft first.
   try {
     saveDraft();
 
@@ -1089,7 +1699,8 @@ el("publishGitHub").onclick = async () => {
     return;
   }
 
-  const password = el("publishPassword").value;
+  const password =
+    el("publishPassword").value;
 
   if(!password) {
     publishMessage(
@@ -1100,16 +1711,15 @@ el("publishGitHub").onclick = async () => {
 
   const projectUrl =
     el("supabaseUrl")
-    .value.trim()
-    .replace(/\/$/,"");
+      .value.trim()
+      .replace(/\/$/,"");
 
   const publicKey =
     el("supabaseKey").value.trim();
 
   if(
-    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(
-      projectUrl
-    )
+    !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i
+      .test(projectUrl)
   ) {
     publishMessage(
       "Draft saved. Enter a valid Supabase project URL."
@@ -1127,8 +1737,6 @@ el("publishGitHub").onclick = async () => {
   button.disabled = true;
 
   try {
-    // Check GitHub's current file version.
-    // Do NOT replace the editor's draft.
     const response = await fetch(
       GITHUB_CONFIG_API,
       {
@@ -1154,8 +1762,6 @@ el("publishGitHub").onclick = async () => {
       );
     }
 
-    // Stop if GitHub has changed since this
-    // draft's last synchronized version.
     if(
       githubExpectedSha &&
       githubExpectedSha !== remote.sha
@@ -1171,7 +1777,6 @@ el("publishGitHub").onclick = async () => {
       return;
     }
 
-    // Older drafts may not have a saved GitHub SHA.
     if(!githubExpectedSha) {
       if(
         !confirm(
@@ -1205,7 +1810,8 @@ el("publishGitHub").onclick = async () => {
     );
 
     const publishResponse = await fetch(
-      projectUrl + "/functions/v1/publish-game-config",
+      projectUrl +
+      "/functions/v1/publish-game-config",
       {
         method:"POST",
         headers:{
@@ -1220,7 +1826,9 @@ el("publishGitHub").onclick = async () => {
       }
     );
 
-    const raw = await publishResponse.text();
+    const raw =
+      await publishResponse.text();
+
     let result;
 
     try {
@@ -1232,7 +1840,10 @@ el("publishGitHub").onclick = async () => {
       );
     }
 
-    if(!publishResponse.ok || !result.ok) {
+    if(
+      !publishResponse.ok ||
+      !result.ok
+    ) {
       throw Error(
         result.error ||
         "Publishing failed (HTTP " +
@@ -1240,8 +1851,8 @@ el("publishGitHub").onclick = async () => {
       );
     }
 
-    // Remember the newly published GitHub version.
-    githubExpectedSha = result.sha || null;
+    githubExpectedSha =
+      result.sha || null;
 
     try {
       if(githubExpectedSha) {
@@ -1250,7 +1861,9 @@ el("publishGitHub").onclick = async () => {
           githubExpectedSha
         );
       } else {
-        localStorage.removeItem(SHA_KEY);
+        localStorage.removeItem(
+          SHA_KEY
+        );
       }
     } catch(e) {
       publishMessage(
@@ -1279,6 +1892,8 @@ el("publishGitHub").onclick = async () => {
   }
 };
 
+/* INITIALIZE */
+
 fill();
 
 if(hasSavedDraft) {
@@ -1292,6 +1907,7 @@ if(hasSavedDraft) {
     "to begin, or edit the defaults and publish deliberately."
   );
 }
+
 </script>
 </body>
 </html>
