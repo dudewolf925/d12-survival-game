@@ -1106,6 +1106,7 @@ const TAP_OUT_MARKER = '__TAPPED_OUT__';
 const HUNT_GIF = 'https://i.imgur.com/9CEEzCM.gif';
 const TAP_OUT_GIF = './tapout.GIF';
 const REDDIT_COMMUNITY = 'NoNutNovemberChalleng';
+const GAME_URL = 'https://dudewolf925.github.io/d12-survival-game/';
 
 const DOUBLES_CHANCE = 0.20;
 const DOUBLES_START_ROLL = 2;
@@ -2739,41 +2740,48 @@ function closePopup(id){
   }
 }
 
+
 /* HUNT SUCCESS */
 
 function showHuntSuccess(){
   if(!current) return;
 
   const hunter = String(
-    current.redditUser||''
-  ).trim()||
-  'an unassigned hunter';
+    current.redditUser || ''
+  ).trim();
 
   $('huntGif').src =
-    HUNT_GIF+
-    '?play='+
+    HUNT_GIF +
+    '?play=' +
     Date.now();
 
   setText(
     'huntBanner',
-    'Successfully hunted by '+
     hunter
+      ? 'Successfully hunted by ' + hunter
+      : 'HUNT SUCCESSFUL!'
   );
 
   setText(
     'huntTime',
-    '⏱️ Survival Time: '+
+    '⏱️ Survival Time: ' +
     fmt(elapsed)
   );
 
+  const hunterMessage = hunter
+    ? 'I was successfully hunted by ' +
+      hunter + '! 🎯😈'
+    : 'My luck finally ran out! 🎯😈';
+
   $('redditPost').value =
-    'I lasted '+
-    readableTime(elapsed)+
-    ' in the NNN Challenge, but ultimately '+
-    'lost myself to '+
-    hunter+
-    '. 🎲\n\n'+
-    'My D12 Survival Game experience:\n\n';
+    '🎯 HUNT SUCCESSFUL!\n\n' +
+    'I lasted ' +
+    readableTime(elapsed) +
+    ' in the D12 NNN Challenge.\n\n' +
+    hunterMessage + '\n\n' +
+    'Think you can survive longer?\n\n' +
+    '🎮 Play D12 Survival Game:\n' +
+    GAME_URL;
 
   openPopup(
     'huntOverlay'
@@ -2797,11 +2805,11 @@ function shareToReddit(textId,title){
   }
 
   const url =
-    'https://www.reddit.com/r/'+
-    REDDIT_COMMUNITY+
-    '/submit?type=TEXT&title='+
-    encodeURIComponent(title)+
-    '&text='+
+    'https://www.reddit.com/r/' +
+    REDDIT_COMMUNITY +
+    '/submit?type=TEXT&title=' +
+    encodeURIComponent(title) +
+    '&text=' +
     encodeURIComponent(post);
 
   window.location.href = url;
@@ -2816,12 +2824,13 @@ function showWinnerCelebration(){
   );
 
   $('winnerPost').value =
-    '🏆 I survived the NNN Challenge!\n\n'+
-    'I lasted '+
-    readableTime(elapsed)+
-    ' in the D12 Survival Game and made '+
-    'it all the way to victory! 🎲\n\n'+
-    "Here's how I survived:\n\n";
+    '🏆 I SURVIVED THE D12 NNN CHALLENGE!\n\n' +
+    'I survived for ' +
+    readableTime(elapsed) +
+    ' and conquered the D12 Challenge! 🎲🔥\n\n' +
+    'Think you can beat my survival time?\n\n' +
+    '🎮 Play D12 Survival Game:\n' +
+    GAME_URL;
 
   openPopup(
     'winnerOverlay'
@@ -2833,22 +2842,23 @@ function showWinnerCelebration(){
 function showTapOutCelebration(){
   setText(
     'tapTime',
-    '⏱️ Survival Time: '+
+    '⏱️ Survival Time: ' +
     fmt(elapsed)
   );
 
   $('tapPost').value =
-    'I tried my fate at the NNN Challenge, '+
-    'but I held it together and tapped out '+
-    'before I lost it. 🎲\n\n'+
-    'I lasted '+
-    readableTime(elapsed)+
-    ' in the D12 Survival Game.\n\n'+
-    'Why I decided to tap out:\n\n';
+    '🏳️ I TAPPED OUT!\n\n' +
+    'I lasted ' +
+    readableTime(elapsed) +
+    ' in the D12 Survival Game before ' +
+    'deciding to walk away. 🎲\n\n' +
+    'How long would you last?\n\n' +
+    '🎮 Play D12 Survival Game:\n' +
+    GAME_URL;
 
   $('tapGif').src =
-    TAP_OUT_GIF+
-    '?play='+
+    TAP_OUT_GIF +
+    '?play=' +
     Date.now();
 
   openPopup(
@@ -2856,19 +2866,6 @@ function showTapOutCelebration(){
   );
 }
 
-/* FINISH GAME */
-
-function finishGame(won=false,tappedOut=false){
-  if(
-    finished ||
-    endingStarted ||
-    saving ||
-    scoreSaved ||
-    doublesPending ||
-    darePending
-  ){
-    return;
-  }
 
   if(
     !current &&
