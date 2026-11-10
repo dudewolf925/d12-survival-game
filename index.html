@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -512,26 +513,66 @@ th{color:white}
   <button id="retrySave" type="button" class="secondary hidden" style="width:100%;margin-top:12px">Retry Saving Score</button>
 </section>
 
-<section class="panel">
-  <h2>Soldier Leaderboard</h2>
-  <p class="notice" id="boardMode">Loading scores…</p>
-  <div class="scroll">
-    <table>
-      <thead><tr><th>Soldier</th><th>Survival Time</th><th>Result</th><th>Ending Slide</th></tr></thead>
-      <tbody id="soldierRows"><tr><td colspan="4">Loading…</td></tr></tbody>
-    </table>
-  </div>
-</section>
+<!-- HUNTER SCOREBOARD - FIRST -->
 
 <section class="panel">
   <h2>Hunter Scoreboard</h2>
   <p class="notice">Soldiers Claimed by each Reddit hunter</p>
+
   <div class="scroll">
     <table>
-      <thead><tr><th>Hunter</th><th>Soldiers Claimed</th></tr></thead>
-      <tbody id="hunterRows"><tr><td colspan="2">Loading…</td></tr></tbody>
+      <thead>
+        <tr>
+          <th>Hunter</th>
+          <th>Soldiers Claimed</th>
+        </tr>
+      </thead>
+      <tbody id="hunterRows">
+        <tr><td colspan="2">Loading…</td></tr>
+      </tbody>
     </table>
   </div>
+
+  <button
+    id="toggleHunters"
+    type="button"
+    class="secondary hidden"
+    style="width:100%;margin-top:14px"
+  >
+    View Top 100 Hunters
+  </button>
+</section>
+
+<!-- SOLDIER LEADERBOARD - SECOND -->
+
+<section class="panel">
+  <h2>Soldier Leaderboard</h2>
+  <p class="notice" id="boardMode">Loading scores…</p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Soldier</th>
+          <th>Survival Time</th>
+          <th>Result</th>
+          <th>Ending Slide</th>
+        </tr>
+      </thead>
+      <tbody id="soldierRows">
+        <tr><td colspan="4">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button
+    id="toggleSoldiers"
+    type="button"
+    class="secondary hidden"
+    style="width:100%;margin-top:14px"
+  >
+    View Top 100 Soldiers
+  </button>
 </section>
 
 <section class="panel center" id="donations">
@@ -1708,22 +1749,36 @@ function isTappedOut(record){
   return record.featured_reddit_user===TAP_OUT_MARKER;
 }
 
-/* LEADERBOARDS */
+/* LEADERBOARDS - TOP 5 / TOP 100 */
+
+let showAllHunters = false;
+let showAllSoldiers = false;
+let leaderboardRows = [];
 
 function renderBoards(rows){
+  leaderboardRows = Array.isArray(rows) ? rows : [];
+
   const soldier = $('soldierRows');
   const hunter = $('hunterRows');
 
   soldier.replaceChildren();
   hunter.replaceChildren();
 
-  const sorted = [...rows]
-    .sort((a,b)=>
-      Number(b.duration_ms||0)-Number(a.duration_ms||0)
+  /* SOLDIER RANKINGS */
+
+  const sorted = [...leaderboardRows]
+    .sort(
+      (a,b)=>
+        Number(b.duration_ms||0) -
+        Number(a.duration_ms||0)
     )
     .slice(0,100);
 
-  if(!sorted.length){
+  const visibleSoldiers = showAllSoldiers
+    ? sorted
+    : sorted.slice(0,5);
+
+  if(!visibleSoldiers.length){
     const row = document.createElement('tr');
     const cell = document.createElement('td');
     cell.colSpan = 4;
@@ -1732,17 +1787,18 @@ function renderBoards(rows){
     soldier.append(row);
   }
 
-  for(const record of sorted){
+  for(const record of visibleSoldiers){
     const row = document.createElement('tr');
 
-    safeCell(row,record.name||'Anonymous');
-    safeCell(row,fmt(record.duration_ms||0));
+    safeCell(row,record.name || 'Anonymous');
+    safeCell(row,fmt(record.duration_ms || 0));
 
     const result = isTappedOut(record)
       ? 'Tapped Out'
-      : record.result==='winner'
+      : record.result === 'winner'
         ? 'Winner'
-        : 'Finished by '+(record.featured_reddit_user||'Unassigned');
+        : 'Finished by ' +
+          (record.featured_reddit_user || 'Unassigned');
 
     safeCell(row,result);
 
@@ -1750,32 +1806,48 @@ function renderBoards(rows){
       row,
       isTappedOut(record)
         ? '—'
-        : (record.ending_slide??'—')
+        : (record.ending_slide ?? '—')
     );
 
     soldier.append(row);
   }
 
+  /* HUNTER RANKINGS */
+
   const counts = new Map();
 
-  for(const record of rows){
+  for(const record of leaderboardRows){
     if(
-      record.result==='winner' ||
+      record.result === 'winner' ||
       isTappedOut(record) ||
       !record.featured_reddit_user
     ){
       continue;
     }
 
-    const name = String(record.featured_reddit_user).trim();
-    counts.set(name,(counts.get(name)||0)+1);
+    const name = String(
+      record.featured_reddit_user
+    ).trim();
+
+    counts.set(
+      name,
+      (counts.get(name) || 0) + 1
+    );
   }
 
-  const ranked = [...counts].sort(
-    (a,b)=>b[1]-a[1] || a[0].localeCompare(b[0])
-  );
+  const ranked = [...counts]
+    .sort(
+      (a,b)=>
+        b[1] - a[1] ||
+        a[0].localeCompare(b[0])
+    )
+    .slice(0,100);
 
-  if(!ranked.length){
+  const visibleHunters = showAllHunters
+    ? ranked
+    : ranked.slice(0,5);
+
+  if(!visibleHunters.length){
     const row = document.createElement('tr');
     const cell = document.createElement('td');
     cell.colSpan = 2;
@@ -1784,13 +1856,48 @@ function renderBoards(rows){
     hunter.append(row);
   }
 
-  for(const [name,count] of ranked){
+  for(const [name,count] of visibleHunters){
     const row = document.createElement('tr');
     safeCell(row,name);
     safeCell(row,count);
     hunter.append(row);
   }
+
+  /* EXPAND / COLLAPSE BUTTONS */
+
+  const hunterButton = $('toggleHunters');
+  const soldierButton = $('toggleSoldiers');
+
+  hunterButton.classList.toggle(
+    'hidden',
+    ranked.length <= 5
+  );
+
+  soldierButton.classList.toggle(
+    'hidden',
+    sorted.length <= 5
+  );
+
+  hunterButton.textContent = showAllHunters
+    ? 'Show Top 5 Hunters'
+    : 'View Top 100 Hunters';
+
+  soldierButton.textContent = showAllSoldiers
+    ? 'Show Top 5 Soldiers'
+    : 'View Top 100 Soldiers';
 }
+
+/* LEADERBOARD BUTTON EVENTS */
+
+$('toggleHunters').addEventListener('click',()=>{
+  showAllHunters = !showAllHunters;
+  renderBoards(leaderboardRows);
+});
+
+$('toggleSoldiers').addEventListener('click',()=>{
+  showAllSoldiers = !showAllSoldiers;
+  renderBoards(leaderboardRows);
+});
 
 /* REFRESH LEADERBOARDS */
 
