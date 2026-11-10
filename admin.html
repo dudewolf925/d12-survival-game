@@ -18,8 +18,6 @@ body{
   color:#f8f8f8;
 }
 body.popupOpen{overflow:hidden}
-
-/* IMPORTANT: HIDE INACTIVE POPUPS */
 .hidden{display:none!important}
 
 main{
@@ -142,8 +140,6 @@ button:disabled{
 }
 .secondMediaPanel h3{margin:0 0 8px}
 
-/* SWIPE MESSAGE EDITOR */
-
 .swipePanel{
   margin:18px 0;
   padding:16px;
@@ -161,7 +157,30 @@ button:disabled{
   margin-top:8px;
 }
 
-/* GAME PREVIEW */
+.timerPanel{
+  margin:18px 0;
+  padding:16px;
+  border:1px solid #777;
+  border-radius:14px;
+  background:#101010;
+}
+.timerPanel h3{
+  margin:0 0 8px;
+}
+.timerPanel .swipeTimerHeading{
+  color:#ff8393;
+  margin-top:20px;
+}
+.timerExample{
+  padding:12px;
+  background:#1b1b1b;
+  border:1px solid #555;
+  border-radius:10px;
+  font-size:13px;
+  color:#ddd;
+  line-height:1.6;
+}
+.timerExample strong{color:#fff}
 
 .gameMock{
   border:1px solid #666;
@@ -253,8 +272,13 @@ button:disabled{
   background:#000;
   border:2px solid #eee;
 }
-
-/* TWO-MEDIA SWIPE GALLERY */
+.mockLockHint{
+  text-align:center;
+  color:#c5c5c5;
+  font-size:13px;
+  margin:10px 0 0;
+  font-variant-numeric:tabular-nums;
+}
 
 .gallery{
   width:100%;
@@ -329,8 +353,6 @@ button:disabled{
   text-align:center;
   color:#aaa;
 }
-
-/* FIVE-SECOND POPUP */
 
 .swipeOverlay{
   position:fixed;
@@ -508,8 +530,6 @@ Choose first slide photo or video
 
 <div class="preview" id="preview"></div>
 
-<!-- SECOND MEDIA -->
-
 <div class="secondMediaPanel">
 
 <h3>🖼️ Second Gallery Item</h3>
@@ -540,8 +560,6 @@ Choose second photo or video
   id="secondMediaPreview"></div>
 
 </div>
-
-<!-- SWIPE MESSAGE -->
 
 <div class="swipePanel">
 
@@ -575,7 +593,60 @@ The message is stored in the
 
 </div>
 
-<!-- LIVE PREVIEW -->
+<div class="timerPanel">
+
+<h3>⏱️ Slide Timer Settings</h3>
+
+<label>
+Reroll lockout in seconds
+<input
+  id="rerollLockSeconds"
+  type="number"
+  min="0"
+  max="86400"
+  step="1"
+  value="0">
+</label>
+
+<p class="mediaHelp">
+This timer starts when the slide appears.
+It controls how long the player must wait
+before rolling again.
+</p>
+
+<h3 class="swipeTimerHeading">
+😈 Additional Swipe Lockout
+</h3>
+
+<label>
+Swipe lockout in seconds (after popup)
+<input
+  id="swipeLockSeconds"
+  type="number"
+  min="0"
+  max="86400"
+  step="1"
+  value="0">
+</label>
+
+<p class="mediaHelp">
+If a player swipes to Media 2, the
+YOU DARED! popup appears for 5 seconds.
+The additional swipe timer begins only
+after the popup closes.
+</p>
+
+<p class="mediaHelp">
+Set this to 0 to disable the additional
+swipe lockout. Each slide can have its
+own duration.
+</p>
+
+<div class="timerExample" id="timerExample">
+<strong>Timer example</strong>
+</div>
+
+</div>
 
 <h3>Live Game Layout Preview</h3>
 
@@ -583,6 +654,8 @@ The message is stored in the
 The preview updates as you edit.
 Swipe left to see the second item
 and test the surprise popup.
+After the popup closes, the preview
+shows the configured swipe countdown.
 </p>
 
 <div class="gameMock">
@@ -632,6 +705,12 @@ Slide description
 </button>
 
 </div>
+
+<p
+  id="mockLockHint"
+  class="mockLockHint"
+  aria-live="polite"></p>
+
 </div>
 
 <label>
@@ -642,15 +721,6 @@ Require Accept Consequences
 <label>
 Consequence destination
 <select id="destination"></select>
-</label>
-
-<label>
-Reroll lockout in seconds
-<input
-  id="rerollLockSeconds"
-  type="number"
-  min="0"
-  max="86400">
 </label>
 
 <div class="actions">
@@ -806,8 +876,6 @@ Reset Defaults
 
 </main>
 
-<!-- SURPRISE POPUP -->
-
 <div
   id="swipeOverlay"
   class="swipeOverlay hidden"
@@ -868,7 +936,8 @@ const DEFAULT = {
     redditUser:"",
     consequence:false,
     destination:1,
-    rerollLockSeconds:0
+    rerollLockSeconds:0,
+    swipeLockSeconds:0
   }))
 };
 
@@ -894,7 +963,26 @@ let swipeTimeout = null;
 let swipeInterval = null;
 let swipeOpen = false;
 
+let previewRerollStartedAt = Date.now();
+let previewSwipeUnlockAt = 0;
+let previewSwipeTriggered = false;
+let previewTimerInterval = null;
+
 /* NORMALIZE OLDER CONFIGURATIONS */
+
+function normalizeLock(value) {
+  const number = Number(value);
+
+  if (!Number.isFinite(number)) return 0;
+
+  return Math.max(
+    0,
+    Math.min(
+      86400,
+      Math.floor(number)
+    )
+  );
+}
 
 function normalizeConfig(data) {
   if (!data || !Array.isArray(data.slides)) {
@@ -910,7 +998,9 @@ function normalizeConfig(data) {
       media2:s.media2 ?? "",
       swipeMessage:s.swipeMessage ?? "",
       rerollLockSeconds:
-        s.rerollLockSeconds ?? 0
+        s.rerollLockSeconds ?? 0,
+      swipeLockSeconds:
+        s.swipeLockSeconds ?? 0
     }))
   };
 }
@@ -1170,9 +1260,140 @@ function preview(id,type,url,fallback) {
   box.append(node);
 }
 
+/* PREVIEW TIMER STATE */
+
+function resetPreviewTimers() {
+  previewRerollStartedAt = Date.now();
+  previewSwipeUnlockAt = 0;
+  previewSwipeTriggered = false;
+  updatePreviewTimer();
+}
+
+function updateTimerExample() {
+  const s = slide();
+  if (!s) return;
+
+  const reroll = normalizeLock(
+    s.rerollLockSeconds
+  );
+
+  const swipe = normalizeLock(
+    s.swipeLockSeconds
+  );
+
+  const box = el("timerExample");
+
+  if (swipe === 0) {
+    box.textContent =
+      "Normal reroll lock: " +
+      reroll +
+      " seconds. " +
+      "No additional swipe lockout is configured.";
+    return;
+  }
+
+  box.textContent =
+    "Normal reroll lock: " +
+    reroll +
+    " seconds from slide arrival. " +
+    "If the player swipes, the popup runs for 5 seconds. " +
+    "Then an additional " +
+    swipe +
+    "-second swipe lock begins. " +
+    "Roll Again unlocks after both timers expire.";
+}
+
+function updatePreviewTimer() {
+  const s = slide();
+  if (!s) return;
+
+  const now = Date.now();
+
+  const rerollUntil =
+    previewRerollStartedAt +
+    normalizeLock(s.rerollLockSeconds)*1000;
+
+  const rerollRemaining = Math.max(
+    0,
+    Math.ceil(
+      (rerollUntil-now)/1000
+    )
+  );
+
+  const swipeRemaining = Math.max(
+    0,
+    Math.ceil(
+      (previewSwipeUnlockAt-now)/1000
+    )
+  );
+
+  const locked =
+    rerollRemaining > 0 ||
+    swipeRemaining > 0 ||
+    swipeOpen;
+
+  const roll = el("mockRoll");
+  const hint = el("mockLockHint");
+
+  roll.textContent =
+    s.consequence
+      ? "⚡ Show Me My Consequences"
+      : "🎲 Roll Again";
+
+  if (s.consequence) {
+    roll.disabled = false;
+    hint.textContent =
+      "Consequence slide: player must accept consequences.";
+    return;
+  }
+
+  roll.disabled = locked;
+
+  if (swipeOpen) {
+    hint.textContent =
+      "YOU DARED! popup active — swipe lock starts after it closes.";
+  } else if (
+    rerollRemaining > 0 &&
+    swipeRemaining > 0
+  ) {
+    hint.textContent =
+      "Reroll: " +
+      rerollRemaining +
+      "s · Swipe lock: " +
+      swipeRemaining +
+      "s";
+  } else if (swipeRemaining > 0) {
+    hint.textContent =
+      "Additional swipe lock: " +
+      swipeRemaining +
+      " seconds remaining";
+  } else if (rerollRemaining > 0) {
+    hint.textContent =
+      "Reroll locked: " +
+      rerollRemaining +
+      " seconds remaining";
+  } else {
+    hint.textContent =
+      "Roll Again is available.";
+  }
+}
+
+function startPreviewTimer() {
+  if (previewTimerInterval !== null) {
+    clearInterval(previewTimerInterval);
+  }
+
+  previewTimerInterval = setInterval(
+    updatePreviewTimer,
+    250
+  );
+}
+
 /* FIVE-SECOND POPUP */
 
 function closeSwipePopup() {
+  const wasOpen = swipeOpen;
+
   clearTimeout(swipeTimeout);
   clearInterval(swipeInterval);
 
@@ -1185,6 +1406,19 @@ function closeSwipePopup() {
   document.body.classList.remove(
     "popupOpen"
   );
+
+  if (wasOpen && previewSwipeTriggered) {
+    const s = slide();
+
+    const seconds = s
+      ? normalizeLock(s.swipeLockSeconds)
+      : 0;
+
+    previewSwipeUnlockAt =
+      Date.now() + seconds*1000;
+  }
+
+  updatePreviewTimer();
 }
 
 function showSwipePopup() {
@@ -1203,6 +1437,7 @@ function showSwipePopup() {
     customMessage || DEFAULT_SWIPE_MESSAGE;
 
   swipeOpen = true;
+  previewSwipeTriggered = true;
 
   el("swipeOverlay").classList.remove(
     "hidden"
@@ -1218,6 +1453,8 @@ function showSwipePopup() {
 
   el("swipeCountdown").textContent =
     "Continuing in 5 seconds…";
+
+  updatePreviewTimer();
 
   swipeInterval = setInterval(() => {
     const remaining = Math.max(
@@ -1522,12 +1759,9 @@ function updateGamePreview() {
       ? "Featured: "+s.redditUser
       : "";
 
-  el("mockRoll").textContent =
-    s.consequence
-      ? "⚡ Show Me My Consequences"
-      : "🎲 Roll Again";
-
   renderGallery();
+  updateTimerExample();
+  updatePreviewTimer();
 }
 
 /* SLIDE BUTTONS */
@@ -1559,6 +1793,7 @@ function buttons() {
 
       selected = s.id;
 
+      resetPreviewTimers();
       buttons();
       edit();
     };
@@ -1617,7 +1852,10 @@ function edit() {
     s.destination || 1;
 
   el("rerollLockSeconds").value =
-    s.rerollLockSeconds || 0;
+    s.rerollLockSeconds ?? 0;
+
+  el("swipeLockSeconds").value =
+    s.swipeLockSeconds ?? 0;
 
   el("remove").disabled =
     selected <= 24;
@@ -1660,6 +1898,8 @@ function fill() {
 
   buttons();
   edit();
+
+  resetPreviewTimers();
 
   preview(
     "homePreview",
@@ -1704,17 +1944,15 @@ function commit() {
         el("destination").value
       );
 
-    s.rerollLockSeconds = Math.max(
-      0,
-      Math.min(
-        86400,
-        Math.floor(
-          Number(
-            el("rerollLockSeconds").value
-          ) || 0
-        )
-      )
-    );
+    s.rerollLockSeconds =
+      normalizeLock(
+        el("rerollLockSeconds").value
+      );
+
+    s.swipeLockSeconds =
+      normalizeLock(
+        el("swipeLockSeconds").value
+      );
   }
 
   [
@@ -1800,6 +2038,19 @@ function validate() {
       throw Error(
         "Slide "+s.id+
         ": invalid reroll lockout."
+      );
+    }
+
+    if (
+      !Number.isInteger(
+        s.swipeLockSeconds
+      ) ||
+      s.swipeLockSeconds < 0 ||
+      s.swipeLockSeconds > 86400
+    ) {
+      throw Error(
+        "Slide "+s.id+
+        ": invalid swipe lockout."
       );
     }
 
@@ -1967,11 +2218,13 @@ el("add").onclick = () => {
     redditUser:"",
     consequence:false,
     destination:1,
-    rerollLockSeconds:0
+    rerollLockSeconds:0,
+    swipeLockSeconds:0
   });
 
   selected = id;
 
+  resetPreviewTimers();
   buttons();
   edit();
 };
@@ -1999,6 +2252,7 @@ el("remove").onclick = () => {
 
   selected = 1;
 
+  resetPreviewTimers();
   buttons();
   edit();
 };
@@ -2257,7 +2511,8 @@ el("homeImageUrl").oninput = () => {
   "media2",
   "consequence",
   "destination",
-  "rerollLockSeconds"
+  "rerollLockSeconds",
+  "swipeLockSeconds"
 ].forEach(id=>{
   el(id).addEventListener(
     "input",
@@ -2737,7 +2992,7 @@ el("publishGitHub").onclick = async () => {
     el("publishPassword").value = "";
 
     publishMessage(
-      "Success! Your draft was saved and game-config.json published to GitHub. The new swipe popup messages are included."
+      "Success! Your draft was saved and game-config.json published to GitHub. Swipe popup messages and swipe lockout timers are included."
     );
 
   } catch(error) {
@@ -2754,6 +3009,7 @@ el("publishGitHub").onclick = async () => {
 /* INITIALIZE */
 
 fill();
+startPreviewTimer();
 
 if (hasSavedDraft) {
   publishMessage(
