@@ -325,6 +325,21 @@ main{padding:12px}
 </table>
 </div>
 <p class="analyticsFootnote">Visitor and player-entry statistics begin when tracking was installed. Recorded games count saved game results, not every game start.</p>
+
+<div style="margin-top:20px">
+  <button
+    id="shareHunterLeaderboard"
+    class="primary"
+    type="button"
+    style="width:100%"
+  >
+    😈 Share Hunter Leaderboard to Reddit
+  </button>
+  <p id="hunterShareNotice"
+     class="notice"
+     aria-live="polite"></p>
+</div>
+
 </div>
 
 <p id="analyticsNotice" class="notice" aria-live="polite"></p>
@@ -1605,7 +1620,10 @@ hunters=hunters
 Number(b.successful_hunts||0)-
 Number(a.successful_hunts||0)
 );
-
+hunterLeaderboardForSharing=hunters.map(hunter=>({
+  hunter:hunter.hunter,
+  successful_hunts:Number(hunter.successful_hunts||0)
+}));
 if(!hunters.length){
 const tr=document.createElement("tr");
 const td=document.createElement("td");
@@ -1635,6 +1653,8 @@ tbody.append(tr);
 }
 
 function clearAnalyticsDisplay(){
+hunterLeaderboardForSharing=[];
+
 for(const id of Object.values(ANALYTICS_FIELDS)){
 el(id).textContent="—";
 }
@@ -1788,6 +1808,90 @@ analyticsPasswordInMemory,true
 el("lockAnalytics").onclick=()=>{
 lockAnalytics();
 };
+
+/* SHARE HUNTER LEADERBOARD TO REDDIT */
+
+let hunterLeaderboardForSharing=[];
+
+function buildHunterLeaderboardPost(){
+  const hunters=hunterLeaderboardForSharing;
+
+  if(!hunters.length){
+    throw Error("Unlock Game Analytics to load hunter rankings first.");
+  }
+
+  const totalHunts=hunters.reduce(
+    (sum,hunter)=>sum+Number(hunter.successful_hunts||0),
+    0
+  );
+
+  const lines=[
+    "😈 D12 SURVIVAL GAME — HUNTER LEADERBOARD 😈",
+    "",
+    "🏆 ALL-TIME HUNTER RANKINGS",
+    ""
+  ];
+
+  hunters.forEach((hunter,index)=>{
+    const rank=index+1;
+    const medal=rank===1?"🥇":
+      rank===2?"🥈":
+      rank===3?"🥉":"🎯";
+
+    lines.push(
+      medal+" #"+rank+" "+hunter.hunter+
+      " — "+Number(hunter.successful_hunts||0)+
+      " successful hunts"
+    );
+  });
+
+  lines.push(
+    "",
+    "💀 Total successful hunts: "+totalHunts,
+    "",
+    "Think you can survive the D12?",
+    "",
+    "🎲 Play here:",
+    "https://dudewolf925.github.io/d12-survival-game/"
+  );
+
+  return lines.join("\n");
+}
+
+function shareHunterLeaderboard(){
+  const notice=document.getElementById("hunterShareNotice");
+
+  try{
+    const text=buildHunterLeaderboardPost();
+
+    const title="😈 D12 Survival Game — Hunter Leaderboard";
+
+    const redditUrl=
+      "https://www.reddit.com/submit?"+
+      "title="+encodeURIComponent(title)+
+      "&text="+encodeURIComponent(text);
+
+    const opened=window.open(
+      redditUrl,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    if(opened){
+      notice.textContent=
+        "Reddit opened with your Hunter Leaderboard. Review and submit your post.";
+    }else{
+      window.location.href=redditUrl;
+    }
+
+  }catch(error){
+    notice.textContent=error.message;
+  }
+}
+
+document.getElementById(
+  "shareHunterLeaderboard"
+).onclick=shareHunterLeaderboard;
 
 /* RESET LEADERBOARDS */
 
