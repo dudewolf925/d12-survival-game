@@ -285,6 +285,31 @@ th,td{
   overflow-wrap:anywhere
 }
 th{color:white}
+/* HUNTER LEADERBOARD MEDALS */
+.hunterMedal{
+  display:inline-block;
+  width:28px;
+  margin-right:7px;
+  font-size:22px;
+  line-height:1;
+  text-align:center;
+  vertical-align:middle;
+}
+
+.hunterFirst td{
+  color:#ffd76b;
+  font-weight:800;
+}
+
+.hunterSecond td{
+  color:#d8dce4;
+  font-weight:700;
+}
+
+.hunterThird td{
+  color:#e6ad79;
+  font-weight:700;
+}
 .totalLost{
   text-align:center;
   margin:12px 0 18px;
@@ -2628,17 +2653,47 @@ function renderBoards(
     hunter.append(row);
   }
 
-  for(const item of visibleHunters){
-    const row=document.createElement('tr');
+for(const [index,item] of visibleHunters.entries()){
+  const row=document.createElement('tr');
 
-    safeCell(row,item.hunter);
-    safeCell(
-      row,
-      item.count.toLocaleString()
+  const medals=['🥇','🥈','🥉'];
+  const rankClasses=[
+    'hunterFirst',
+    'hunterSecond',
+    'hunterThird'
+  ];
+
+  if(index<3){
+    row.classList.add(rankClasses[index]);
+  }
+
+  const hunterCell=document.createElement('td');
+
+  if(index<3){
+    const medal=document.createElement('span');
+    medal.className='hunterMedal';
+    medal.textContent=medals[index];
+    medal.setAttribute(
+      'aria-label',
+      'Rank '+(index+1)
     );
 
-    hunter.append(row);
+    hunterCell.append(medal);
   }
+
+  const name=document.createElement('span');
+  name.textContent=item.hunter;
+  hunterCell.append(name);
+
+  row.append(hunterCell);
+
+  safeCell(
+    row,
+    item.count.toLocaleString()
+  );
+
+  hunter.append(row);
+}
 
   const hb=$('toggleHunters');
   const sb=$('toggleSoldiers');
