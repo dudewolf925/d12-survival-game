@@ -329,6 +329,7 @@ let cfg=clone(DEFAULT);
 let selected=1;
 let githubExpectedSha=null;
 let hasSavedDraft=false;
+let requiresInitialGitHubLoad=true;
 let swipeTimeout=null,swipeInterval=null,swipeOpen=false;
 let previewRerollStartedAt=Date.now();
 let previewSwipeUnlockAt=0;
@@ -363,6 +364,7 @@ try{
   if(stored){
     cfg=normalizeConfig(JSON.parse(stored));
     hasSavedDraft=true;
+    requiresInitialGitHubLoad=false;
     githubExpectedSha=localStorage.getItem(SHA_KEY)||null;
   }
 }catch(error){
@@ -377,7 +379,7 @@ function resolveMedia(value,type){
   const url=String(value||"").trim();
   if(!url)return null;
 
-  if(/^data:(image|video)\//i.test(url)||/^blob:/i.test(url)){
+  if(/^data:(image|video)\//i.test(url)||^blob:/i.test(url)){
     return {
       kind:/^data:video\//i.test(url)||(/^blob:/i.test(url)&&type==="video")
         ?"video":"image",
@@ -635,20 +637,25 @@ function startPreviewTimer(){
   previewTimerInterval=setInterval(updatePreviewTimer,250);
 }
 
-function closeSwipePopup(){
+function closeSwipePopup(startLock=true){
   const wasOpen=swipeOpen;
+
   clearTimeout(swipeTimeout);
   clearInterval(swipeInterval);
+
   swipeTimeout=null;
   swipeInterval=null;
   swipeOpen=false;
+
   el("swipeOverlay").classList.add("hidden");
   document.body.classList.remove("popupOpen");
-  if(wasOpen&&previewSwipeTriggered){
+
+  if(startLock&&wasOpen&&previewSwipeTriggered){
     const s=slide();
     previewSwipeUnlockAt=Date.now()+
       (s?normalizeLock(s.swipeLockSeconds):0)*1000;
   }
+
   updatePreviewTimer();
 }
 
@@ -814,7 +821,7 @@ function buttons(){
     button.textContent=s.id;
     button.className=s.id===selected?"active":"";
     button.onclick=()=>{
-      closeSwipePopup();
+      closeSwipePopup(false);
       commit();
       selected=s.id;
       resetPreviewTimers();
@@ -1020,11 +1027,12 @@ el("remove").onclick=()=>{
 
 el("reset").onclick=()=>{
   if(!confirm("Reset all edits on this device?"))return;
-  closeSwipePopup();
+  closeSwipePopup(false);
   cfg=clone(DEFAULT);
   selected=1;
   githubExpectedSha=null;
   hasSavedDraft=false;
+  requiresInitialGitHubLoad=true;
   try{
     localStorage.removeItem(DRAFT_KEY);
     localStorage.removeItem(SHA_KEY);
@@ -1234,7 +1242,8 @@ el("loadGitHub").onclick=async()=>{
     selected=1;
     githubExpectedSha=latest.sha;
     hasSavedDraft=true;
-    closeSwipePopup();
+    requiresInitialGitHubLoad=false;
+    closeSwipePopup(false);
     fill();
     publishMessage(
       "GitHub configuration loaded and saved as your draft. "+
@@ -1249,6 +1258,15 @@ el("loadGitHub").onclick=async()=>{
 
 el("publishGitHub").onclick=async()=>{
   const button=el("publishGitHub");
+
+  if(requiresInitialGitHubLoad){
+    publishMessage(
+      "Publishing blocked for safety. This device has not loaded "+
+      "your existing game from GitHub. Tap Load from GitHub "+
+      "(replace editor) first so your real slides are protected."
+    );
+    return;
+  }
 
   try{
     saveDraft();
@@ -1396,8 +1414,8 @@ if(hasSavedDraft){
   );
 }else{
   publishMessage(
-    "No saved draft found. Load from GitHub once to begin, "+
-    "or edit the defaults and publish deliberately."
+    "No saved draft found. Load from GitHub once to begin. "+
+    "Publishing is blocked until your existing game is loaded."
   );
 }
 </script>
