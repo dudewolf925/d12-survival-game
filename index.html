@@ -262,6 +262,7 @@ textarea{min-height:135px;resize:vertical}
   color:var(--muted);
   font-size:13px;
   margin:10px 0 0;
+  font-variant-numeric:tabular-nums;
 }
 .status{text-align:center;margin:15px 0 0;overflow-wrap:anywhere}
 .scroll{overflow-x:auto}
@@ -508,7 +509,7 @@ th{color:white}
     <button id="finish" type="button" class="cameButton">💦 I Came 💦</button>
     <button id="tapOut" type="button" class="tapButton">🏳️ I'm Tapping Out 🏳️</button>
   </div>
-  <p id="rollHint" class="rollHint"></p>
+  <p id="rollHint" class="rollHint" aria-live="polite"></p>
   <p id="status" class="status" aria-live="polite"></p>
   <button id="retrySave" type="button" class="secondary hidden" style="width:100%;margin-top:12px">Retry Saving Score</button>
 </section>
@@ -518,7 +519,6 @@ th{color:white}
 <section class="panel">
   <h2>Hunter Scoreboard</h2>
   <p class="notice">Soldiers Claimed by each Reddit hunter</p>
-
   <div class="scroll">
     <table>
       <thead>
@@ -532,13 +532,7 @@ th{color:white}
       </tbody>
     </table>
   </div>
-
-  <button
-    id="toggleHunters"
-    type="button"
-    class="secondary hidden"
-    style="width:100%;margin-top:14px"
-  >
+  <button id="toggleHunters" type="button" class="secondary hidden" style="width:100%;margin-top:14px">
     View Top 100 Hunters
   </button>
 </section>
@@ -548,7 +542,6 @@ th{color:white}
 <section class="panel">
   <h2>Soldier Leaderboard</h2>
   <p class="notice" id="boardMode">Loading scores…</p>
-
   <div class="scroll">
     <table>
       <thead>
@@ -564,13 +557,7 @@ th{color:white}
       </tbody>
     </table>
   </div>
-
-  <button
-    id="toggleSoldiers"
-    type="button"
-    class="secondary hidden"
-    style="width:100%;margin-top:14px"
-  >
+  <button id="toggleSoldiers" type="button" class="secondary hidden" style="width:100%;margin-top:14px">
     View Top 100 Soldiers
   </button>
 </section>
@@ -719,6 +706,14 @@ let doublesInterval = null;
 let darePending = false;
 let dareTimeout = null;
 let dareInterval = null;
+let darePopupSlide = null;
+
+/* NEW: INDEPENDENT LOCKOUT STATE */
+
+let normalLockUntil = 0;
+let swipeLockUntil = 0;
+let swipeLockInterval = null;
+let swipeLockStarted = false;
 
 /* TIME */
 
@@ -828,7 +823,14 @@ function normalizeSlide(s,index){
       destinationValue==='' || destinationValue===null
         ? null
         : Number(destinationValue),
-    rerollLockSeconds:Math.max(0,Number(s.rerollLockSeconds||0)||0)
+    rerollLockSeconds:Math.max(
+      0,
+      Number(s.rerollLockSeconds||0)||0
+    ),
+    swipeLockSeconds:Math.max(
+      0,
+      Number(s.swipeLockSeconds||0)||0
+    )
   };
 }
 
@@ -998,17 +1000,33 @@ function mediaPage(value){
 
 /* DARE POPUP */
 
-function closeDarePopup(){
+function closeDarePopup(startLock=true){
+  const wasPending = darePending;
+  const slide = darePopupSlide;
+
   clearTimeout(dareTimeout);
   clearInterval(dareInterval);
+
   dareTimeout = null;
   dareInterval = null;
   darePending = false;
+  darePopupSlide = null;
 
   $('d12DareOverlay').classList.add('hidden');
 
   if(!document.querySelector('.overlay:not(.hidden)')){
     document.body.classList.remove('popupOpen');
+  }
+
+  if(
+    startLock &&
+    wasPending &&
+    slide &&
+    current===slide &&
+    !endingStarted &&
+    !finished
+  ){
+    startSwipeLock(slide);
   }
 }
 
@@ -1018,6 +1036,7 @@ function showDarePopup(slide){
   }
 
   darePending = true;
+  darePopupSlide = slide;
 
   const message = String(
     slide.swipeMessage ||
@@ -1048,7 +1067,7 @@ function showDarePopup(slide){
       (remaining/DARE_DISPLAY_MS*100)+'%';
   },100);
 
-  dareTimeout = setTimeout(closeDarePopup,DARE_DISPLAY_MS);
+  dareTimeout = setTimeout(()=>closeDarePopup(true),DARE_DISPLAY_MS);
   return true;
 }
 
@@ -1288,13 +1307,25 @@ function getSlide(id){
   return slides.get(Number(id))||null;
 }
 
-/* REROLL LOCK */
+/* REROLL AND SWIPE LOCKS */
 
 function clearRerollTimer(){
   if(rerollUnlockTimer!==null){
-    clearTimeout(rerollUnlockTimer);
+    clearInterval(rerollUnlockTimer);
     rerollUnlockTimer = null;
   }
+
+  normalLockUntil = 0;
+}
+
+function clearSwipeLock(){
+  if(swipeLockInterval!==null){
+    clearInterval(swipeLockInterval);
+    swipeLockInterval = null;
+  }
+
+  swipeLockUntil = 0;
+  swipeLockStarted = false;
 }
 
 function isRequiredConsequence(slide){
@@ -1316,6 +1347,116 @@ function validDestination(slide){
   return getSlide(destination);
 }
 
+function updateRerollLock(){
+  if(finished || endingStarted) return;
+
+  const now = Date.now();
+
+  const normalRemaining = Math.max(
+    0,
+    normalLockUntil-now
+  );
+
+  const swipeRemaining = Math.max(
+    0,
+    swipeLockUntil-now
+  );
+
+  const remaining = Math.max(
+    normalRemaining,
+    swipeRemaining
+  );
+
+  const required = current &&
+    isRequiredConsequence(current);
+
+  if(required){
+    rollLocked = true;
+    $('roll').disabled = true;
+    return;
+  }
+
+  if(remaining>0){
+    rollLocked = true;
+    $('roll').disabled = true;
+
+    const seconds = Math.ceil(remaining/1000);
+    const reasons = [];
+
+    if(normalRemaining>0){
+      reasons.push(
+        'Normal lock: '+
+        Math.ceil(normalRemaining/1000)+'s'
+      );
+    }
+
+    if(swipeRemaining>0){
+      reasons.push(
+        'Swipe lock: '+
+        Math.ceil(swipeRemaining/1000)+'s'
+      );
+    }
+
+    setText(
+      'rollHint',
+      '🔒 Reroll locked — '+
+      seconds+' seconds remaining. '+
+      reasons.join(' · ')
+    );
+
+  }else{
+    rollLocked = false;
+    $('roll').disabled = false;
+    setText('rollHint','');
+  }
+}
+
+function startLockCountdown(){
+  if(rerollUnlockTimer!==null){
+    clearInterval(rerollUnlockTimer);
+  }
+
+  updateRerollLock();
+
+  rerollUnlockTimer = setInterval(()=>{
+    updateRerollLock();
+
+    if(
+      normalLockUntil<=Date.now() &&
+      swipeLockUntil<=Date.now()
+    ){
+      clearInterval(rerollUnlockTimer);
+      rerollUnlockTimer = null;
+      updateRerollLock();
+    }
+  },250);
+}
+
+function startSwipeLock(slide){
+  if(
+    !slide ||
+    current!==slide ||
+    finished ||
+    endingStarted ||
+    swipeLockStarted
+  ){
+    return;
+  }
+
+  swipeLockStarted = true;
+
+  const seconds = Math.max(
+    0,
+    Number(slide.swipeLockSeconds)||0
+  );
+
+  if(seconds<=0) return;
+
+  swipeLockUntil = Date.now()+seconds*1000;
+
+  startLockCountdown();
+}
+
 /* ACTION BUTTON */
 
 function setAction(mode){
@@ -1333,8 +1474,9 @@ function setAction(mode){
 function showSlide(slide){
   if(endingStarted) return;
 
-  closeDarePopup();
+  closeDarePopup(false);
   clearRerollTimer();
+  clearSwipeLock();
   current = slide;
 
   $('slideArea').classList.remove('hidden');
@@ -1382,7 +1524,7 @@ function showSlide(slide){
       'rollHint',
       target
         ? 'Tap Show Me My Consequences.'
-        : 'Fix the destination in Admin Studio.'
+        : 'Fix the destination in game-config.json.'
     );
 
     return;
@@ -1397,28 +1539,17 @@ function showSlide(slide){
       : ''
   );
 
-  const lockSeconds = Math.max(0,Number(slide.rerollLockSeconds)||0);
+  const lockSeconds = Math.max(
+    0,
+    Number(slide.rerollLockSeconds)||0
+  );
+
+  normalLockUntil = Date.now()+lockSeconds*1000;
 
   if(lockSeconds>0){
-    rollLocked = true;
-    $('roll').disabled = true;
-
-    setText('rollHint','Reroll locked for '+lockSeconds+' seconds.');
-
-    rerollUnlockTimer = setTimeout(()=>{
-      rerollUnlockTimer = null;
-
-      if(finished || endingStarted || doublesPending) return;
-
-      rollLocked = false;
-      $('roll').disabled = false;
-      setText('rollHint','');
-    },lockSeconds*1000);
-
+    startLockCountdown();
   }else{
-    rollLocked = false;
-    $('roll').disabled = false;
-    setText('rollHint','');
+    updateRerollLock();
   }
 }
 
@@ -1427,7 +1558,7 @@ function showSlide(slide){
 function showDoubles(originalRoll,target){
   if(doublesPending || endingStarted) return;
 
-  closeDarePopup();
+  closeDarePopup(false);
   doublesPending = true;
   doublesTarget = target;
 
@@ -1501,6 +1632,8 @@ function continueDoubles(){
 /* ROLL D12 */
 
 function roll(){
+  updateRerollLock();
+
   if(
     !configReady ||
     finished ||
@@ -1537,7 +1670,9 @@ function roll(){
   if(slide){
     showSlide(slide);
   }else{
-    closeDarePopup();
+    closeDarePopup(false);
+    clearRerollTimer();
+    clearSwipeLock();
     current = null;
     $('slideArea').classList.add('hidden');
     setAction('roll');
@@ -1703,9 +1838,10 @@ function finishGame(won=false,tappedOut=false){
 
   updateClock();
   endingStarted = true;
-  closeDarePopup();
+  closeDarePopup(false);
   clearInterval(tick);
   clearRerollTimer();
+  clearSwipeLock();
 
   $('roll').disabled = true;
   $('accept').disabled = true;
