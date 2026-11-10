@@ -1811,87 +1811,368 @@ lockAnalytics();
 
 /* SHARE HUNTER LEADERBOARD TO REDDIT */
 
+
+/* SHAREABLE TOP 5 HUNTER SCOREBOARD */
+
 let hunterLeaderboardForSharing=[];
 
-function buildHunterLeaderboardPost(){
-  const hunters=hunterLeaderboardForSharing;
+const GAME_LINK=
+"https://dudewolf925.github.io/d12-survival-game/";
 
-  if(!hunters.length){
-    throw Error("Unlock Game Analytics to load hunter rankings first.");
+const shareArea=el("shareHunterLeaderboard").parentElement;
+const shareButton=el("shareHunterLeaderboard");
+
+shareButton.textContent=
+"🖼️ Generate Top 5 Leaderboard Image";
+
+const imagePanel=document.createElement("div");
+imagePanel.style.cssText=
+"margin-top:14px;display:none";
+
+const imageCanvas=document.createElement("canvas");
+imageCanvas.width=1080;
+imageCanvas.height=1440;
+imageCanvas.style.cssText=
+"width:100%;height:auto;border-radius:14px;"+
+"border:1px solid #666;display:block";
+
+const imageActions=document.createElement("div");
+imageActions.className="actions";
+imageActions.style.marginTop="12px";
+
+const saveImageButton=document.createElement("button");
+saveImageButton.type="button";
+saveImageButton.className="primary";
+saveImageButton.textContent="⬇️ Save PNG";
+
+const shareImageButton=document.createElement("button");
+shareImageButton.type="button";
+shareImageButton.className="primary";
+shareImageButton.textContent="📤 Share Image";
+
+imageActions.append(saveImageButton,shareImageButton);
+imagePanel.append(imageCanvas,imageActions);
+
+shareArea.insertBefore(
+imagePanel,
+el("hunterShareNotice")
+);
+
+function roundedBox(ctx,x,y,w,h,r,fill,stroke){
+  ctx.beginPath();
+  ctx.roundRect(x,y,w,h,r);
+
+  if(fill){
+    ctx.fillStyle=fill;
+    ctx.fill();
   }
 
-  const totalHunts=hunters.reduce(
-    (sum,hunter)=>sum+Number(hunter.successful_hunts||0),
-    0
-  );
-
-  const lines=[
-    "😈 D12 SURVIVAL GAME — HUNTER LEADERBOARD 😈",
-    "",
-    "🏆 ALL-TIME HUNTER RANKINGS",
-    ""
-  ];
-
-  hunters.forEach((hunter,index)=>{
-    const rank=index+1;
-    const medal=rank===1?"🥇":
-      rank===2?"🥈":
-      rank===3?"🥉":"🎯";
-
-    lines.push(
-      medal+" #"+rank+" "+hunter.hunter+
-      " — "+Number(hunter.successful_hunts||0)+
-      " successful hunts"
-    );
-  });
-
-  lines.push(
-    "",
-    "💀 Total successful hunts: "+totalHunts,
-    "",
-    "Think you can survive the D12?",
-    "",
-    "🎲 Play here:",
-    "https://dudewolf925.github.io/d12-survival-game/"
-  );
-
-  return lines.join("\n");
+  if(stroke){
+    ctx.strokeStyle=stroke;
+    ctx.lineWidth=3;
+    ctx.stroke();
+  }
 }
 
-function shareHunterLeaderboard(){
-  const notice=document.getElementById("hunterShareNotice");
+function fitCanvasText(ctx,text,maxWidth,baseSize){
+  let size=baseSize;
 
-  try{
-    const text=buildHunterLeaderboardPost();
+  while(size>20){
+    ctx.font="500 "+size+"px system-ui";
 
-    const title="😈 D12 Survival Game — Hunter Leaderboard";
-
-    const redditUrl=
-      "https://www.reddit.com/submit?"+
-      "title="+encodeURIComponent(title)+
-      "&text="+encodeURIComponent(text);
-
-    const opened=window.open(
-      redditUrl,
-      "_blank",
-      "noopener,noreferrer"
-    );
-
-    if(opened){
-      notice.textContent=
-        "Reddit opened with your Hunter Leaderboard. Review and submit your post.";
-    }else{
-      window.location.href=redditUrl;
+    if(ctx.measureText(text).width<=maxWidth){
+      break;
     }
 
-  }catch(error){
-    notice.textContent=error.message;
+    size-=2;
   }
+
+  return size;
 }
 
-document.getElementById(
-  "shareHunterLeaderboard"
-).onclick=shareHunterLeaderboard;
+function drawLeaderboardImage(){
+  const hunters=hunterLeaderboardForSharing
+    .filter(h=>
+      h&&
+      String(h.hunter||"").trim()&&
+      Number(h.successful_hunts)>0
+    )
+    .sort((a,b)=>
+      Number(b.successful_hunts)-
+      Number(a.successful_hunts)||
+      String(a.hunter).localeCompare(String(b.hunter))
+    )
+    .slice(0,5);
+
+  if(!hunters.length){
+    throw Error(
+      "No hunter rankings are loaded. Unlock and refresh Game Analytics first."
+    );
+  }
+
+  const lostText=el("statLost").textContent.trim();
+
+  if(!/^[\d,]+$/.test(lostText)){
+    throw Error(
+      "Total Soldiers Lost is unavailable. Refresh Game Analytics first."
+    );
+  }
+
+  const ctx=imageCanvas.getContext("2d");
+  const W=1080;
+  const H=1440;
+
+  ctx.clearRect(0,0,W,H);
+
+  const background=ctx.createLinearGradient(0,0,W,H);
+  background.addColorStop(0,"#080808");
+  background.addColorStop(1,"#151515");
+
+  ctx.fillStyle=background;
+  ctx.fillRect(0,0,W,H);
+
+  roundedBox(
+    ctx,22,12,1036,1410,65,
+    null,"#666666"
+  );
+
+  ctx.textAlign="center";
+  ctx.fillStyle="#ff648b";
+  ctx.font="900 61px system-ui";
+  ctx.fillText(
+    "THE NNN SURVIVAL CHALLENGE",
+    W/2,91
+  );
+
+  ctx.fillStyle="#f7f2f6";
+  ctx.font="800 63px system-ui";
+  ctx.fillText("Hunter Scoreboard",W/2,170);
+
+  const panelGradient=ctx.createLinearGradient(
+    70,190,1010,470
+  );
+  panelGradient.addColorStop(0,"#200b11");
+  panelGradient.addColorStop(1,"#290c15");
+
+  roundedBox(
+    ctx,65,195,950,275,38,
+    panelGradient,"#a63c5b"
+  );
+
+  ctx.fillStyle="#ffb1c2";
+  ctx.font="800 48px system-ui";
+  ctx.fillText(
+    "💀 Total Soldiers Lost",
+    W/2,270
+  );
+
+  ctx.fillStyle="#ff6388";
+  ctx.font="900 113px system-ui";
+  ctx.fillText(lostText,W/2,381);
+
+  ctx.fillStyle="#f4dce2";
+  ctx.font="30px system-ui";
+  ctx.fillText(
+    "All-time successful hunts credited to Reddit hunters",
+    W/2,433
+  );
+
+  ctx.textAlign="left";
+  ctx.fillStyle="#d8d8d8";
+  ctx.font="35px system-ui";
+  ctx.fillText(
+    "Soldiers Claimed by each Reddit hunter",
+    65,535
+  );
+
+  ctx.fillStyle="#ffffff";
+  ctx.font="800 37px system-ui";
+  ctx.fillText("Hunter",80,618);
+  ctx.textAlign="right";
+  ctx.fillText("Soldiers Claimed",985,618);
+
+  const medals=["🥇","🥈","🥉"];
+  const rowStart=652;
+  const rowHeight=100;
+
+  for(let i=0;i<5;i++){
+    const y=rowStart+i*rowHeight;
+
+    ctx.strokeStyle="#858585";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(65,y);
+    ctx.lineTo(1015,y);
+    ctx.stroke();
+
+    if(i>=hunters.length)continue;
+
+    const hunter=hunters[i];
+    const username=String(hunter.hunter);
+    const claims=Number(
+      hunter.successful_hunts
+    ).toLocaleString();
+
+    ctx.textAlign="left";
+    ctx.fillStyle="#ffffff";
+
+    if(i<3){
+      ctx.font="51px system-ui";
+      ctx.fillText(medals[i],88,y+70);
+    }else{
+      ctx.font="44px system-ui";
+      ctx.fillText("#"+(i+1),88,y+67);
+    }
+
+    const fontSize=fitCanvasText(
+      ctx,username,440,43
+    );
+
+    ctx.font="500 "+fontSize+"px system-ui";
+    ctx.fillText(username,195,y+67);
+
+    ctx.textAlign="right";
+    ctx.font="45px system-ui";
+    ctx.fillText(claims,800,y+67);
+  }
+
+  ctx.strokeStyle="#858585";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(65,rowStart+5*rowHeight);
+  ctx.lineTo(1015,rowStart+5*rowHeight);
+  ctx.stroke();
+
+  const footerGradient=ctx.createLinearGradient(
+    60,1190,1020,1390
+  );
+  footerGradient.addColorStop(0,"#252525");
+  footerGradient.addColorStop(1,"#333333");
+
+  roundedBox(
+    ctx,60,1210,960,165,35,
+    footerGradient,"#aaaaaa"
+  );
+
+  ctx.textAlign="center";
+  ctx.fillStyle="#ffffff";
+  ctx.font="800 48px system-ui";
+  ctx.fillText(
+    "🎲 Play The NNN Survival Challenge",
+    W/2,1282
+  );
+
+  ctx.fillStyle="#8be5a0";
+  ctx.font="35px system-ui";
+  ctx.fillText(
+    "dudewolf925.github.io/d12-survival-game",
+    W/2,1340
+  );
+
+  imagePanel.style.display="block";
+
+  el("hunterShareNotice").textContent=
+    "Your Top 5 leaderboard image is ready.";
+}
+
+function imageBlob(){
+  return new Promise((resolve,reject)=>{
+    imageCanvas.toBlob(blob=>{
+      if(blob){
+        resolve(blob);
+      }else{
+        reject(Error("Could not create PNG image."));
+      }
+    },"image/png");
+  });
+}
+
+shareButton.onclick=()=>{
+  try{
+    drawLeaderboardImage();
+    imagePanel.scrollIntoView({
+      behavior:"smooth",
+      block:"nearest"
+    });
+  }catch(error){
+    el("hunterShareNotice").textContent=
+      error.message;
+  }
+};
+
+saveImageButton.onclick=async()=>{
+  try{
+    const blob=await imageBlob();
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+
+    link.href=url;
+    link.download="D12-Top-5-Hunter-Scoreboard.png";
+
+    document.body.append(link);
+    link.click();
+    link.remove();
+
+    setTimeout(()=>URL.revokeObjectURL(url),60000);
+
+    el("hunterShareNotice").textContent=
+      "PNG prepared. On iPhone, save it to Files or Photos using the available browser options.";
+  }catch(error){
+    el("hunterShareNotice").textContent=
+      error.message;
+  }
+};
+
+shareImageButton.onclick=async()=>{
+  try{
+    const blob=await imageBlob();
+
+    const file=new File(
+      [blob],
+      "D12-Top-5-Hunter-Scoreboard.png",
+      {type:"image/png"}
+    );
+
+    const shareData={
+      title:"The NNN Survival Challenge",
+      text:"😈 Top 5 Hunter Scoreboard\n"+GAME_LINK,
+      files:[file]
+    };
+
+    if(
+      navigator.share&&
+      navigator.canShare&&
+      navigator.canShare({files:[file]})
+    ){
+      await navigator.share(shareData);
+
+      el("hunterShareNotice").textContent=
+        "Share sheet opened. Choose Reddit or save the image.";
+    }else{
+      el("hunterShareNotice").textContent=
+        "Direct image sharing is unavailable in this browser. Use Save PNG, then attach the image to your Reddit post.";
+    }
+  }catch(error){
+    if(error.name!=="AbortError"){
+      el("hunterShareNotice").textContent=
+        "Sharing failed: "+error.message;
+    }
+  }
+};
+
+el("refreshAnalytics").addEventListener(
+  "click",
+  ()=>{
+    imagePanel.style.display="none";
+  }
+);
+
+el("lockAnalytics").addEventListener(
+  "click",
+  ()=>{
+    imagePanel.style.display="none";
+  }
+);
 
 /* RESET LEADERBOARDS */
 
