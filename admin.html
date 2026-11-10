@@ -379,7 +379,7 @@ function resolveMedia(value,type){
   const url=String(value||"").trim();
   if(!url)return null;
 
-  if(/^data:(image|video)\//i.test(url)||^blob:/i.test(url)){
+ if(/^data:(image|video)\//i.test(url)||/^blob:/i.test(url)){
     return {
       kind:/^data:video\//i.test(url)||(/^blob:/i.test(url)&&type==="video")
         ?"video":"image",
