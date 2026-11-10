@@ -1,7 +1,7 @@
 {
   "title": "A NNN challenge",
   "introTitle": "Do you have what it takes to survive?",
-  "introText": "Welcome to my NNN game\n\nRoll the dice🎲\nFace your fate\nSurvive if you can😈\n\nThe rules!!\nFollow the instructions provided by each hunter. \nYou have 4 options during game play\n\n1 - Roll again and keep tempting fate\n2 - I came (hunter made you lose your nut)\n3 - Tapping out  (you don’t wanna risk losing your nut any longer)\n4 - play until you get to the winning slide\n\nWhen you’re done playing you can share your results with your cumrads in r/NoNutNovemberChalleng right from the game!\n\n\nATTENTION Hunters!!!!\nCheck in on the leaderboard.  If anyone nuts because of you, you get the credit and can add it to your tally. \nSee how many nuts you’ve claimed!!\n\nIf you’d like your content removed or if you’d like a custom photo/video added please dm me on Reddit. u/TailorSea2085",
+  "introText": "Welcome to my NNN game\n\nRoll the dice🎲\nFace your fate\nSurvive if you can😈\n\nIf you’ve been here before im planning an update for this weekend 😈😈\n\nThe rules!!\nFollow the instructions provided by each hunter. \nYou have 4 options during game play\n\n1 - Roll again and keep tempting fate\n2 - I came (hunter made you lose your nut)\n3 - Tapping out  (you don’t wanna risk losing your nut any longer)\n4 - play until you get to the winning slide\n\nWhen you’re done playing you can share your results with your cumrads in r/NoNutNovemberChalleng right from the game!\n\n\nATTENTION Hunters!!!!\nCheck in on the leaderboard.  If anyone nuts because of you, you get the credit and can add it to your tally. \nSee how many nuts you’ve claimed!!\n\nIf you’d like your content removed or if you’d like a custom photo/video added please dm me on Reddit. u/TailorSea2085",
   "homeImageUrl": "https://i.imgur.com/ME7W3yO_d.webp?maxwidth=760&fidelity=grand",
   "supabaseUrl": "https://nustqxwldlgsdncebwxt.supabase.co",
   "supabaseKey": "sb_publishable_eHWFWDOvdBpcn1B_9mYryg_KjiCvEdr",
@@ -342,5 +342,7 @@
       "rerollLockSeconds": 60,
       "swipeLockSeconds": 0
     }
-  ]
+  ],
+  "shareImageUrl": "https://i.imgur.com/LielhLf_d.png?maxwidth=520&shape=thumb&fidelity=high",
+  "homeScreenIconUrl": "https://i.imgur.com/qWLnyFu_d.png?maxwidth=520&shape=thumb&fidelity=high"
 }
