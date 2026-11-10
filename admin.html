@@ -1850,7 +1850,17 @@ shareImageButton.type="button";
 shareImageButton.className="primary";
 shareImageButton.textContent="📤 Share Image";
 
-imageActions.append(saveImageButton,shareImageButton);
+const redditImageButton=document.createElement("button");
+redditImageButton.type="button";
+redditImageButton.className="primary";
+redditImageButton.textContent="🔴 Post Leaderboard to Reddit";
+redditImageButton.style.width="100%";
+
+imageActions.append(
+  saveImageButton,
+  shareImageButton,
+  redditImageButton
+);
 imagePanel.append(imageCanvas,imageActions);
 
 shareArea.insertBefore(
@@ -2159,7 +2169,54 @@ shareImageButton.onclick=async()=>{
     }
   }
 };
+redditImageButton.onclick=async()=>{
+  const notice=el("hunterShareNotice");
 
+  try{
+    drawLeaderboardImage();
+
+    const blob=await imageBlob();
+    const file=new File(
+      [blob],
+      "D12-Top-5-Hunter-Scoreboard.png",
+      {type:"image/png"}
+    );
+
+    const title=
+      "The NNN Survival Challenge — Top 5 Hunter Scoreboard";
+
+    const redditUrl=
+      "https://www.reddit.com/submit?title="+
+      encodeURIComponent(title);
+
+    // Try iPhone's native image-sharing options first.
+    if(
+      navigator.share&&
+      navigator.canShare&&
+      navigator.canShare({files:[file]})
+    ){
+      await navigator.share({
+        title,
+        text:"😈 Think you can survive?\n"+GAME_LINK,
+        files:[file]
+      });
+
+      notice.textContent=
+        "Choose Reddit in the share sheet to create your post.";
+    }else{
+      window.open(redditUrl,"_blank");
+
+      notice.textContent=
+        "Reddit opened. Save the PNG and attach it to your post.";
+    }
+
+  }catch(error){
+    if(error.name!=="AbortError"){
+      notice.textContent=
+        "Could not prepare Reddit post: "+error.message;
+    }
+  }
+};
 el("refreshAnalytics").addEventListener(
   "click",
   ()=>{
