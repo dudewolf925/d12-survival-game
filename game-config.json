@@ -1,3 +1,4 @@
+
 {
   "title": "A NNN challenge",
   "introTitle": "Do you have what it takes to survive?",
@@ -17,7 +18,8 @@
       "redditUser": "u/dreamalicious",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 65
+      "rerollLockSeconds": 65,
+      "swipeLockSeconds": 0
     },
     {
       "id": 2,
@@ -30,7 +32,8 @@
       "redditUser": "u/smoakinghot",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 120
+      "rerollLockSeconds": 120,
+      "swipeLockSeconds": 0
     },
     {
       "id": 3,
@@ -43,7 +46,8 @@
       "redditUser": "u/peachywellow",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 60
+      "rerollLockSeconds": 60,
+      "swipeLockSeconds": 0
     },
     {
       "id": 4,
@@ -56,7 +60,8 @@
       "redditUser": "u/vadababy",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 5,
@@ -69,7 +74,8 @@
       "redditUser": "u/vixenp___",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 6,
@@ -82,7 +88,8 @@
       "redditUser": "u/brattyytea",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 240
+      "rerollLockSeconds": 240,
+      "swipeLockSeconds": 0
     },
     {
       "id": 7,
@@ -95,7 +102,8 @@
       "redditUser": "u/facelesslust91",
       "consequence": true,
       "destination": 22,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 8,
@@ -108,7 +116,8 @@
       "redditUser": "u/-Gold-Palm-",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 9,
@@ -121,7 +130,8 @@
       "redditUser": "u/Sighhhh1",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 180
+      "rerollLockSeconds": 180,
+      "swipeLockSeconds": 0
     },
     {
       "id": 10,
@@ -134,7 +144,8 @@
       "redditUser": "u/RubyRoxanne",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 11,
@@ -147,7 +158,8 @@
       "redditUser": "u/WildestRose666",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 12,
@@ -160,7 +172,8 @@
       "redditUser": "u/Petite_Paula",
       "consequence": false,
       "destination": 16,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 13,
@@ -173,7 +186,8 @@
       "redditUser": "u/SeriouslyMaria",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 180
+      "rerollLockSeconds": 180,
+      "swipeLockSeconds": 0
     },
     {
       "id": 14,
@@ -186,7 +200,8 @@
       "redditUser": "",
       "consequence": true,
       "destination": 23,
-      "rerollLockSeconds": 5
+      "rerollLockSeconds": 5,
+      "swipeLockSeconds": 0
     },
     {
       "id": 15,
@@ -199,7 +214,8 @@
       "redditUser": "u/FreeCaregiver4399",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 16,
@@ -212,7 +228,8 @@
       "redditUser": "",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 17,
@@ -225,7 +242,8 @@
       "redditUser": "u/vadababy",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 18,
@@ -238,7 +256,8 @@
       "redditUser": "u/SecretKumchie",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 60
+      "rerollLockSeconds": 60,
+      "swipeLockSeconds": 0
     },
     {
       "id": 19,
@@ -251,7 +270,8 @@
       "redditUser": "u/-Gold-Palm-",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 120
+      "rerollLockSeconds": 120,
+      "swipeLockSeconds": 0
     },
     {
       "id": 20,
@@ -264,7 +284,8 @@
       "redditUser": "u/Jamieeey",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 21,
@@ -277,7 +298,8 @@
       "redditUser": "u/YourBlondeMommy",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 60
+      "rerollLockSeconds": 60,
+      "swipeLockSeconds": 0
     },
     {
       "id": 22,
@@ -290,7 +312,8 @@
       "redditUser": "u/facelesslust91",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 240
+      "rerollLockSeconds": 240,
+      "swipeLockSeconds": 0
     },
     {
       "id": 23,
@@ -303,7 +326,8 @@
       "redditUser": "u/KujiAlt",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 0
+      "rerollLockSeconds": 0,
+      "swipeLockSeconds": 0
     },
     {
       "id": 24,
@@ -316,7 +340,8 @@
       "redditUser": "u/StyxHips",
       "consequence": false,
       "destination": 1,
-      "rerollLockSeconds": 60
+      "rerollLockSeconds": 60,
+      "swipeLockSeconds": 0
     }
   ]
 }
