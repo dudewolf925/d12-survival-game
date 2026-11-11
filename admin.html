@@ -2652,151 +2652,212 @@ publishMessage(
 
 el("analyticsNotice").textContent=
 "🔒 Analytics are locked. Enter your publishing password to view them.";
-/* D12 FOUR-VIEW ADMIN STUDIO: add just before the final </script> */
+
+
+/* D12 ADMIN STUDIO FOUR-VIEW NAVIGATION - REPLACEMENT */
 (function setupStudioNavigation(){
   const main=document.querySelector('main');
-  const sections=[...main.querySelectorAll(':scope > section')];
-  if(sections.length!==7){console.error('Expected seven Admin Studio sections; navigation not installed.');return;}
+  const sections=Array.from(main.children).filter(node=>node.tagName==='SECTION');
+  if(sections.length!==7){
+    console.error('D12 navigation: expected seven original sections; found '+sections.length);
+    return;
+  }
   const [home,slides,supabase,analytics,reset,github,tools]=sections;
-  const style=document.createElement('style');
-  style.textContent=`
-    .studioNav{position:sticky;top:0;z-index:100;background:#080808ee;backdrop-filter:blur(12px);padding:12px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;border-bottom:1px solid #444}
-    .studioNav button{font-size:13px;padding:9px 3px;min-height:54px;border-radius:10px}
-    .studioNav button[aria-current=page]{background:#16803c;border-color:#5ad783;font-weight:800}
+  const css=document.createElement('style');
+  css.textContent=`
+    .studioNav{position:sticky;top:0;z-index:100;background:#080808f5;backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:12px 0;border-bottom:1px solid #444}
+    .studioNav button{font-size:12px;padding:9px 3px;min-height:56px;border-radius:10px;overflow-wrap:anywhere}
+    .studioNav button[aria-current="page"]{background:#16803c;border-color:#5ad783;font-weight:800}
     .studioView{display:none}.studioView.isActive{display:block}
     .studioFooter{margin:22px 0 36px}.studioFooter button{width:100%;font-size:18px;padding:17px}
-    .studioModal{position:fixed;inset:0;z-index:11000;background:#000d;display:flex;align-items:center;justify-content:center;padding:18px}
-    .studioModal.hidden{display:none!important}
-    .studioDialog{background:#191919;border:2px solid #777;border-radius:20px;padding:22px;width:100%;max-width:430px;box-shadow:0 12px 45px #000}
+    .studioModal{position:fixed;inset:0;z-index:11000;background:#000e;display:flex;align-items:center;justify-content:center;padding:18px}
+    .studioDialog{background:#191919;border:2px solid #777;border-radius:20px;padding:22px;width:100%;max-width:430px;max-height:90dvh;overflow:auto;box-shadow:0 12px 45px #000}
     .studioDialog h2{margin-top:0}.studioDialog .actions button{flex:1}
+    .studioModal .notice{min-height:1.5em}
     #analyticsLocked{display:none!important}
-    #publishGitHub,#publishPassword{display:none!important}
+    #publishGitHub{display:none!important}
   `;
-  document.head.append(style);
+  document.head.append(css);
 
   const nav=document.createElement('nav');
   nav.className='studioNav';
-  nav.setAttribute('aria-label','Admin Studio sections');
-  const definitions=[
-    ['home','ð  Home'],['slides','ðï¸ Slides'],
-    ['admin','âï¸ Admin'],['analytics','ð Analytics']
+  nav.setAttribute('aria-label','Admin Studio pages');
+  const defs=[
+    ['home','🏠 Home'],['slides','🎞️ Slides'],
+    ['admin','⚙️ Admin'],['analytics','📊 Analytics']
   ];
   const views={};
   const navButtons={};
-  for(const [id,label] of definitions){
+  for(const [id,label] of defs){
     const button=document.createElement('button');
-    button.type='button';button.textContent=label;
-    button.onclick=()=>goTo(id);
-    nav.append(button);navButtons[id]=button;
+    button.type='button';
+    button.textContent=label;
+    button.addEventListener('click',()=>navigate(id));
+    nav.append(button);
+    navButtons[id]=button;
     const view=document.createElement('div');
-    view.className='studioView';view.id='studio-'+id;
+    view.className='studioView';
+    view.id='studio-'+id;
     views[id]=view;
   }
   main.insertBefore(nav,sections[0]);
-  for(const id of ['home','slides','admin','analytics'])main.append(views[id]);
+  Object.values(views).forEach(view=>main.append(view));
   views.home.append(home);
   views.slides.append(slides);
   views.admin.append(supabase,reset,github,tools);
   views.analytics.append(analytics);
 
-  // Put Save Draft, Copy Configuration and Reset Defaults inside GitHub section.
-  github.append(tools.querySelector('.actions'),tools.querySelector('#notice'));
+  const toolsActions=tools.querySelector('.actions');
+  const toolsNotice=el('notice');
+  github.append(toolsActions,toolsNotice);
   tools.remove();
   const originalPublish=el('publishGitHub');
   const originalPassword=el('publishPassword');
+  const originalPasswordLabel=originalPassword.closest('label');
   const publishNotice=el('publishNotice');
-  // Retain original publish controls and handlers in the DOM, but hide them.
-  const oldPasswordLabel=originalPassword.closest('label');
-  if(oldPasswordLabel)oldPasswordLabel.style.display='none';
+  if(originalPasswordLabel)originalPasswordLabel.style.display='none';
   originalPublish.style.display='none';
 
-  function modal(title,description,submitLabel,action){
-    const overlay=document.createElement('div');
-    overlay.className='studioModal';
-    overlay.setAttribute('role','dialog');
-    overlay.setAttribute('aria-modal','true');
-    const box=document.createElement('div');box.className='studioDialog';
-    const heading=document.createElement('h2');heading.textContent=title;
-    const p=document.createElement('p');p.textContent=description;
-    const input=document.createElement('input');
-    input.type='password';input.autocomplete='off';
-    input.placeholder='Enter password';
-    input.setAttribute('aria-label','Admin password');
-    const feedback=document.createElement('p');feedback.className='notice';
-    const actions=document.createElement('div');actions.className='actions';
-    const cancel=document.createElement('button');cancel.textContent='Cancel';
-    const submit=document.createElement('button');submit.className='primary';submit.textContent=submitLabel;
-    function close(){overlay.remove();document.body.classList.remove('popupOpen');}
-    cancel.onclick=close;
-    submit.onclick=async()=>{
-      if(!input.value){feedback.textContent='Enter your password.';return;}
-      submit.disabled=true;
-      try{await action(input.value,close,feedback);}catch(error){feedback.textContent=error.message;}
-      finally{submit.disabled=false;}
-    };
-    input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();submit.click();}});
-    actions.append(cancel,submit);box.append(heading,p,input,feedback,actions);
-    overlay.append(box);document.body.append(overlay);
-    document.body.classList.add('popupOpen');input.focus();
-    return {close,feedback};
-  }
-
-  function publishPopup(){
-    modal('ð Publish to GitHub',
-      'Your draft will be saved and checked against GitHub before publishing.',
-      'Publish Now',(password,close)=>{
-        originalPassword.value=password;
-        close();
-        originalPublish.click();
-        // Show publishing results where the user is currently working.
-        publishNotice.scrollIntoView({behavior:'smooth',block:'nearest'});
-      });
-  }
-  for(const id of Object.keys(views)){
-    const footer=document.createElement('div');footer.className='studioFooter';
-    const button=document.createElement('button');
-    button.type='button';button.className='primary';
-    button.textContent='ð Publish to GitHub';button.onclick=publishPopup;
-    const status=document.createElement('p');status.className='notice';
-    status.setAttribute('aria-live','polite');
-    footer.append(button,status);views[id].append(footer);
-    if(id!=='admin'){
-      const observer=new MutationObserver(()=>{status.textContent=publishNotice.textContent;});
-      observer.observe(publishNotice,{childList:true,characterData:true,subtree:true});
-    }
-  }
-
-  // Analytics unlock happens in a popup; reuse existing secure request handler.
-  function analyticsPopup(){
-    if(analyticsPasswordInMemory){show('analytics');return;}
-    modal('ð Unlock Game Analytics',
-      'Enter your existing publishing password to view private statistics.',
-      'Unlock Analytics',async(password,close,feedback)=>{
-        el('analyticsPassword').value=password;
-        el('unlockAnalytics').click();
-        feedback.textContent='Checking passwordâ¦';
-        const start=Date.now();
-        while(Date.now()-start<20000){
-          await new Promise(resolve=>setTimeout(resolve,250));
-          if(analyticsPasswordInMemory){close();show('analytics');return;}
-          const note=el('analyticsNotice').textContent;
-          if(note.startsWith('Could not unlock')||note.startsWith('Enter a valid')){
-            feedback.textContent=note;return;
-          }
-        }
-        feedback.textContent=el('analyticsNotice').textContent||'Request timed out.';
-      });
-  }
   function show(id){
     for(const key of Object.keys(views)){
       views[key].classList.toggle('isActive',key===id);
       navButtons[key].setAttribute('aria-current',key===id?'page':'false');
     }
-    window.scrollTo({top:0,behavior:'instant'});
+    window.scrollTo(0,0);
   }
-  function goTo(id){
-    if(id==='analytics'&&!analyticsPasswordInMemory){analyticsPopup();return;}
-    try{commit();}catch(error){console.warn(error);}
+
+  function openModal(title,description,submitText,onSubmit){
+    const overlay=document.createElement('div');
+    overlay.className='studioModal';
+    overlay.setAttribute('role','dialog');
+    overlay.setAttribute('aria-modal','true');
+    overlay.setAttribute('aria-label',title);
+    const dialog=document.createElement('div');
+    dialog.className='studioDialog';
+    const heading=document.createElement('h2');
+    heading.textContent=title;
+    const descriptionNode=document.createElement('p');
+    descriptionNode.textContent=description;
+    const input=document.createElement('input');
+    input.type='password';
+    input.autocomplete='off';
+    input.placeholder='Enter password';
+    input.setAttribute('aria-label','Password');
+    const feedback=document.createElement('p');
+    feedback.className='notice';
+    feedback.setAttribute('aria-live','polite');
+    const actions=document.createElement('div');
+    actions.className='actions';
+    const cancel=document.createElement('button');
+    cancel.type='button';
+    cancel.textContent='Cancel';
+    const submit=document.createElement('button');
+    submit.type='button';
+    submit.className='primary';
+    submit.textContent=submitText;
+    let closed=false;
+    function close(){
+      if(closed)return;
+      closed=true;
+      input.value='';
+      overlay.remove();
+      document.body.classList.remove('popupOpen');
+    }
+    cancel.addEventListener('click',close);
+    submit.addEventListener('click',async()=>{
+      const password=input.value;
+      if(!password){feedback.textContent='Enter your password.';return;}
+      submit.disabled=true;
+      cancel.disabled=true;
+      try{await onSubmit(password,close,feedback);}
+      catch(error){feedback.textContent=error.message||String(error);}
+      finally{submit.disabled=false;cancel.disabled=false;}
+    });
+    input.addEventListener('keydown',event=>{
+      if(event.key==='Enter'){event.preventDefault();submit.click();}
+      if(event.key==='Escape'){event.preventDefault();close();}
+    });
+    actions.append(cancel,submit);
+    dialog.append(heading,descriptionNode,input,feedback,actions);
+    overlay.append(dialog);
+    document.body.append(overlay);
+    document.body.classList.add('popupOpen');
+    input.focus();
+    return {close,feedback};
+  }
+
+  const footerStatus={};
+  for(const id of Object.keys(views)){
+    const footer=document.createElement('div');
+    footer.className='studioFooter';
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='primary';
+    button.textContent='🚀 Publish to GitHub';
+    button.addEventListener('click',publishPopup);
+    const status=document.createElement('p');
+    status.className='notice';
+    status.setAttribute('aria-live','polite');
+    footer.append(button,status);
+    views[id].append(footer);
+    footerStatus[id]=status;
+  }
+  const publishObserver=new MutationObserver(()=>{
+    const text=publishNotice.textContent;
+    Object.values(footerStatus).forEach(status=>{status.textContent=text;});
+  });
+  publishObserver.observe(publishNotice,{childList:true,characterData:true,subtree:true});
+  Object.values(footerStatus).forEach(status=>{
+    status.textContent=publishNotice.textContent;
+  });
+
+  function publishPopup(){
+    openModal('🚀 Publish to GitHub',
+      'Enter your publishing password. Your draft will be saved and GitHub will be checked before any update.',
+      'Continue to Publish',async(password,close)=>{
+        originalPassword.value=password;
+        close();
+        originalPublish.click();
+        // The original handler retains its GitHub conflict checks and confirmations.
+      });
+  }
+
+  async function unlockAnalytics(password,close,feedback){
+    const notice=el('analyticsNotice');
+    const unlockButton=el('unlockAnalytics');
+    el('analyticsPassword').value=password;
+    feedback.textContent='Checking password and loading analytics…';
+    // Observe the original handler's final success/error state, without changing its endpoint.
+    unlockButton.click();
+    const start=Date.now();
+    while(Date.now()-start<30000){
+      await new Promise(resolve=>setTimeout(resolve,200));
+      if(analyticsPasswordInMemory){
+        close();
+        show('analytics');
+        return;
+      }
+      const text=notice.textContent||'';
+      if(text.startsWith('Could not unlock')||text.startsWith('Enter a valid')||text.startsWith('Enter your publishing')){
+        feedback.textContent=text;
+        return;
+      }
+      if(!unlockButton.disabled&&Date.now()-start>400){
+        feedback.textContent=text||'Unable to unlock analytics.';
+        return;
+      }
+    }
+    feedback.textContent='Analytics request timed out. Try again.';
+  }
+
+  function navigate(id){
+    if(id==='analytics'&&!analyticsPasswordInMemory){
+      openModal('🔒 Unlock Game Analytics',
+        'Enter your existing publishing password to view private game statistics.',
+        'Unlock Analytics',unlockAnalytics);
+      return;
+    }
+    try{commit();}catch(error){console.warn('Could not commit current edit:',error);}
     show(id);
   }
   el('lockAnalytics').addEventListener('click',()=>show('admin'));
