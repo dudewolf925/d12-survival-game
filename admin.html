@@ -2864,6 +2864,52 @@ el("analyticsNotice").textContent=
   show('home');
 })();
 
+
+/* D12 AUTOMATIC ADMIN STUDIO CACHE BUSTER */
+(function setupAutomaticCacheBuster(){
+  const VERSION_KEY="d12_admin_html_version_v1";
+  const CHECK_KEY="d12_admin_cache_check_v1";
+  const ADMIN_API=
+    "https://api.github.com/repos/dudewolf925/d12-survival-game/contents/admin.html?ref=main";
+
+  async function checkForUpdates(){
+    try{
+      const response=await fetch(ADMIN_API,{
+        cache:"no-store",
+        headers:{Accept:"application/vnd.github+json"}
+      });
+
+      if(!response.ok)return;
+
+      const data=await response.json();
+      const latestSha=data.sha;
+
+      if(!latestSha)return;
+
+      const currentVersion=localStorage.getItem(VERSION_KEY);
+
+      if(currentVersion!==latestSha){
+        localStorage.setItem(VERSION_KEY,latestSha);
+
+        // Reload once with a fresh URL when a new version is found.
+        const url=new URL(window.location.href);
+        url.searchParams.set("v",latestSha.substring(0,12));
+
+        if(url.searchParams.get("v")!==
+           new URL(window.location.href).searchParams.get("v")){
+          window.location.replace(url.toString());
+        }
+      }
+
+    }catch(error){
+      console.warn("Admin update check unavailable:",error);
+    }
+  }
+
+  checkForUpdates();
+})();
+
+
 </script>
 </body>
 </html>
