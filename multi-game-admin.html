@@ -4,6 +4,80 @@
 <section class="panel"><h2>Game Manager</h2><label for="gameSelect">Select a saved game</label><select id="gameSelect"></select><div class="row" style="margin-top:12px"><button id="newGame" class="primary">➕ New Game</button><button id="deleteLocal" class="danger">Remove Local Draft</button></div><label>Game URL slug (cannot change after creation)</label><input id="slug" placeholder="my-challenge" pattern="[a-z0-9-]+"><p class="muted">Public link: <a id="gameLink" target="_blank" rel="noopener"></a></p><label>Game title</label><input id="title" maxlength="200"><label>Homepage introduction</label><textarea id="introText"></textarea><label>Home image HTTPS URL</label><input id="homeImageUrl" placeholder="https://..."><label>Winning slide</label><select id="victorySlide"></select><p class="muted">Slides 1–12 are required for D12 dice rolls. Slides 13–99 can be added or removed. You can choose any existing slide as the victory slide.</p></section>
 <section class="panel"><h2>Slides</h2><div id="slideList"></div><div class="row" style="margin-top:12px"><button id="addSlide" class="primary">➕ Add Slide</button><button id="removeSlide" class="danger">🗑️ Remove Selected</button></div><div id="slideEditor"><h3 id="slideHeading">Slide</h3><label>Title</label><input id="slideTitle"><label>Description</label><textarea id="description"></textarea><label>Reddit hunter (optional)</label><input id="redditUser" placeholder="u/Example"><label>Primary media HTTPS URL</label><input id="url"><label>Second media HTTPS URL (enables swipe)</label><input id="media2"><label>Swipe surprise message</label><textarea id="swipeMessage"></textarea><label><input id="consequence" type="checkbox" style="width:auto"> Must follow consequence</label><label>Consequence destination</label><select id="destination"></select><div class="row"><div><label>Reroll lock (seconds)</label><input id="rerollLockSeconds" type="number" min="0" max="86400"></div><div><label>Swipe lock (seconds)</label><input id="swipeLockSeconds" type="number" min="0" max="86400"></div></div></div></section>
 <section class="panel"><h2>Supabase public settings</h2><label>Project URL</label><input id="supabaseUrl" placeholder="https://project.supabase.co"><label>Publishable / anon API key (never a secret key)</label><input id="supabaseKey"><p class="muted">These values are published in game-config.json. Do not use a service-role key or database password.</p></section>
+
+<section class="panel" id="deleteUserPanel">
+  <h2>🗑️ Delete User Entries</h2>
+  <p class="muted">
+    Find and remove a specific user's recorded game results
+    across all games, including the original NNN.
+    Game slides and settings will not be changed.
+  </p>
+
+  <label for="deleteUsername">Username</label>
+  <input
+    id="deleteUsername"
+    placeholder="u/test"
+    maxlength="40"
+    autocomplete="off"
+  >
+
+  <label for="deleteScope">Search games</label>
+  <select id="deleteScope">
+    <option value="all">All games, including original NNN</option>
+    <option value="original">Original NNN only</option>
+    <option value="multi">All Multi-Game Studio games</option>
+  </select>
+
+  <label for="deleteRole">Entries to remove</label>
+  <select id="deleteRole">
+    <option value="both">Soldier and Hunter</option>
+    <option value="soldier">Soldier entries only</option>
+    <option value="hunter">Hunter entries only</option>
+  </select>
+
+  <label for="deleteUserPassword">
+    Existing leaderboard-reset password
+  </label>
+  <input
+    id="deleteUserPassword"
+    type="password"
+    autocomplete="off"
+    placeholder="Enter reset password"
+  >
+
+  <button
+    id="previewDeleteUser"
+    type="button"
+    class="primary"
+    style="width:100%;margin-top:14px"
+  >
+    🔍 Preview Matching Entries
+  </button>
+
+  <div id="deleteUserPreview" class="hidden"
+       style="margin-top:16px;padding:14px;border:1px solid #777;border-radius:12px">
+    <h3>Deletion Preview</h3>
+    <p id="deleteUserCounts"></p>
+    <p class="muted">
+      Deleting a Hunter's claim also deletes the associated
+      game-result record. This may remove that result from
+      overall game statistics.
+    </p>
+    <button
+      id="confirmDeleteUser"
+      type="button"
+      class="danger"
+      style="width:100%"
+    >
+      🗑️ Permanently Delete Matching Entries
+    </button>
+  </div>
+
+  <p id="deleteUserStatus"
+     class="status"
+     aria-live="polite"></p>
+</section>
+
 <section class="panel"><h2>Save & Publish</h2><div class="row"><button id="saveDraft" class="primary">💾 Save Draft</button><button id="loadGitHub">↻ Load Published Game</button></div><label>Publishing password</label><input id="password" type="password" autocomplete="off"><button id="publish" class="primary" style="margin-top:12px;width:100%">🚀 Publish This Game</button><p id="status" class="status" aria-live="polite"></p><p class="muted">Publishing requires the new Edge Function, SQL migration, and player template to be installed first.</p></section></main>
 <script>
 'use strict';const $=id=>document.getElementById(id);const BASE='https://dudewolf925.github.io/d12-survival-game/games/';const REPO='https://api.github.com/repos/dudewolf925/d12-survival-game/contents/games/';const STORE='d12_multi_game_drafts_v1';let drafts={},cfg=null,selected=1,expectedSha=null,slugLocked=false;const fields=['title','introText','homeImageUrl','supabaseUrl','supabaseKey'];const slideFields=['title','description','redditUser','url','media2','swipeMessage','consequence','destination','rerollLockSeconds','swipeLockSeconds'];
