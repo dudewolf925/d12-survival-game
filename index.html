@@ -166,6 +166,36 @@ textarea{min-height:135px;resize:vertical}
   font-size:13px;
   margin:8px 0
 }
+
+/* NEW: CLICKABLE FEATURED REDDIT USER */
+.featuredRedditUser{
+  text-align:center;
+  margin:0 0 16px;
+  padding:8px 12px;
+  border:1px solid #555;
+  border-radius:12px;
+  background:#101010
+}
+.featuredRedditLabel{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-bottom:4px
+}
+.featuredRedditLink{
+  display:inline-block;
+  color:#ff7949;
+  font-size:16px;
+  font-weight:800;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  overflow-wrap:anywhere
+}
+.featuredRedditLink:hover,
+.featuredRedditLink:focus-visible{
+  color:#ffb08e
+}
+
 .slideDescription{
   font-size:17px;
   line-height:1.65;
@@ -285,6 +315,7 @@ th,td{
   overflow-wrap:anywhere
 }
 th{color:white}
+
 /* HUNTER LEADERBOARD MEDALS */
 .hunterMedal{
   display:inline-block;
@@ -295,17 +326,14 @@ th{color:white}
   text-align:center;
   vertical-align:middle;
 }
-
 .hunterFirst td{
   color:#ffd76b;
   font-weight:800;
 }
-
 .hunterSecond td{
   color:#d8dce4;
   font-weight:700;
 }
-
 .hunterThird td{
   color:#e6ad79;
   font-weight:700;
@@ -576,6 +604,20 @@ th{color:white}
   <div id="slideArea" class="hidden">
     <h2 id="slideTitle" class="slideTitle"></h2>
     <div id="slideMedia" class="slideMedia"></div>
+
+    <!-- NEW: FEATURED USER LINK BELOW ALL SLIDE MEDIA -->
+    <div id="featuredRedditUser"
+         class="featuredRedditUser hidden">
+      <span class="featuredRedditLabel">
+        Featured Reddit User
+      </span>
+      <a id="featuredRedditLink"
+         class="featuredRedditLink"
+         target="_blank"
+         rel="noopener noreferrer">
+      </a>
+    </div>
+
     <p id="slideDescription" class="slideDescription"></p>
     <p id="hunter" class="slideHunter"></p>
     <p id="consequence" class="consequenceText"></p>
@@ -1006,7 +1048,7 @@ async function request(path,options={}){
 }
 
 /* =========================================
-   NEW: SUPABASE ANALYTICS RPC
+   SUPABASE ANALYTICS RPC
    ========================================= */
 
 async function rpc(functionName,parameters={}){
@@ -1091,10 +1133,6 @@ async function recordBrowserVisit(){
   const id=getVisitorId();
   if(!id)return;
 
-  /*
-    Mark this page load before the request,
-    preventing accidental duplicate calls.
-  */
   browserVisitRecorded=true;
 
   try{
@@ -1734,10 +1772,6 @@ async function loadPublished(){
       arr.length+' slides'
     );
 
-    /*
-      NEW: Register one browser visit per page load.
-      This does not delay the player.
-    */
     recordBrowserVisit();
 
   }catch(error){
@@ -1797,12 +1831,6 @@ function begin(){
 
   playerName=name;
 
-  /*
-    NEW: Record this username's game entry.
-    Every new game entry counts as a visit.
-    The first recorded entry per username
-    is not counted as a revisit.
-  */
   recordPlayerVisit(playerName);
 
   $('home').classList.add('hidden');
@@ -1982,6 +2010,43 @@ function setAction(mode){
     '⚡ Show Me My Consequences';
 }
 
+/* =========================================
+   NEW: FEATURED REDDIT PROFILE LINK
+   ========================================= */
+
+function updateFeaturedRedditUser(slide){
+  const container=$('featuredRedditUser');
+  const link=$('featuredRedditLink');
+
+  if(!container||!link)return;
+
+  const username=String(
+    slide?.redditUser||''
+  ).trim().replace(/^u\//i,'');
+
+  // Validate username before constructing the URL.
+  if(!/^[A-Za-z0-9_-]{3,20}$/.test(username)){
+    container.classList.add('hidden');
+    link.removeAttribute('href');
+    link.textContent='';
+    return;
+  }
+
+  // Safe text rendering: no HTML injection.
+  link.textContent='u/'+username;
+
+  // Reddit profile opens in a separate tab.
+  link.href=
+    'https://www.reddit.com/user/'+
+    encodeURIComponent(username)+'/';
+
+  container.classList.remove('hidden');
+}
+
+/* =========================================
+   SHOW SLIDE
+   ========================================= */
+
 function showSlide(slide){
   if(endingStarted)return;
 
@@ -2007,6 +2072,9 @@ function showSlide(slide){
       :slide.media;
 
   showMedia('slideMedia',firstMedia);
+
+  // NEW: Show clickable username below slide media.
+  updateFeaturedRedditUser(slide);
 
   setText(
     'slideDescription',
@@ -2490,14 +2558,6 @@ let showAllSoldiers=false;
 let leaderboardRows=[];
 let allTimeHunterRows=null;
 
-/*
-  All-time hunter scores come from the Supabase
-  d12_hunter_scores() function.
-
-  Soldier leaderboard still displays the top
-  100 survival times from existing score records.
-*/
-
 function localHunterTotals(rows){
   const counts=new Map();
 
@@ -2603,11 +2663,6 @@ function renderBoards(
     soldier.append(row);
   }
 
-  /*
-    Hunter results are already aggregated by
-    Supabase across all saved scores.
-  */
-
   const source=Array.isArray(hunterData)
     ?hunterData
     :localHunterTotals(leaderboardRows);
@@ -2653,47 +2708,47 @@ function renderBoards(
     hunter.append(row);
   }
 
-for(const [index,item] of visibleHunters.entries()){
-  const row=document.createElement('tr');
+  for(const [index,item] of visibleHunters.entries()){
+    const row=document.createElement('tr');
 
-  const medals=['🥇','🥈','🥉'];
-  const rankClasses=[
-    'hunterFirst',
-    'hunterSecond',
-    'hunterThird'
-  ];
+    const medals=['🥇','🥈','🥉'];
+    const rankClasses=[
+      'hunterFirst',
+      'hunterSecond',
+      'hunterThird'
+    ];
 
-  if(index<3){
-    row.classList.add(rankClasses[index]);
-  }
+    if(index<3){
+      row.classList.add(rankClasses[index]);
+    }
 
-  const hunterCell=document.createElement('td');
+    const hunterCell=document.createElement('td');
 
-  if(index<3){
-    const medal=document.createElement('span');
-    medal.className='hunterMedal';
-    medal.textContent=medals[index];
-    medal.setAttribute(
-      'aria-label',
-      'Rank '+(index+1)
+    if(index<3){
+      const medal=document.createElement('span');
+      medal.className='hunterMedal';
+      medal.textContent=medals[index];
+      medal.setAttribute(
+        'aria-label',
+        'Rank '+(index+1)
+      );
+
+      hunterCell.append(medal);
+    }
+
+    const name=document.createElement('span');
+    name.textContent=item.hunter;
+    hunterCell.append(name);
+
+    row.append(hunterCell);
+
+    safeCell(
+      row,
+      item.count.toLocaleString()
     );
 
-    hunterCell.append(medal);
+    hunter.append(row);
   }
-
-  const name=document.createElement('span');
-  name.textContent=item.hunter;
-  hunterCell.append(name);
-
-  row.append(hunterCell);
-
-  safeCell(
-    row,
-    item.count.toLocaleString()
-  );
-
-  hunter.append(row);
-}
 
   const hb=$('toggleHunters');
   const sb=$('toggleSoldiers');
@@ -2734,19 +2789,12 @@ $('toggleSoldiers').addEventListener(
 );
 
 /* =========================================
-   NEW: ALL-TIME HUNTER SCOREBOARD
+   ALL-TIME HUNTER SCOREBOARD
    ========================================= */
 
 async function board(){
   try{
     if(online()){
-      /*
-        Fetch the 100 best soldier scores.
-
-        Supabase calculates hunter totals separately
-        across the full d12_scores table.
-      */
-
       const [scores,hunters]=await Promise.all([
         request(
           'd12_scores?select='+
